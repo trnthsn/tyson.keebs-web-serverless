@@ -1,0 +1,1323 @@
+[
+  {
+    "id": "via-1",
+    "name": "8ghty VIA Definition",
+    "description": "VIA keymap JSON definition for 8ghty",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "8ghty",
+    "vendorProductId": 1414743352,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_8ghty_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-2",
+    "name": "E8ghtyNeo VIA Definition",
+    "description": "VIA keymap JSON definition for E8ghtyNeo",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "E8ghtyNeo",
+    "vendorProductId": 1414740037,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_e8ghtyNeo_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-4",
+    "name": "E8ghtyQK VIA Definition",
+    "description": "VIA keymap JSON definition for E8ghtyQK",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "E8ghtyQK",
+    "vendorProductId": 1414740043,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_e8ghtyQK_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-3",
+    "name": "E8ghtySunset VIA Definition",
+    "description": "VIA keymap JSON definition for E8ghtySunset",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "E8ghtySunset",
+    "vendorProductId": 1414755685,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_e8ghtySunset_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-5",
+    "name": "E8ghty VIA Definition",
+    "description": "VIA keymap JSON definition for E8ghty",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "E8ghty",
+    "vendorProductId": 1414740016,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_e8ghty_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-6",
+    "name": "ItachiSplit VIA Definition",
+    "description": "VIA keymap JSON definition for ItachiSplit",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "ItachiSplit",
+    "vendorProductId": 1414744404,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_itachiSplit_via.json",
+        "format": "JSON",
+        "size": "5 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-7",
+    "name": "Mjolnir70 VIA Definition",
+    "description": "VIA keymap JSON definition for Mjolnir70",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Mjolnir70",
+    "vendorProductId": 1414745418,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_mjolnir70_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-8",
+    "name": "Numpad VIA Definition",
+    "description": "VIA keymap JSON definition for Numpad",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Numpad",
+    "vendorProductId": 1414745680,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_numpad_via.json",
+        "format": "JSON",
+        "size": "1 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-10",
+    "name": "S6xty5Neo VIA Definition",
+    "description": "VIA keymap JSON definition for S6xty5Neo",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xty5Neo",
+    "vendorProductId": 1414746958,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xty5Neo_via.json",
+        "format": "JSON",
+        "size": "1 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-9",
+    "name": "S6xty5625 VIA Definition",
+    "description": "VIA keymap JSON definition for S6xty5625",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xty5625",
+    "vendorProductId": 1414746933,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xty5_625_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-11",
+    "name": "S6xty5 VIA Definition",
+    "description": "VIA keymap JSON definition for S6xty5",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xty5",
+    "vendorProductId": 1414746933,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xty5_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-12",
+    "name": "S6xty5hs VIA Definition",
+    "description": "VIA keymap JSON definition for S6xty5hs",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xty5hs",
+    "vendorProductId": 1414751592,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xty5hs.json",
+        "format": "JSON",
+        "size": "1 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-13",
+    "name": "S6xty5neor2 VIA Definition",
+    "description": "VIA keymap JSON definition for S6xty5neor2",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xty5neor2",
+    "vendorProductId": 1414745669,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xty5neor2_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-14",
+    "name": "S6xty5r2 VIA Definition",
+    "description": "VIA keymap JSON definition for S6xty5r2",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xty5r2",
+    "vendorProductId": 1414739509,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xty5r2_via.json",
+        "format": "JSON",
+        "size": "1 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-15",
+    "name": "S6xty5r3 VIA Definition",
+    "description": "VIA keymap JSON definition for S6xty5r3",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xty5r3",
+    "vendorProductId": 1414751539,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xty5r3_via.json",
+        "format": "JSON",
+        "size": "1 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-16",
+    "name": "S6xtyMikeVuong VIA Definition",
+    "description": "VIA keymap JSON definition for S6xtyMikeVuong",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xtyMikeVuong",
+    "vendorProductId": 1414745430,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xtyMikeVuong_.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-17",
+    "name": "S6xty VIA Definition",
+    "description": "VIA keymap JSON definition for S6xty",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xty",
+    "vendorProductId": 1414746934,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xty_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-20",
+    "name": "S6xtyfs VIA Definition",
+    "description": "VIA keymap JSON definition for S6xtyfs",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xtyfs",
+    "vendorProductId": 1414739558,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xtyfs_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-19",
+    "name": "S6xtyneo VIA Definition",
+    "description": "VIA keymap JSON definition for S6xtyneo",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xtyneo",
+    "vendorProductId": 1414739567,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xtyneo_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-21",
+    "name": "S6xtyr3 VIA Definition",
+    "description": "VIA keymap JSON definition for S6xtyr3",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xtyr3",
+    "vendorProductId": 1414739507,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xtyr3_via.json",
+        "format": "JSON",
+        "size": "4 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-18",
+    "name": "S7venty5 VIA Definition",
+    "description": "VIA keymap JSON definition for S7venty5",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S7venty5",
+    "vendorProductId": 1414739765,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s7venty5_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-23",
+    "name": "S7venty5jelly VIA Definition",
+    "description": "VIA keymap JSON definition for S7venty5jelly",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S7venty5jelly",
+    "vendorProductId": 1414739818,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s7venty5jelly_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-22",
+    "name": "S7venty VIA Definition",
+    "description": "VIA keymap JSON definition for S7venty",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S7venty",
+    "vendorProductId": 1414746935,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s7venty_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-24",
+    "name": "S7ventyr2 VIA Definition",
+    "description": "VIA keymap JSON definition for S7ventyr2",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S7ventyr2",
+    "vendorProductId": 1414739760,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s7ventyr2_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-25",
+    "name": "Tyson1800 VIA Definition",
+    "description": "VIA keymap JSON definition for Tyson1800",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tyson1800",
+    "vendorProductId": 1414738232,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tyson1800.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-26",
+    "name": "Tyson60 VIA Definition",
+    "description": "VIA keymap JSON definition for Tyson60",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tyson60",
+    "vendorProductId": 1414739507,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tyson60_via.json",
+        "format": "JSON",
+        "size": "4 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-27",
+    "name": "Tyson60s VIA Definition",
+    "description": "VIA keymap JSON definition for Tyson60s",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tyson60s",
+    "vendorProductId": 1414734609,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tyson60s_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-28",
+    "name": "Tyson65 VIA Definition",
+    "description": "VIA keymap JSON definition for Tyson65",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tyson65",
+    "vendorProductId": 1414751539,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tyson65_via.json",
+        "format": "JSON",
+        "size": "1 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-29",
+    "name": "Tyson70 VIA Definition",
+    "description": "VIA keymap JSON definition for Tyson70",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tyson70",
+    "vendorProductId": 1414755383,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tyson70_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-31",
+    "name": "Tyson75 VIA Definition",
+    "description": "VIA keymap JSON definition for Tyson75",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tyson75",
+    "vendorProductId": 1414739765,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tyson75_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-30",
+    "name": "Tyson80 VIA Definition",
+    "description": "VIA keymap JSON definition for Tyson80",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tyson80",
+    "vendorProductId": 1414754096,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tyson80_via.json",
+        "format": "JSON",
+        "size": "4 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-33",
+    "name": "Tyson88 VIA Definition",
+    "description": "VIA keymap JSON definition for Tyson88",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tyson88",
+    "vendorProductId": 1414754104,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tyson88_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-32",
+    "name": "Tyson88hs VIA Definition",
+    "description": "VIA keymap JSON definition for Tyson88hs",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tyson88hs",
+    "vendorProductId": 1414754104,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tyson88hs_via.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "via-34",
+    "name": "Tysons100 VIA Definition",
+    "description": "VIA keymap JSON definition for Tysons100",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "Tysons100",
+    "vendorProductId": 1414755121,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_tysons100.json",
+        "format": "JSON",
+        "size": "3 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-35",
+    "name": "E8ghty Firmware",
+    "description": "VIA-compatible firmware for E8ghty",
+    "category": "FIRMWARE",
+    "keyboardModel": "E8ghty",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/E8ghty/F072/trnthsn_e8ghty_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "37 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/E8ghty/F103/trnthsn_e8ghty_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "74 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-36",
+    "name": "E8ghtyNeo Firmware",
+    "description": "VIA-compatible firmware for E8ghtyNeo",
+    "category": "FIRMWARE",
+    "keyboardModel": "E8ghtyNeo",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/E8ghtyNeo/F072/trnthsn_e8ghtyneo_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/E8ghtyNeo/F103/trnthsn_e8ghtyneo_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-37",
+    "name": "E8ghtyQK Firmware",
+    "description": "VIA-compatible firmware for E8ghtyQK",
+    "category": "FIRMWARE",
+    "keyboardModel": "E8ghtyQK",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/E8ghtyQK/F072/trnthsn_e8ghtyqk_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "37 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/E8ghtyQK/F103/trnthsn_e8ghtyqk_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "74 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-38",
+    "name": "E8ghtySunset Firmware",
+    "description": "VIA-compatible firmware for E8ghtySunset",
+    "category": "FIRMWARE",
+    "keyboardModel": "E8ghtySunset",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/E8ghtySunset/trnthsn_e8ghtysunset_via.uf2",
+        "format": "UF2",
+        "size": "74 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-39",
+    "name": "Mjolnir70 Firmware",
+    "description": "VIA-compatible firmware for Mjolnir70",
+    "category": "FIRMWARE",
+    "keyboardModel": "Mjolnir70",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Mjolnir70/trnthsn_mjolnir70_stm32f072_via.bin",
+        "format": "BIN",
+        "size": "37 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Mjolnir70/trnthsn_mjolnir70_via.bin",
+        "format": "BIN",
+        "size": "36 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-40",
+    "name": "S6xty Firmware",
+    "description": "VIA-compatible firmware for S6xty",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xty",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty/F072/trnthsn_s6xty_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "36 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty/F103/trnthsn_s6xty_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "74 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-41",
+    "name": "S6xty5 Firmware",
+    "description": "VIA-compatible firmware for S6xty5",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xty5",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5/trnthsn_s6xty5_via.bin",
+        "format": "BIN",
+        "size": "36 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-42",
+    "name": "S6xty5HS Firmware",
+    "description": "VIA-compatible firmware for S6xty5HS",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xty5HS",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5HS/F072/trnthsn_s6xty5hs_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5HS/F103/trnthsn_s6xty5hs_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-43",
+    "name": "S6xty5Neo R2 Firmware",
+    "description": "VIA-compatible firmware for S6xty5Neo R2",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xty5Neo R2",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5Neo R2/F072/trnthsn_s6xty5neor2_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "25 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5Neo R2/F103/trnthsn_s6xty5neor2_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "52 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-44",
+    "name": "S6xty5Neo Firmware",
+    "description": "VIA-compatible firmware for S6xty5Neo",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xty5Neo",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5Neo/trnthsn_s6xty5neo_via.bin",
+        "format": "BIN",
+        "size": "36 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-45",
+    "name": "S6xty5r2 Firmware",
+    "description": "VIA-compatible firmware for S6xty5r2",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xty5r2",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5r2/F072/trnthsn_s6xty5r2_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5r2/F103/trnthsn_s6xty5r2_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-46",
+    "name": "S6xty5r3 Firmware",
+    "description": "VIA-compatible firmware for S6xty5r3",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xty5r3",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5r3/F072/trnthsn_s6xty5r3_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xty5r3/F103/trnthsn_s6xty5r3_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-47",
+    "name": "S6xtyMikeVuong Firmware",
+    "description": "VIA-compatible firmware for S6xtyMikeVuong",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xtyMikeVuong",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xtyMikeVuong/trnthsn_s6xtymikevuong_via.bin",
+        "format": "BIN",
+        "size": "37 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-48",
+    "name": "S6xtyNeo Firmware",
+    "description": "VIA-compatible firmware for S6xtyNeo",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xtyNeo",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xtyNeo/F072/trnthsn_s6xtyneo_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "29 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xtyNeo/F103/trnthsn_s6xtyneo_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "60 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-49",
+    "name": "S6xtyR2 Firmware",
+    "description": "VIA-compatible firmware for S6xtyR2",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xtyR2",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xtyR2/F072/trnthsn_s6xtyr2_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "37 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xtyR2/F103/trnthsn_s6xtyr2_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "74 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-50",
+    "name": "S6xtyfs Firmware",
+    "description": "VIA-compatible firmware for S6xtyfs",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xtyfs",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xtyfs/F072/trnthsn_s6xtyfs_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xtyfs/F103/trnthsn_s6xtyfs_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-51",
+    "name": "S6xtyr3 Firmware",
+    "description": "VIA-compatible firmware for S6xtyr3",
+    "category": "FIRMWARE",
+    "keyboardModel": "S6xtyr3",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xtyr3/F072/trnthsn_s6xtyr3_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S6xtyr3/F103/trnthsn_s6xtyr3_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-52",
+    "name": "S7venty Firmware",
+    "description": "VIA-compatible firmware for S7venty",
+    "category": "FIRMWARE",
+    "keyboardModel": "S7venty",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S7venty/trnthsn_s7venty_via.bin",
+        "format": "BIN",
+        "size": "36 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-53",
+    "name": "S7venty5 Firmware",
+    "description": "VIA-compatible firmware for S7venty5",
+    "category": "FIRMWARE",
+    "keyboardModel": "S7venty5",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S7venty5/F072/trnthsn_s7venty5_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "42 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S7venty5/F103/trnthsn_s7venty5_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-54",
+    "name": "S7venty5Jelly Firmware",
+    "description": "VIA-compatible firmware for S7venty5Jelly",
+    "category": "FIRMWARE",
+    "keyboardModel": "S7venty5Jelly",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S7venty5Jelly/F072/trnthsn_s7venty5jelly_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "29 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S7venty5Jelly/F103/trnthsn_s7venty5jelly_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "60 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-55",
+    "name": "S7ventyr2 Firmware",
+    "description": "VIA-compatible firmware for S7ventyr2",
+    "category": "FIRMWARE",
+    "keyboardModel": "S7ventyr2",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S7ventyr2/F072/trnthsn_s7ventyr2_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "42 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S7ventyr2/F103/trnthsn_s7ventyr2_stm32f103_led_indicator.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "84 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/S7ventyr2/F103/trnthsn_s7ventyr2_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "83 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-56",
+    "name": "Tyson1800 Firmware",
+    "description": "VIA-compatible firmware for Tyson1800",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson1800",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson1800/F072/trnthsn_tyson1800_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "25 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson1800/F103/trnthsn_tyson1800_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "51 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-57",
+    "name": "Tyson60 Firmware",
+    "description": "VIA-compatible firmware for Tyson60",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson60",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60/F072/trnthsn_tyson60_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "36 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60/F103/trnthsn_tyson60_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "73 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-58",
+    "name": "Tyson60Cinque Firmware",
+    "description": "VIA-compatible firmware for Tyson60Cinque",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson60Cinque",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Cinque/F072/trnthsn_tyson60cinque_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Cinque/F103/trnthsn_tyson60cinque_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Cinque/trnthsn_tyson60cinque_stm32f072_via.bin",
+        "format": "BIN",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Cinque/trnthsn_tyson60cinque_stm32f103_via.uf2",
+        "format": "UF2",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-59",
+    "name": "Tyson60Levi Firmware",
+    "description": "VIA-compatible firmware for Tyson60Levi",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson60Levi",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Levi/F072/trnthsn_tyson60levi_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "47 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Levi/F103/trnthsn_tyson60levi_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "95 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-60",
+    "name": "Tyson60Lily Firmware",
+    "description": "VIA-compatible firmware for Tyson60Lily",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson60Lily",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Lily/F072/trnthsn_tyson60lily_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Lily/F103/trnthsn_tyson60lily_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-61",
+    "name": "Tyson60Neo Firmware",
+    "description": "VIA-compatible firmware for Tyson60Neo",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson60Neo",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Neo/F072/trnthsn_tyson60neo_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "47 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Neo/F103/trnthsn_tyson60neo_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "95 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-62",
+    "name": "Tyson60Zero Firmware",
+    "description": "VIA-compatible firmware for Tyson60Zero",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson60Zero",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Zero/F072/trnthsn_tyson60zero_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "47 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Zero/F103/trnthsn_tyson60zero_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "95 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-63",
+    "name": "Tyson60fs Firmware",
+    "description": "VIA-compatible firmware for Tyson60fs",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson60fs",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60fs/F072/trnthsn_tyson60tsangan_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "48 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60fs/F103/trnthsn_tyson60tsangan_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "95 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-64",
+    "name": "Tyson60s Firmware",
+    "description": "VIA-compatible firmware for Tyson60s",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson60s",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60s/trnthsn_tyson60s_via.uf2",
+        "format": "UF2",
+        "size": "98 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-65",
+    "name": "Tyson65 Firmware",
+    "description": "VIA-compatible firmware for Tyson65",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson65",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson65/F072/trnthsn_tyson65_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson65/F103/trnthsn_tyson65_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-66",
+    "name": "Tyson65Neo Firmware",
+    "description": "VIA-compatible firmware for Tyson65Neo",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson65Neo",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson65Neo/F072/trnthsn_tyson65neo_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "30 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson65Neo/F103/trnthsn_tyson65neo_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "60 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-67",
+    "name": "Tyson65Whale Firmware",
+    "description": "VIA-compatible firmware for Tyson65Whale",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson65Whale",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson65Whale/F103/trnthsn_tyson65whale_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-68",
+    "name": "Tyson65hs Firmware",
+    "description": "VIA-compatible firmware for Tyson65hs",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson65hs",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson65hs/F072/trnthsn_tyson65hs_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson65hs/F103/trnthsn_tyson65hs_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-69",
+    "name": "Tyson70 Firmware",
+    "description": "VIA-compatible firmware for Tyson70",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson70",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson70/F072/trnthsn_tyson70_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson70/F103/trnthsn_tyson70_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-70",
+    "name": "Tyson75 Firmware",
+    "description": "VIA-compatible firmware for Tyson75",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson75",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson75/F072/trnthsn_tyson75_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "42 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson75/F103/trnthsn_tyson75_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-71",
+    "name": "Tyson80 Firmware",
+    "description": "VIA-compatible firmware for Tyson80",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson80",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F072/trnthsn_tyson80_blackcore_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F072/trnthsn_tyson80_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F103/trnthsn_tyson80_blackcore_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F103/trnthsn_tyson80_stm32f103_native_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F103/trnthsn_tyson80_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-72",
+    "name": "Tyson88 Firmware",
+    "description": "VIA-compatible firmware for Tyson88",
+    "category": "FIRMWARE",
+    "keyboardModel": "Tyson88",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson88/F103/trnthsn_tyson88_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "74 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-73",
+    "name": "TysonS100 Firmware",
+    "description": "VIA-compatible firmware for TysonS100",
+    "category": "FIRMWARE",
+    "keyboardModel": "TysonS100",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/TysonS100/F072/trnthsn_tysons100_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "43 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/TysonS100/F103/trnthsn_tysons100_stm32f103_via.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "size": "85 KB"
+      }
+    ]
+  },
+  {
+    "id": "bl-74",
+    "name": "uf2boot.bin",
+    "description": "Bootloader for uf2boot.bin",
+    "category": "BOOTLOADER",
+    "keyboardModel": "uf2boot.bin",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Bootloader/uf2boot.bin",
+        "format": "BIN",
+        "size": "16 KB"
+      }
+    ]
+  }
+]

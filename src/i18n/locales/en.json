@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "viaConfig": "VIA Config",
+    "resources": "Resources"
+  },
+  "home": {
+    "heroTitle": "Custom Keyboard PCBs",
+    "heroSubtitle": "VIA-compatible hotswap and solder PCBs for your next mechanical keyboard build.",
+    "openViaConfig": "Open VIA Config",
+    "browseResources": "Browse Resources",
+    "brandTitle": "Built for enthusiasts, by enthusiasts.",
+    "brandDescription": "Every Tyson.Keebs product is designed with obsessive attention to detail. From PCB layout to case compatibility, we obsess over the details so you can focus on what matters most — the feel of every keystroke.",
+    "est": "Est. 2024"
+  },
+  "via": {
+    "title": "VIA Config",
+    "description": "Connect your VIA-compatible keyboard to remap keys, configure layers, and customize your typing experience.",
+    "connect": "Connect Keyboard",
+    "disconnect": "Disconnect",
+    "unsupported": "Your browser does not support WebHID. Please use a compatible browser (Chrome, Edge, or Opera) to configure your keyboard.",
+    "connecting": "Authorizing device...",
+    "error": "Connection Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "deviceInfo": "Device Info",
+    "name": "Name",
+    "vendorId": "Vendor ID",
+    "productId": "Product ID",
+    "viaProtocol": "VIA Protocol",
+    "firmware": "Firmware",
+    "keyboardDefinition": "Keyboard Definition",
+    "version": "Version",
+    "matrix": "Matrix",
+    "keys": "Keys",
+    "layoutOptions": "Layout Options",
+    "noDefinition": "No JSON definition found for this keyboard in the resource library.",
+    "noDefinitionHint": "Keymap editing requires a keyboard definition. Definitions can be found on the Resources page.",
+    "keymapEditor": "Keymap Editor",
+    "keymapEditorDesc": "Coming soon. Select a key on the keyboard layout below to remap it."
+  },
+  "resources": {
+    "title": "Resources",
+    "description": "Download VIA keymap definitions, firmware, and bootloader files for your keyboard.",
+    "searchPlaceholder": "Search resources...",
+    "resultsCount": "{{count}} result",
+    "resultsCount_plural": "{{count}} results",
+    "noResults": "No resources found.",
+    "model": "Model",
+    "view": "View",
+    "download": "Download"
+  },
+  "footer": {
+    "brand": "Custom PCB mechanical keyboards. Precision engineered. Minimalist design.",
+    "tools": "Tools",
+    "viaConfig": "VIA Config",
+    "resources": "Resources",
+    "connect": "Connect"
+  },
+  "common": {
+    "previous": "Previous",
+    "next": "Next"
+  }
+}

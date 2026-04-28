@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "viaConfig": "VIA Config",
+    "resources": "Tài nguyên"
+  },
+  "home": {
+    "heroTitle": "PCB Bàn Phím Cơ",
+    "heroSubtitle": "PCB hotswap và solder tương thích VIA cho bàn phím cơ tiếp theo của bạn.",
+    "openViaConfig": "Mở VIA Config",
+    "browseResources": "Duyệt tài nguyên",
+    "brandTitle": "Được xây dựng bởi người đam mê, dành cho người đam mê.",
+    "brandDescription": "Mọi sản phẩm Tyson.Keebs đều được thiết kế với sự chú ý tỉ mỉ đến từng chi tiết. Từ bố cục PCB đến khả năng tương thích case, chúng tôi chú trọng từng chi tiết để bạn có thể tập trung vào điều quan trọng nhất — cảm giác của mỗi lần gõ phím.",
+    "est": "Thành lập 2024"
+  },
+  "via": {
+    "title": "VIA Config",
+    "description": "Kết nối bàn phím tương thích VIA để remap phím, cấu hình layer và cá nhân hóa trải nghiệm gõ của bạn.",
+    "connect": "Kết nối bàn phím",
+    "disconnect": "Ngắt kết nối",
+    "unsupported": "Trình duyệt của bạn không hỗ trợ WebHID. Vui lòng sử dụng trình duyệt tương thích (Chrome, Edge hoặc Opera) để cấu hình bàn phím.",
+    "connecting": "Đang xác thực thiết bị...",
+    "error": "Lỗi kết nối",
+    "retry": "Thử lại",
+    "cancel": "Hủy",
+    "deviceInfo": "Thông tin thiết bị",
+    "name": "Tên",
+    "vendorId": "Mã nhà sản xuất",
+    "productId": "Mã sản phẩm",
+    "viaProtocol": "VIA Protocol",
+    "firmware": "Firmware",
+    "keyboardDefinition": "Định nghĩa bàn phím",
+    "version": "Phiên bản",
+    "matrix": "Ma trận",
+    "keys": "Phím",
+    "layoutOptions": "Tùy chọn bố cục",
+    "noDefinition": "Không tìm thấy định nghĩa JSON cho bàn phím này trong thư viện tài nguyên.",
+    "noDefinitionHint": "Chỉnh sửa keymap cần định nghĩa bàn phím. Có thể tìm thấy định nghĩa ở trang Tài nguyên.",
+    "keymapEditor": "Trình chỉnh sửa Keymap",
+    "keymapEditorDesc": "Sắp ra mắt. Chọn một phím trên bố cục bàn phím bên dưới để remap."
+  },
+  "resources": {
+    "title": "Tài nguyên",
+    "description": "Tải xuống định nghĩa VIA keymap, firmware và bootloader cho bàn phím của bạn.",
+    "searchPlaceholder": "Tìm kiếm tài nguyên...",
+    "resultsCount": "{{count}} kết quả",
+    "resultsCount_plural": "{{count}} kết quả",
+    "noResults": "Không tìm thấy tài nguyên nào.",
+    "model": "Mẫu",
+    "view": "Xem",
+    "download": "Tải xuống"
+  },
+  "footer": {
+    "brand": "PCB bàn phím cơ tùy chỉnh. Thiết kế chính xác. Tối giản.",
+    "tools": "Công cụ",
+    "viaConfig": "VIA Config",
+    "resources": "Tài nguyên",
+    "connect": "Kết nối"
+  },
+  "common": {
+    "previous": "Trước",
+    "next": "Sau"
+  }
+}
