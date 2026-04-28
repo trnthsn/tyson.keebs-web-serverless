@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { ConfigProvider, theme } from 'antd';
 
 type Theme = 'light' | 'dark';
 
@@ -17,32 +18,48 @@ const ThemeContext = createContext<ThemeContextType>({
 const STORAGE_KEY = 'tysonkeebs-theme';
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [currentTheme, setCurrentTheme] = useState<Theme>('light');
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark');
-    setTheme(isDark ? 'dark' : 'light');
+    setCurrentTheme(isDark ? 'dark' : 'light');
     setReady(true);
   }, []);
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
+    if (currentTheme === 'dark') {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme]);
+    localStorage.setItem(STORAGE_KEY, currentTheme);
+  }, [currentTheme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    setCurrentTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
+  const isDark = currentTheme === 'dark';
+
+  const antdTheme = {
+    algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+    token: {
+      colorLink: isDark ? '#ffffff' : '#121212',
+      colorLinkHover: isDark ? 'rgba(255,255,255,0.75)' : 'rgba(18,18,18,0.75)',
+      colorBgElevated: isDark ? '#0a0a0a' : '#ffffff',
+      colorText: isDark ? 'rgba(255,255,255,0.75)' : 'rgba(18,18,18,0.75)',
+      colorTextBase: isDark ? '#ffffff' : '#121212',
+      colorBorder: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(18,18,18,0.1)',
+    },
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
+    <ThemeContext.Provider value={{ theme: currentTheme, toggleTheme }}>
+      <ConfigProvider theme={antdTheme}>
+        {children}
+      </ConfigProvider>
     </ThemeContext.Provider>
   );
 };
