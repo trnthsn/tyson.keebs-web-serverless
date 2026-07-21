@@ -47,7 +47,19 @@
     "noResults": "No resources found.",
     "model": "Model",
     "view": "View",
-    "download": "Download"
+    "download": "Download",
+    "detectTitle": "Detect keyboard definition",
+    "detectDescription": "Connect a Tyson.Keebs VIA-compatible keyboard to find and download its JSON definition automatically.",
+    "detectButton": "Detect Keyboard",
+    "detecting": "Detecting...",
+    "detectedKeyboard": "Detected keyboard",
+    "detectUnsupported": "Your browser does not support WebHID. Please use Chrome, Edge, or Opera.",
+    "detectFailed": "Failed to detect keyboard.",
+    "definitionMatched": "Matched JSON definition for {{name}}.",
+    "downloadJson": "Download JSON",
+    "downloadJsonConfig": "Download JSON Config",
+    "downloadFirmware": "Download Firmware",
+    "noDetectedDefinition": "No Tyson.Keebs JSON definition matches this keyboard in the resource library."
   },
   "footer": {
     "brand": "Custom PCB mechanical keyboards. Precision engineered. Minimalist design.",

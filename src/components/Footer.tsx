@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from './LanguageSwitcher';
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -63,9 +62,6 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-16 pt-8 border-t border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] text-[1.2rem] text-center transition-colors duration-300">
-          <div className="flex items-center justify-center gap-4 mb-4 md:hidden">
-            <LanguageSwitcher />
-          </div>
           &copy; {year} Tyson.Keebs. All rights reserved.
         </div>
       </div>

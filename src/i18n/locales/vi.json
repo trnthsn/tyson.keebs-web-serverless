@@ -47,7 +47,19 @@
     "noResults": "Không tìm thấy tài nguyên nào.",
     "model": "Mẫu",
     "view": "Xem",
-    "download": "Tải xuống"
+    "download": "Tải xuống",
+    "detectTitle": "Nhận diện định nghĩa bàn phím",
+    "detectDescription": "Kết nối bàn phím Tyson.Keebs tương thích VIA để tự động tìm và tải định nghĩa JSON.",
+    "detectButton": "Nhận diện bàn phím",
+    "detecting": "Đang nhận diện...",
+    "detectedKeyboard": "Bàn phím đã nhận diện",
+    "detectUnsupported": "Trình duyệt của bạn không hỗ trợ WebHID. Vui lòng dùng Chrome, Edge hoặc Opera.",
+    "detectFailed": "Không thể nhận diện bàn phím.",
+    "definitionMatched": "Đã khớp định nghĩa JSON cho {{name}}.",
+    "downloadJson": "Tải JSON",
+    "downloadJsonConfig": "Tải JSON Config",
+    "downloadFirmware": "Tải firmware",
+    "noDetectedDefinition": "Không có định nghĩa JSON Tyson.Keebs nào khớp với bàn phím này trong thư viện tài nguyên."
   },
   "footer": {
     "brand": "PCB bàn phím cơ tùy chỉnh. Thiết kế chính xác. Tối giản.",

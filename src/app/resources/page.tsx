@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, ChevronDown, Download } from 'lucide-react';
+import { Search, ChevronDown, Download, Usb, CheckCircle2, AlertCircle } from 'lucide-react';
 import resourcesData from '@/data/resources.json';
 
 type ResourceFile = {
@@ -28,6 +28,13 @@ type ResourceCategory = 'All' | 'JSON_DEFINITION' | 'FIRMWARE' | 'BOOTLOADER';
 
 const categoryOrder: ResourceCategory[] = ['All', 'JSON_DEFINITION', 'FIRMWARE', 'BOOTLOADER'];
 const PAGE_SIZE = 12;
+
+type DetectedKeyboard = {
+  vendorId: number;
+  productId: number;
+  productName: string;
+  vendorProductId: number;
+};
 
 const categoryLabel = (cat: ResourceCategory) => {
   if (cat === 'All') return 'All';
@@ -56,13 +63,48 @@ const formatBadge = (format: string) => {
   return `${base} ${border}`;
 };
 
+const computeVendorProductId = (vendorId: number, productId: number) =>
+  (vendorId << 16) | productId;
+
+const getHid = () => {
+  if (!('hid' in navigator)) return null;
+  return navigator.hid as HID;
+};
+
 export default function ResourcesPage() {
   const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState<ResourceCategory>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const [detectedKeyboard, setDetectedKeyboard] = useState<DetectedKeyboard | null>(null);
+  const [detectError, setDetectError] = useState<string | null>(null);
+  const [isDetecting, setIsDetecting] = useState(false);
   const debouncedKeyword = useDebounce(searchQuery, 300);
+
+  const matchedDefinition = useMemo(
+    () =>
+      detectedKeyboard
+        ? resources.find(
+            (resource) =>
+              resource.category === 'JSON_DEFINITION' &&
+              resource.vendorProductId === detectedKeyboard.vendorProductId
+          ) ?? null
+        : null,
+    [detectedKeyboard]
+  );
+
+  const matchedFirmware = useMemo(
+    () =>
+      matchedDefinition
+        ? resources.find(
+            (resource) =>
+              resource.category === 'FIRMWARE' &&
+              resource.keyboardModel.toLowerCase() === matchedDefinition.keyboardModel.toLowerCase()
+          ) ?? null
+        : null,
+    [matchedDefinition]
+  );
 
   const filtered = useMemo(() => {
     let result = resources;
@@ -91,10 +133,6 @@ export default function ResourcesPage() {
     [filtered, page]
   );
 
-  useEffect(() => {
-    setPage(1);
-  }, [activeCategory, debouncedKeyword]);
-
   const handleDownload = useCallback(async (url: string, name: string, format?: string) => {
     if (format === 'JSON') {
       try {
@@ -120,6 +158,42 @@ export default function ResourcesPage() {
     a.click();
   }, []);
 
+  const detectKeyboard = useCallback(async () => {
+    const hid = getHid();
+
+    if (!hid) {
+      setDetectError(t('resources.detectUnsupported'));
+      return;
+    }
+
+    setIsDetecting(true);
+    setDetectError(null);
+
+    try {
+      const [device] = await hid.requestDevice({
+        filters: [{ usagePage: 0xff60, usage: 0x61 }],
+      });
+
+      if (!device) {
+        setIsDetecting(false);
+        return;
+      }
+
+      const detected = {
+        vendorId: device.vendorId,
+        productId: device.productId,
+        productName: device.productName || t('resources.detectedKeyboard'),
+        vendorProductId: computeVendorProductId(device.vendorId, device.productId),
+      };
+
+      setDetectedKeyboard(detected);
+    } catch (err: unknown) {
+      setDetectError(err instanceof Error ? err.message : t('resources.detectFailed'));
+    } finally {
+      setIsDetecting(false);
+    }
+  }, [t]);
+
   return (
     <div className="px-6 md:px-12 py-12 md:py-20">
       <div className="max-w-[120rem] mx-auto">
@@ -135,12 +209,158 @@ export default function ResourcesPage() {
           </p>
         </div>
 
+        <div className="border-y border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] py-6 mb-10">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Usb size={18} strokeWidth={1.5} className="text-[#121212] dark:text-white" />
+                <h2 className="text-[1.6rem] text-[#121212] dark:text-white" style={{ fontFamily: "'Jost', sans-serif" }}>
+                  {t('resources.detectTitle')}
+                </h2>
+              </div>
+              <p className="text-[1.4rem] text-[rgba(18,18,18,0.65)] dark:text-[rgba(255,255,255,0.65)] leading-relaxed">
+                {t('resources.detectDescription')}
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              <button
+                onClick={detectKeyboard}
+                disabled={isDetecting}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.3rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200 disabled:opacity-50 disabled:cursor-wait"
+              >
+                <Usb size={14} strokeWidth={1.7} />
+                {isDetecting ? t('resources.detecting') : t('resources.detectButton')}
+              </button>
+            </div>
+          </div>
+
+          {detectedKeyboard ? (
+            <div className="mt-5 border border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] p-4">
+              {matchedDefinition ? (
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 size={18} strokeWidth={1.7} className="mt-1 text-[#121212] dark:text-white" />
+                    <div>
+                      <p className="text-[1.4rem] text-[#121212] dark:text-white">
+                        {t('resources.definitionMatched', { name: matchedDefinition.keyboardModel })}
+                      </p>
+                      <p className="text-[1.2rem] text-[rgba(18,18,18,0.55)] dark:text-[rgba(255,255,255,0.55)] mt-1">
+                        {detectedKeyboard.productName}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <button
+                      onClick={() =>
+                        handleDownload(
+                          matchedDefinition.files[0].url,
+                          matchedDefinition.name,
+                          matchedDefinition.files[0].format
+                        )
+                      }
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2 border border-[#121212] dark:border-white text-[#121212] dark:text-white text-[1.3rem] tracking-wide hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-200"
+                    >
+                      <Download size={14} strokeWidth={1.7} />
+                      {t('resources.downloadJsonConfig')}
+                    </button>
+
+                    {matchedFirmware ? (
+                      matchedFirmware.files.length > 1 ? (
+                        <div className="relative">
+                          <button
+                            onClick={() =>
+                              setOpenDropdownId(
+                                openDropdownId === `detected-${matchedFirmware.id}`
+                                  ? null
+                                  : `detected-${matchedFirmware.id}`
+                              )
+                            }
+                            className="w-full inline-flex items-center justify-center gap-2 px-5 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.3rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200"
+                          >
+                            {t('resources.downloadFirmware')}
+                            <ChevronDown size={12} strokeWidth={2} />
+                          </button>
+
+                          {openDropdownId === `detected-${matchedFirmware.id}` && (
+                            <>
+                              <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setOpenDropdownId(null)}
+                              />
+                              <div className="absolute left-0 right-0 top-full mt-1 min-w-[18rem] bg-white dark:bg-[#1a1a1a] border border-[rgba(18,18,18,0.2)] dark:border-[rgba(255,255,255,0.2)] z-20 shadow-sm">
+                                {matchedFirmware.files.map((file, idx) => (
+                                  <button
+                                    key={idx}
+                                    onClick={() => {
+                                      handleDownload(
+                                        file.url,
+                                        `${matchedFirmware.name} (${file.mcu || file.format})`,
+                                        file.format
+                                      );
+                                      setOpenDropdownId(null);
+                                    }}
+                                    className="w-full text-left px-4 py-3 text-[1.3rem] text-[#121212] dark:text-white hover:bg-[#fbfbfb] dark:hover:bg-[#2a2a2a] transition-colors flex items-center justify-between gap-4"
+                                  >
+                                    <span>
+                                      {file.mcu ? `${file.mcu} (${file.format})` : file.format} &mdash;{' '}
+                                      {file.size}
+                                    </span>
+                                    <Download size={14} strokeWidth={2} />
+                                  </button>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            handleDownload(
+                              matchedFirmware.files[0].url,
+                              matchedFirmware.name,
+                              matchedFirmware.files[0].format
+                            )
+                          }
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.3rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200"
+                        >
+                          <Download size={14} strokeWidth={1.7} />
+                          {t('resources.downloadFirmware')}
+                        </button>
+                      )
+                    ) : null}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-start gap-3">
+                  <AlertCircle size={18} strokeWidth={1.7} className="mt-1 text-[#121212] dark:text-white" />
+                  <div>
+                    <p className="text-[1.4rem] text-[rgba(18,18,18,0.65)] dark:text-[rgba(255,255,255,0.65)]">
+                      {t('resources.noDetectedDefinition')}
+                    </p>
+                    <p className="text-[1.2rem] text-[rgba(18,18,18,0.55)] dark:text-[rgba(255,255,255,0.55)] mt-1">
+                      {detectedKeyboard.productName}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          {detectError ? (
+            <p className="mt-4 text-[1.3rem] text-red-500">{detectError}</p>
+          ) : null}
+        </div>
+
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
           <div className="flex flex-wrap gap-2">
             {categoryOrder.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => {
+                  setActiveCategory(cat);
+                  setPage(1);
+                }}
                 className={`px-5 py-2 text-[1.3rem] tracking-wide transition-colors duration-200 ${
                   activeCategory === cat
                     ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212]'
@@ -157,7 +377,10 @@ export default function ResourcesPage() {
               type="text"
               placeholder={t('resources.searchPlaceholder')}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(1);
+              }}
               className="w-full border border-[rgba(18,18,18,0.2)] dark:border-[rgba(255,255,255,0.2)] bg-white dark:bg-[#121212] px-4 py-3 pl-11 text-[1.5rem] text-[#121212] dark:text-white placeholder:text-[rgba(18,18,18,0.38)] dark:placeholder:text-[rgba(255,255,255,0.38)] focus:border-[#121212] dark:focus:border-white outline-none transition-colors"
             />
             <Search
