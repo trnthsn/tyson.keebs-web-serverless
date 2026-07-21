@@ -1242,31 +1242,41 @@
         "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F072/trnthsn_tyson80_blackcore_stm32f072_via.bin",
         "format": "BIN",
         "mcu": "F072",
-        "size": "43 KB"
+        "size": "43 KB",
+        "variant": "Blackcore",
+        "version": "VIA"
       },
       {
         "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F072/trnthsn_tyson80_stm32f072_via.bin",
         "format": "BIN",
         "mcu": "F072",
-        "size": "43 KB"
+        "size": "43 KB",
+        "variant": "Non-Blackcore",
+        "version": "VIA"
       },
       {
         "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F103/trnthsn_tyson80_blackcore_stm32f103_via.uf2",
         "format": "UF2",
         "mcu": "F103",
-        "size": "85 KB"
+        "size": "85 KB",
+        "variant": "Blackcore",
+        "version": "VIA"
       },
       {
         "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F103/trnthsn_tyson80_stm32f103_native_via.uf2",
         "format": "UF2",
         "mcu": "F103",
-        "size": "85 KB"
+        "size": "85 KB",
+        "variant": "Non-Blackcore",
+        "version": "Native"
       },
       {
         "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F103/trnthsn_tyson80_stm32f103_via.uf2",
         "format": "UF2",
         "mcu": "F103",
-        "size": "85 KB"
+        "size": "85 KB",
+        "variant": "Non-Blackcore",
+        "version": "VIA"
       }
     ]
   },

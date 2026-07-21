@@ -61,6 +61,21 @@ function cleanModelName(name) {
     .replace(/\s+/g, '');
 }
 
+function getFirmwareVariant(model, filename) {
+  if (model === 'Tyson80') {
+    return filename.includes('blackcore') ? 'Blackcore' : 'Non-Blackcore';
+  }
+  return undefined;
+}
+
+function getFirmwareVersion(model, filename) {
+  if (model === 'Tyson80') {
+    if (filename.includes('native')) return 'Native';
+    if (filename.includes('_via')) return 'VIA';
+  }
+  return undefined;
+}
+
 async function main() {
   console.log(`Fetching repo tree from ${GITHUB_OWNER}/${GITHUB_REPO}...`);
   const tree = await getRepoTree();
@@ -129,11 +144,13 @@ async function main() {
           ? parts.length === 3 ? parts[1] : parts[parts.length - 2]
           : undefined;
       const format = filename.endsWith('.uf2') ? 'UF2' : filename.endsWith('.bin') ? 'BIN' : 'FILE';
+      const variant = getFirmwareVariant(model, filename);
+      const version = getFirmwareVersion(model, filename);
       const size = fileSizes[ff.fullPath]
         ? `${Math.round(fileSizes[ff.fullPath] / 1024)} KB`
         : '';
 
-      fileEntries.push({ url, format, mcu, size });
+      fileEntries.push({ url, format, mcu, variant, version, size });
     }
 
     resources.push({
