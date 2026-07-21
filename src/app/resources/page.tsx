@@ -2,45 +2,20 @@
 
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, ChevronDown, Download, Usb, CheckCircle2, AlertCircle } from 'lucide-react';
 import resourcesData from '@/data/resources.json';
+import { KeyboardDetectPanel } from './components/KeyboardDetectPanel';
+import { ResourceCard } from './components/ResourceCard';
+import { ResourceFilters } from './components/ResourceFilters';
+import { ResourcePagination } from './components/ResourcePagination';
+import type { DetectedKeyboard, Resource, ResourceCategory } from './components/types';
+import {
+  computeVendorProductId,
+  getHid,
+  resolveKeyboardModelFromName,
+} from './components/resource-utils';
 
-type ResourceFile = {
-  url: string;
-  format: string;
-  mcu?: string;
-  size?: string;
-};
-
-type Resource = {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  keyboardModel: string;
-  vendorProductId?: number;
-  files: ResourceFile[];
-};
-
-const resources = resourcesData as Resource[];
-
-type ResourceCategory = 'All' | 'JSON_DEFINITION' | 'FIRMWARE' | 'BOOTLOADER';
-
-const categoryOrder: ResourceCategory[] = ['All', 'JSON_DEFINITION', 'FIRMWARE', 'BOOTLOADER'];
 const PAGE_SIZE = 12;
-
-type DetectedKeyboard = {
-  vendorId: number;
-  productId: number;
-  productName: string;
-  vendorProductId: number;
-};
-
-const categoryLabel = (cat: ResourceCategory) => {
-  if (cat === 'All') return 'All';
-  if (cat === 'JSON_DEFINITION') return 'JSON';
-  return cat;
-};
+const resources = resourcesData as Resource[];
 
 const useDebounce = (value: string, delay: number) => {
   const [debounced, setDebounced] = useState(value);
@@ -49,26 +24,6 @@ const useDebounce = (value: string, delay: number) => {
     return () => clearTimeout(timer);
   }, [value, delay]);
   return debounced;
-};
-
-const formatBadge = (format: string) => {
-  const base = 'bg-[#fbfbfb] dark:bg-[#1a1a1a] text-[#121212] dark:text-white border';
-  const border = format === 'JSON'
-    ? 'border-[#121212] dark:border-white'
-    : format === 'UF2'
-    ? 'border-[#121212] dark:border-white'
-    : format === 'BIN'
-    ? 'border-[#121212] dark:border-white'
-    : 'border-[rgba(18,18,18,0.2)] dark:border-[rgba(255,255,255,0.2)]';
-  return `${base} ${border}`;
-};
-
-const computeVendorProductId = (vendorId: number, productId: number) =>
-  (vendorId << 16) | productId;
-
-const getHid = () => {
-  if (!('hid' in navigator)) return null;
-  return navigator.hid as HID;
 };
 
 export default function ResourcesPage() {
@@ -82,28 +37,47 @@ export default function ResourcesPage() {
   const [isDetecting, setIsDetecting] = useState(false);
   const debouncedKeyword = useDebounce(searchQuery, 300);
 
-  const matchedDefinition = useMemo(
+  const matchedDefinitions = useMemo(
     () =>
       detectedKeyboard
-        ? resources.find(
+        ? resources.filter(
             (resource) =>
               resource.category === 'JSON_DEFINITION' &&
               resource.vendorProductId === detectedKeyboard.vendorProductId
-          ) ?? null
-        : null,
+          )
+        : [],
     [detectedKeyboard]
+  );
+
+  const resolvedKeyboardModel = useMemo(
+    () =>
+      detectedKeyboard
+        ? resolveKeyboardModelFromName(detectedKeyboard.productName, matchedDefinitions, resources)
+        : null,
+    [detectedKeyboard, matchedDefinitions]
+  );
+
+  const matchedDefinition = useMemo(
+    () =>
+      resolvedKeyboardModel
+        ? matchedDefinitions.find(
+            (resource) =>
+              resource.keyboardModel.toLowerCase() === resolvedKeyboardModel.toLowerCase()
+          ) ?? matchedDefinitions[0] ?? null
+        : null,
+    [matchedDefinitions, resolvedKeyboardModel]
   );
 
   const matchedFirmware = useMemo(
     () =>
-      matchedDefinition
+      resolvedKeyboardModel
         ? resources.find(
             (resource) =>
               resource.category === 'FIRMWARE' &&
-              resource.keyboardModel.toLowerCase() === matchedDefinition.keyboardModel.toLowerCase()
+              resource.keyboardModel.toLowerCase() === resolvedKeyboardModel.toLowerCase()
           ) ?? null
         : null,
-    [matchedDefinition]
+    [resolvedKeyboardModel]
   );
 
   const filtered = useMemo(() => {
@@ -209,187 +183,32 @@ export default function ResourcesPage() {
           </p>
         </div>
 
-        <div className="border-y border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] py-6 mb-10">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Usb size={18} strokeWidth={1.5} className="text-[#121212] dark:text-white" />
-                <h2 className="text-[1.6rem] text-[#121212] dark:text-white" style={{ fontFamily: "'Jost', sans-serif" }}>
-                  {t('resources.detectTitle')}
-                </h2>
-              </div>
-              <p className="text-[1.4rem] text-[rgba(18,18,18,0.65)] dark:text-[rgba(255,255,255,0.65)] leading-relaxed">
-                {t('resources.detectDescription')}
-              </p>
-            </div>
+        <KeyboardDetectPanel
+          t={t}
+          detectedKeyboard={detectedKeyboard}
+          detectError={detectError}
+          isDetecting={isDetecting}
+          matchedDefinition={matchedDefinition}
+          matchedFirmware={matchedFirmware}
+          openDropdownId={openDropdownId}
+          onDetect={detectKeyboard}
+          onDropdownChange={setOpenDropdownId}
+          onDownload={handleDownload}
+        />
 
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-              <button
-                onClick={detectKeyboard}
-                disabled={isDetecting}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.3rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200 disabled:opacity-50 disabled:cursor-wait"
-              >
-                <Usb size={14} strokeWidth={1.7} />
-                {isDetecting ? t('resources.detecting') : t('resources.detectButton')}
-              </button>
-            </div>
-          </div>
-
-          {detectedKeyboard ? (
-            <div className="mt-5 border border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] p-4">
-              {matchedDefinition ? (
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 size={18} strokeWidth={1.7} className="mt-1 text-[#121212] dark:text-white" />
-                    <div>
-                      <p className="text-[1.4rem] text-[#121212] dark:text-white">
-                        {t('resources.definitionMatched', { name: matchedDefinition.keyboardModel })}
-                      </p>
-                      <p className="text-[1.2rem] text-[rgba(18,18,18,0.55)] dark:text-[rgba(255,255,255,0.55)] mt-1">
-                        {detectedKeyboard.productName}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <button
-                      onClick={() =>
-                        handleDownload(
-                          matchedDefinition.files[0].url,
-                          matchedDefinition.name,
-                          matchedDefinition.files[0].format
-                        )
-                      }
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2 border border-[#121212] dark:border-white text-[#121212] dark:text-white text-[1.3rem] tracking-wide hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-200"
-                    >
-                      <Download size={14} strokeWidth={1.7} />
-                      {t('resources.downloadJsonConfig')}
-                    </button>
-
-                    {matchedFirmware ? (
-                      matchedFirmware.files.length > 1 ? (
-                        <div className="relative">
-                          <button
-                            onClick={() =>
-                              setOpenDropdownId(
-                                openDropdownId === `detected-${matchedFirmware.id}`
-                                  ? null
-                                  : `detected-${matchedFirmware.id}`
-                              )
-                            }
-                            className="w-full inline-flex items-center justify-center gap-2 px-5 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.3rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200"
-                          >
-                            {t('resources.downloadFirmware')}
-                            <ChevronDown size={12} strokeWidth={2} />
-                          </button>
-
-                          {openDropdownId === `detected-${matchedFirmware.id}` && (
-                            <>
-                              <div
-                                className="fixed inset-0 z-10"
-                                onClick={() => setOpenDropdownId(null)}
-                              />
-                              <div className="absolute left-0 right-0 top-full mt-1 min-w-[18rem] bg-white dark:bg-[#1a1a1a] border border-[rgba(18,18,18,0.2)] dark:border-[rgba(255,255,255,0.2)] z-20 shadow-sm">
-                                {matchedFirmware.files.map((file, idx) => (
-                                  <button
-                                    key={idx}
-                                    onClick={() => {
-                                      handleDownload(
-                                        file.url,
-                                        `${matchedFirmware.name} (${file.mcu || file.format})`,
-                                        file.format
-                                      );
-                                      setOpenDropdownId(null);
-                                    }}
-                                    className="w-full text-left px-4 py-3 text-[1.3rem] text-[#121212] dark:text-white hover:bg-[#fbfbfb] dark:hover:bg-[#2a2a2a] transition-colors flex items-center justify-between gap-4"
-                                  >
-                                    <span>
-                                      {file.mcu ? `${file.mcu} (${file.format})` : file.format} &mdash;{' '}
-                                      {file.size}
-                                    </span>
-                                    <Download size={14} strokeWidth={2} />
-                                  </button>
-                                ))}
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() =>
-                            handleDownload(
-                              matchedFirmware.files[0].url,
-                              matchedFirmware.name,
-                              matchedFirmware.files[0].format
-                            )
-                          }
-                          className="inline-flex items-center justify-center gap-2 px-5 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.3rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200"
-                        >
-                          <Download size={14} strokeWidth={1.7} />
-                          {t('resources.downloadFirmware')}
-                        </button>
-                      )
-                    ) : null}
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-start gap-3">
-                  <AlertCircle size={18} strokeWidth={1.7} className="mt-1 text-[#121212] dark:text-white" />
-                  <div>
-                    <p className="text-[1.4rem] text-[rgba(18,18,18,0.65)] dark:text-[rgba(255,255,255,0.65)]">
-                      {t('resources.noDetectedDefinition')}
-                    </p>
-                    <p className="text-[1.2rem] text-[rgba(18,18,18,0.55)] dark:text-[rgba(255,255,255,0.55)] mt-1">
-                      {detectedKeyboard.productName}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : null}
-
-          {detectError ? (
-            <p className="mt-4 text-[1.3rem] text-red-500">{detectError}</p>
-          ) : null}
-        </div>
-
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-          <div className="flex flex-wrap gap-2">
-            {categoryOrder.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => {
-                  setActiveCategory(cat);
-                  setPage(1);
-                }}
-                className={`px-5 py-2 text-[1.3rem] tracking-wide transition-colors duration-200 ${
-                  activeCategory === cat
-                    ? 'bg-[#121212] dark:bg-white text-white dark:text-[#121212]'
-                    : 'border border-[rgba(18,18,18,0.2)] dark:border-[rgba(255,255,255,0.2)] text-[#121212] dark:text-white hover:bg-[#fbfbfb] dark:hover:bg-[#1a1a1a]'
-                }`}
-              >
-                {categoryLabel(cat)}
-              </button>
-            ))}
-          </div>
-
-          <div className="relative w-full md:w-[32rem]">
-            <input
-              type="text"
-              placeholder={t('resources.searchPlaceholder')}
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setPage(1);
-              }}
-              className="w-full border border-[rgba(18,18,18,0.2)] dark:border-[rgba(255,255,255,0.2)] bg-white dark:bg-[#121212] px-4 py-3 pl-11 text-[1.5rem] text-[#121212] dark:text-white placeholder:text-[rgba(18,18,18,0.38)] dark:placeholder:text-[rgba(255,255,255,0.38)] focus:border-[#121212] dark:focus:border-white outline-none transition-colors"
-            />
-            <Search
-              size={18}
-              strokeWidth={1.5}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-[rgba(18,18,18,0.4)] dark:text-[rgba(255,255,255,0.4)]"
-            />
-          </div>
-        </div>
+        <ResourceFilters
+          t={t}
+          activeCategory={activeCategory}
+          searchQuery={searchQuery}
+          onCategoryChange={(category) => {
+            setActiveCategory(category);
+            setPage(1);
+          }}
+          onSearchChange={(query) => {
+            setSearchQuery(query);
+            setPage(1);
+          }}
+        />
 
         <p className="text-[1.3rem] text-[rgba(18,18,18,0.55)] dark:text-[rgba(255,255,255,0.55)] mb-6 uppercase tracking-wider">
           {t('resources.resultsCount', { count: total })}
@@ -404,161 +223,19 @@ export default function ResourcesPage() {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-              {paginated.map((resource) => {
-                const hasMultipleFiles = resource.files.length > 1;
-                const isJson = resource.category === 'JSON_DEFINITION';
-
-                return (
-                  <div
-                    key={resource.id}
-                    className="border border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] p-6 flex flex-col hover:border-[rgba(18,18,18,0.3)] dark:hover:border-[rgba(255,255,255,0.3)] transition-colors duration-200"
-                  >
-                    <div className="flex items-start justify-between gap-4 mb-4">
-                      <div className="flex flex-wrap gap-1">
-                        {Array.from(new Set(resource.files.map((f) => f.format))).map((fmt) => (
-                          <span
-                            key={fmt}
-                            className={`inline-flex items-center px-2 py-1 text-[1.1rem] uppercase tracking-wider ${formatBadge(
-                              fmt
-                            )}`}
-                          >
-                            {fmt}
-                          </span>
-                        ))}
-                      </div>
-                      <span className="text-[1.2rem] text-[rgba(18,18,18,0.55)] dark:text-[rgba(255,255,255,0.55)] whitespace-nowrap">
-                        {resource.files.length} file{resource.files.length > 1 ? 's' : ''}
-                      </span>
-                    </div>
-
-                    <h3
-                      className="text-[1.6rem] text-[#121212] dark:text-white mb-2"
-                      style={{ fontFamily: "'Jost', sans-serif" }}
-                    >
-                      {resource.name}
-                    </h3>
-
-                    <p className="text-[1.4rem] text-[rgba(18,18,18,0.75)] dark:text-[rgba(255,255,255,0.75)] leading-relaxed mb-4 flex-1">
-                      {resource.description}
-                    </p>
-
-                    <div className="pt-4 border-t border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)]">
-                      <span className="text-[1.1rem] text-[rgba(18,18,18,0.55)] dark:text-[rgba(255,255,255,0.55)] uppercase tracking-wider">
-                        {t('resources.model')}
-                      </span>
-                      <span className="text-[1.3rem] text-[#121212] dark:text-white ml-2">
-                        {resource.keyboardModel}
-                      </span>
-                    </div>
-
-                    <div className="mt-5">
-                      {isJson && resource.files.length === 1 ? (
-                        <div className="flex gap-2">
-                          <a
-                            href={resource.files[0].url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 text-center px-4 py-2 border border-[#121212] dark:border-white text-[#121212] dark:text-white text-[1.3rem] tracking-wide hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-200"
-                          >
-                            {t('resources.view')}
-                          </a>
-                          <button
-                            onClick={() =>
-                              handleDownload(
-                                resource.files[0].url,
-                                resource.name,
-                                resource.files[0].format
-                              )
-                            }
-                            className="flex-1 px-4 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.3rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200"
-                          >
-                            {t('resources.download')}
-                          </button>
-                        </div>
-                      ) : hasMultipleFiles ? (
-                        <div className="relative">
-                          <button
-                            onClick={() =>
-                              setOpenDropdownId(openDropdownId === resource.id ? null : resource.id)
-                            }
-                            className="w-full px-4 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.3rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200 flex items-center justify-center gap-2"
-                          >
-                            {t('resources.download')}
-                            <ChevronDown size={12} strokeWidth={2} />
-                          </button>
-
-                          {openDropdownId === resource.id && (
-                            <>
-                              <div
-                                className="fixed inset-0 z-10"
-                                onClick={() => setOpenDropdownId(null)}
-                              />
-                              <div className="absolute left-0 right-0 top-full mt-1 bg-white dark:bg-[#1a1a1a] border border-[rgba(18,18,18,0.2)] dark:border-[rgba(255,255,255,0.2)] z-20 shadow-sm">
-                                {resource.files.map((file, idx) => (
-                                  <button
-                                    key={idx}
-                                    onClick={() => {
-                                      handleDownload(
-                                        file.url,
-                                        `${resource.name} (${file.mcu || file.format})`,
-                                        file.format
-                                      );
-                                      setOpenDropdownId(null);
-                                    }}
-                                    className="w-full text-left px-4 py-3 text-[1.3rem] text-[#121212] dark:text-white hover:bg-[#fbfbfb] dark:hover:bg-[#2a2a2a] transition-colors flex items-center justify-between"
-                                  >
-                                    <span>
-                                      {file.mcu ? `${file.mcu} (${file.format})` : file.format} &mdash;{' '}
-                                      {file.size}
-                                    </span>
-                                    <Download size={14} strokeWidth={2} />
-                                  </button>
-                                ))}
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() =>
-                            handleDownload(
-                              resource.files[0].url,
-                              resource.name,
-                              resource.files[0].format
-                            )
-                          }
-                          className="w-full px-4 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.3rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200"
-                        >
-                          {t('resources.download')}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+              {paginated.map((resource) => (
+                <ResourceCard
+                  key={resource.id}
+                  t={t}
+                  resource={resource}
+                  openDropdownId={openDropdownId}
+                  onDropdownChange={setOpenDropdownId}
+                  onDownload={handleDownload}
+                />
+              ))}
             </div>
 
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-4 mt-12">
-                <button
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page <= 1}
-                  className="px-6 py-2 border border-[#121212] dark:border-white text-[#121212] dark:text-white text-[1.4rem] tracking-wide hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                  {t('common.previous')}
-                </button>
-                <span className="text-[1.4rem] text-[#121212] dark:text-white">
-                  {page} / {totalPages}
-                </span>
-                <button
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page >= totalPages}
-                  className="px-6 py-2 border border-[#121212] dark:border-white text-[#121212] dark:text-white text-[1.4rem] tracking-wide hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
-              </div>
-            )}
+            <ResourcePagination t={t} page={page} totalPages={totalPages} onPageChange={setPage} />
           </>
         )}
       </div>
