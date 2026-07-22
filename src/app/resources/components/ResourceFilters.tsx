@@ -11,13 +11,13 @@ type ResourceFiltersProps = {
   onSearchChange: (query: string) => void;
 };
 
-export function ResourceFilters({
+export const ResourceFilters = ({
   t,
   activeCategory,
   searchQuery,
   onCategoryChange,
   onSearchChange,
-}: ResourceFiltersProps) {
+}: ResourceFiltersProps) => {
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
       <div className="flex flex-wrap gap-2">
@@ -52,4 +52,4 @@ export function ResourceFilters({
       </div>
     </div>
   );
-}
+};

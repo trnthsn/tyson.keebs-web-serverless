@@ -9,7 +9,7 @@ const Footer = () => {
 
   return (
     <footer className="border-t border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] mt-20 transition-colors duration-300">
-      <div className="max-w-[120rem] mx-auto px-6 md:px-0 pt-16 pb-8">
+      <div className="max-w-[120rem] mx-auto px-6 md:px-6 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
             <h4

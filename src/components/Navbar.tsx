@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-[#0a0a0a] border-b border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.08)] transition-colors duration-300 shadow-sm dark:shadow-lg dark:shadow-black/20">
-      <div className="max-w-[120rem] mx-auto px-6 md:px-0">
+      <div className="max-w-[120rem] mx-auto px-6 md:px-6">
         <div className="flex items-center justify-between h-[6rem]">
           <nav className="flex items-center gap-8">
             <Link

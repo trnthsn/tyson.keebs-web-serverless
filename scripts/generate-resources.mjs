@@ -8,7 +8,7 @@ const API_BASE = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
 
 const TOKEN = process.env.GITHUB_TOKEN || '';
 
-async function fetchJson(url, useAuth = false) {
+const fetchJson = async (url, useAuth = false) => {
   const headers = {};
   if (TOKEN && useAuth) {
     headers['Authorization'] = `Bearer ${TOKEN}`;
@@ -16,20 +16,20 @@ async function fetchJson(url, useAuth = false) {
   const res = await fetch(url, { headers });
   if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
   return res.json();
-}
+};
 
-async function fetchRaw(url) {
+const fetchRaw = async (url) => {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
   return res.json();
-}
+};
 
-async function getRepoTree() {
+const getRepoTree = async () => {
   const data = await fetchJson(`${API_BASE}/git/trees/${GITHUB_BRANCH}?recursive=1`);
   return data.tree;
-}
+};
 
-async function extractVendorProductId(rawUrl) {
+const extractVendorProductId = async (rawUrl) => {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const json = await fetchRaw(rawUrl);
@@ -50,33 +50,33 @@ async function extractVendorProductId(rawUrl) {
     }
   }
   return null;
-}
+};
 
-function cleanModelName(name) {
+const cleanModelName = (name) => {
   let base = name.replace(/\.json$/i, '');
   base = base.replace(/^trnthsn_/, '').replace(/_via$/, '');
   return base
     .replace(/_/g, ' ')
     .replace(/\b\w/g, (c) => c.toUpperCase())
     .replace(/\s+/g, '');
-}
+};
 
-function getFirmwareVariant(model, filename) {
+const getFirmwareVariant = (model, filename) => {
   if (model === 'Tyson80') {
     return filename.includes('blackcore') ? 'Blackcore' : 'Non-Blackcore';
   }
   return undefined;
-}
+};
 
-function getFirmwareVersion(model, filename) {
+const getFirmwareVersion = (model, filename) => {
   if (model === 'Tyson80') {
     if (filename.includes('native')) return 'Native';
     if (filename.includes('_via')) return 'VIA';
   }
   return undefined;
-}
+};
 
-async function main() {
+const main = async () => {
   console.log(`Fetching repo tree from ${GITHUB_OWNER}/${GITHUB_REPO}...`);
   const tree = await getRepoTree();
 
@@ -188,7 +188,7 @@ async function main() {
   const outputPath = path.resolve(process.cwd(), 'src/data/resources.json');
   fs.writeFileSync(outputPath, JSON.stringify(resources, null, 2));
   console.log(`Generated resources.json with ${resources.length} entries → ${outputPath}`);
-}
+};
 
 main().catch((err) => {
   console.error('Failed to generate resources:', err);

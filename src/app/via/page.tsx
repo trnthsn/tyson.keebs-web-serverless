@@ -287,7 +287,7 @@ const ConnectedView = ({
   );
 };
 
-export default function ViaConfigPage() {
+const ViaConfigPage = () => {
   const [state, dispatch] = useReducer(viaReducer, initialState);
   const cleanupRef = useRef<(() => void) | null>(null);
 
@@ -316,8 +316,11 @@ export default function ViaConfigPage() {
       if (parsed) {
         dispatch({ type: 'DEFINITION_LOADED', definition: parsed });
       }
-    } catch (err: any) {
-      dispatch({ type: 'CONNECT_ERROR', error: err.message || 'Failed to connect' });
+    } catch (err: unknown) {
+      dispatch({
+        type: 'CONNECT_ERROR',
+        error: err instanceof Error ? err.message : 'Failed to connect',
+      });
     }
   }, []);
 
@@ -334,4 +337,6 @@ export default function ViaConfigPage() {
   if (state.error) return <ErrorView message={state.error} onRetry={connect} onCancel={disconnect} />;
   if (!state.deviceInfo) return <DisconnectedView onConnect={connect} />;
   return <ConnectedView deviceInfo={state.deviceInfo} definition={state.definition} onDisconnect={disconnect} />;
-}
+};
+
+export default ViaConfigPage;

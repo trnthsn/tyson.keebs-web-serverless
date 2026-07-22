@@ -15,11 +15,11 @@ export const metadata: Metadata = {
   description: "VIA keyboard configurator and firmware resources for TysonKeebs PCBs",
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
   return (
     <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <head>
@@ -49,4 +49,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
