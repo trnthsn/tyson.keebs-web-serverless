@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import resourcesData from '@/data/resources.json';
 import { KeyboardDetectPanel } from './components/KeyboardDetectPanel';
 import { ResourceCard } from './components/ResourceCard';
@@ -28,14 +29,42 @@ const useDebounce = (value: string, delay: number) => {
 
 const ResourcesPage = () => {
   const { t } = useTranslation();
-  const [activeCategory, setActiveCategory] = useState<ResourceCategory>('All');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(1);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [activeCategory, setActiveCategory] = useState<ResourceCategory>(() => {
+    const category = searchParams.get('category');
+    return category === 'JSON_DEFINITION' || category === 'FIRMWARE' || category === 'BOOTLOADER'
+      ? category
+      : 'All';
+  });
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get('search') || '');
+  const [page, setPage] = useState(() => {
+    const pageParam = searchParams.get('page');
+    return pageParam ? parseInt(pageParam, 10) || 1 : 1;
+  });
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const [detectedKeyboard, setDetectedKeyboard] = useState<DetectedKeyboard | null>(null);
   const [detectError, setDetectError] = useState<string | null>(null);
   const [isDetecting, setIsDetecting] = useState(false);
+
   const debouncedKeyword = useDebounce(searchQuery, 300);
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const params = new URLSearchParams();
+    if (debouncedKeyword) params.set('search', debouncedKeyword);
+    if (activeCategory !== 'All') params.set('category', activeCategory);
+    if (page > 1) params.set('page', String(page));
+    const qs = params.toString();
+    router.replace(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false });
+  }, [debouncedKeyword, activeCategory, page, router, pathname]);
 
   const matchedDefinitions = useMemo(
     () =>
@@ -108,6 +137,7 @@ const ResourcesPage = () => {
   );
 
   const handleDownload = useCallback(async (url: string, name: string, format?: string) => {
+    const originalFilename = url.split('/').pop() || name;
     if (format === 'JSON') {
       try {
         const res = await fetch(url);
@@ -116,7 +146,7 @@ const ResourcesPage = () => {
         const blobUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = blobUrl;
-        a.download = `${name}.json`;
+        a.download = originalFilename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -128,7 +158,7 @@ const ResourcesPage = () => {
     }
     const a = document.createElement('a');
     a.href = url;
-    a.download = name;
+    a.download = originalFilename;
     a.click();
   }, []);
 
@@ -243,4 +273,10 @@ const ResourcesPage = () => {
   );
 };
 
-export default ResourcesPage;
+const ResourcesPageWrapper = () => (
+  <Suspense fallback={null}>
+    <ResourcesPage />
+  </Suspense>
+);
+
+export default ResourcesPageWrapper;

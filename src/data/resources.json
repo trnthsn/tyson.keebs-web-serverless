@@ -979,16 +979,6 @@
         "format": "UF2",
         "mcu": "F103",
         "size": "85 KB"
-      },
-      {
-        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Cinque/trnthsn_tyson60cinque_stm32f072_via.bin",
-        "format": "BIN",
-        "size": "43 KB"
-      },
-      {
-        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson60Cinque/trnthsn_tyson60cinque_stm32f103_via.uf2",
-        "format": "UF2",
-        "size": "85 KB"
       }
     ]
   },
