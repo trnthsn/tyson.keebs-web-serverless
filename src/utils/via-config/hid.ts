@@ -25,18 +25,29 @@ const hidCommand = async (
     padded[2 + i] = b;
   });
 
-  await device.sendReport(0, new Uint8Array(padded.slice(1)));
-
   return new Promise((resolve, reject) => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
     const handler = (e: HIDInputReportEvent) => {
       device.removeEventListener('inputreport', handler);
+      if (timer) clearTimeout(timer);
+      const bytes = Array.from(new Uint8Array(e.data.buffer, e.data.byteOffset, e.data.byteLength));
+      console.log('[Tyson VIA] HID protocol response', {
+        command,
+        response: bytes,
+      });
       resolve(e.data);
     };
-    setTimeout(() => {
+    device.addEventListener('inputreport', handler);
+    timer = setTimeout(() => {
       device.removeEventListener('inputreport', handler);
       reject(new Error('HID command timeout'));
     }, 5000);
-    device.addEventListener('inputreport', handler);
+
+    device.sendReport(0, new Uint8Array(padded.slice(1))).catch((error) => {
+      device.removeEventListener('inputreport', handler);
+      if (timer) clearTimeout(timer);
+      reject(error);
+    });
   });
 };
 
