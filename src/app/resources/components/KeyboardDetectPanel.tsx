@@ -16,7 +16,7 @@ type KeyboardDetectPanelProps = {
   onDownload: (url: string, name: string, format?: string) => void;
 };
 
-export function KeyboardDetectPanel({
+export const KeyboardDetectPanel = ({
   t,
   detectedKeyboard,
   detectError,
@@ -27,7 +27,7 @@ export function KeyboardDetectPanel({
   onDetect,
   onDropdownChange,
   onDownload,
-}: KeyboardDetectPanelProps) {
+}: KeyboardDetectPanelProps) => {
   return (
     <div className="border-y border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] py-6 mb-10">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
@@ -168,4 +168,4 @@ export function KeyboardDetectPanel({
       ) : null}
     </div>
   );
-}
+};

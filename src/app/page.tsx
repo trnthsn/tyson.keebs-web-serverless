@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
 
-export default function Home() {
+const Home = () => {
   const { t } = useTranslation();
 
   return (
@@ -72,4 +72,6 @@ export default function Home() {
       </section>
     </main>
   );
-}
+};
+
+export default Home;

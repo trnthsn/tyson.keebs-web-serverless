@@ -26,7 +26,7 @@ const useDebounce = (value: string, delay: number) => {
   return debounced;
 };
 
-export default function ResourcesPage() {
+const ResourcesPage = () => {
   const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState<ResourceCategory>('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -241,4 +241,6 @@ export default function ResourcesPage() {
       </div>
     </div>
   );
-}
+};
+
+export default ResourcesPage;

@@ -7,7 +7,7 @@ type ResourcePaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-export function ResourcePagination({ t, page, totalPages, onPageChange }: ResourcePaginationProps) {
+export const ResourcePagination = ({ t, page, totalPages, onPageChange }: ResourcePaginationProps) => {
   if (totalPages <= 1) return null;
 
   return (
@@ -31,4 +31,4 @@ export function ResourcePagination({ t, page, totalPages, onPageChange }: Resour
       </button>
     </div>
   );
-}
+};

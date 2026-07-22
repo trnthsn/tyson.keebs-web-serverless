@@ -11,13 +11,13 @@ type ResourceCardProps = {
   onDownload: (url: string, name: string, format?: string) => void;
 };
 
-export function ResourceCard({
+export const ResourceCard = ({
   t,
   resource,
   openDropdownId,
   onDropdownChange,
   onDownload,
-}: ResourceCardProps) {
+}: ResourceCardProps) => {
   const hasMultipleFiles = resource.files.length > 1;
   const isJson = resource.category === 'JSON_DEFINITION';
 
@@ -131,4 +131,4 @@ export function ResourceCard({
       </div>
     </div>
   );
-}
+};
