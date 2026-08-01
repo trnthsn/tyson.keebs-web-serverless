@@ -93,6 +93,26 @@ img { max-width: 100%; display: block; }
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+@keyframes keymap-blink {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.keymap-selected-blink {
+  animation: keymap-blink 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keymap-selected-blink {
+    animation: none;
+  }
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

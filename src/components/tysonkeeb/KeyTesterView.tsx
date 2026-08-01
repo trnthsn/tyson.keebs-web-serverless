@@ -61,7 +61,7 @@ export const KeyTesterView = ({
   }, [deviceInfo, rows, cols, bytesPerRow]);
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex-1 min-h-0 flex flex-col">
       <div className="px-4 py-3 text-[1.6rem] text-[#222] dark:text-[#d9d9d9] border-b border-[#796c6c] dark:border-[#414141]">
         {t('tysonkeeb.keyTester')} -{' '}
         <span className="text-red-500">{pressedKeys.size}</span>{' '}

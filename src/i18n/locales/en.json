@@ -73,7 +73,7 @@
     "next": "Next"
   },
   "tysonkeeb": {
-    "title": "TysonKeebs VIA Config",
+    "title": "VIA Config",
     "connect": "Connect",
     "connected": "Connected",
     "connecting": "Connecting...",
@@ -90,7 +90,7 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "connectTitle": "Connect your keyboard",
-    "connectHint": "Plug in a VIA-compatible keyboard and click Connect. Your browser will ask for permission to access the device.",
+    "connectHint": "Plug in a Tyson.Keebs keyboard and click Connect.",
     "webhidUnavailable": "WebHID is not available",
     "webhidUnavailableHint": "This tool requires WebHID, which is only supported in Chromium-based browsers (Chrome, Edge, Brave). Open this page in one of those browsers.",
     "definitionNotFound": "Could not find a keyboard definition for this device in the resources.",

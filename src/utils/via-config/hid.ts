@@ -484,3 +484,41 @@ export const setCustomColor = async (
     sat,
   ]);
 };
+
+// V3 custom menu values reuse the 0x07/0x08/0x09 bytes with [channel, id]
+// addressing (mirrors keyboard-api CUSTOM_MENU_GET_VALUE/SET_VALUE/SAVE).
+export const getCustomMenuValue = async (
+  deviceInfo: DeviceInfo,
+  channel: number,
+  id: number,
+  resultLength = 1,
+): Promise<number[]> => {
+  const res = await hidCommand(
+    deviceInfo.device,
+    APICommand.BACKLIGHT_CONFIG_GET_VALUE,
+    [channel, id],
+  );
+  return res.slice(4, 4 + resultLength);
+};
+
+export const setCustomMenuValue = async (
+  deviceInfo: DeviceInfo,
+  channel: number,
+  id: number,
+  ...rest: number[]
+) => {
+  await hidCommand(deviceInfo.device, APICommand.BACKLIGHT_CONFIG_SET_VALUE, [
+    channel,
+    id,
+    ...rest,
+  ]);
+};
+
+export const saveCustomMenu = async (
+  deviceInfo: DeviceInfo,
+  channel: number,
+) => {
+  await hidCommand(deviceInfo.device, APICommand.BACKLIGHT_CONFIG_SAVE, [
+    channel,
+  ]);
+};

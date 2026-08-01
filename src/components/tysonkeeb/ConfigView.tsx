@@ -1,10 +1,19 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { VIAKey } from '@the-via/reader';
+import {
+  getLightingDefinition,
+  isVIADefinitionV2,
+  type VIAKey,
+} from '@the-via/reader';
 import type { ParsedDefinition } from '@/utils/via-config/definitions';
-import type { KeymapStore, LightingData } from '@/components/tysonkeeb/useTysonKeebDevice';
+import type {
+  CustomColor,
+  KeymapStore,
+  LightingData,
+} from '@/components/tysonkeeb/useTysonKeebDevice';
+import { resolveV3Menus } from '@/utils/via-config/v3-menus';
 import { KeyboardView } from '@/components/tysonkeeb/KeyboardView';
 import { LayerControl } from '@/components/tysonkeeb/LayerControl';
 import { KeycodePicker } from '@/components/tysonkeeb/KeycodePicker';
@@ -16,6 +25,7 @@ type ConfigViewProps = {
   definition: ParsedDefinition;
   keymapStore: KeymapStore;
   lightingData: LightingData | null;
+  customColors: CustomColor[] | null;
   keys: VIAKey[];
   cols: number;
   layoutOptions: number[] | null;
@@ -24,6 +34,12 @@ type ConfigViewProps = {
   byteToKey: Record<number, string>;
   updateBacklightValue: (command: number, ...rest: number[]) => Promise<void>;
   updateCustomColor: (idx: number, hue: number, sat: number) => Promise<void>;
+  updateMenuValue: (
+    name: string,
+    channel: number,
+    id: number,
+    ...rest: number[]
+  ) => Promise<void>;
   onDisconnect: () => void;
 };
 
@@ -33,6 +49,7 @@ export const ConfigView = ({
   definition,
   keymapStore,
   lightingData,
+  customColors,
   keys,
   cols,
   layoutOptions,
@@ -41,10 +58,18 @@ export const ConfigView = ({
   byteToKey,
   updateBacklightValue,
   updateCustomColor,
+  updateMenuValue,
   onDisconnect,
 }: ConfigViewProps) => {
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>('keymap');
+
+  useEffect(() => {
+    keymapStore.setIsSelectable(tab === 'keymap');
+    if (tab !== 'keymap') {
+      keymapStore.setSelectedKey(null);
+    }
+  }, [tab, keymapStore]);
 
   const { layers, layerCount, selectedLayer, selectedKey, isSelectable, loadProgress } = keymapStore;
 
@@ -52,12 +77,6 @@ export const ConfigView = ({
     if (!layers || layers.length === 0) return null;
     return layers[Math.min(selectedLayer, layers.length - 1)] ?? null;
   }, [layers, selectedLayer]);
-
-  const usedKeycodes = useMemo(() => {
-    const set = new Set<number>();
-    (layers || []).forEach((layer) => layer.forEach((byte) => set.add(byte)));
-    return set;
-  }, [layers]);
 
   const tabs: { id: Tab; label: string }[] = [
     { id: 'keymap', label: t('tysonkeeb.keymap') },
@@ -69,7 +88,7 @@ export const ConfigView = ({
   ];
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex-1 min-h-0 flex flex-col">
       <div className="relative h-[50rem] shrink-0 border-b border-[#796c6c] dark:border-[#414141]">
         <div className="absolute top-0 left-0 z-10 p-4">
           <LayerControl
@@ -81,7 +100,7 @@ export const ConfigView = ({
         <div className="absolute top-0 right-0 z-10 p-4">
           <button
             onClick={onDisconnect}
-            className="px-4 py-2 text-[1.6rem] uppercase text-[#222] dark:text-[#d9d9d9] hover:bg-[#ebe4e4] dark:hover:bg-[#333] transition-colors duration-150"
+            className="px-4 py-2 text-[1.6rem] uppercase text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333] transition-colors duration-150"
           >
             {t('tysonkeeb.disconnect')}
           </button>
@@ -99,7 +118,7 @@ export const ConfigView = ({
         />
         {loadProgress < 1 && (
           <div className="absolute inset-0 z-20 bg-white/70 dark:bg-black/70 flex flex-col items-center justify-center gap-4">
-            <div className="w-[4rem] h-[4rem] border-4 border-[#E8C4B8] border-t-transparent rounded-full animate-spin" />
+            <div className="w-[4rem] h-[4rem] border-4 border-[#9c9c9c] border-t-transparent rounded-full animate-spin" />
             <div className="text-[1.6rem] text-[#222] dark:text-[#d9d9d9] tabular-nums">
               {t('tysonkeeb.loadingKeymap')}{' '}
               {Math.round(loadProgress * 100)}%
@@ -108,30 +127,31 @@ export const ConfigView = ({
         )}
       </div>
 
-      <div className="flex-1 min-h-0 flex">
-        <div className="w-[18rem] shrink-0 flex flex-col gap-1 p-4 bg-white dark:bg-[#282626] overflow-y-auto">
-          {tabs.map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => setTab(id)}
-              className={`px-4 py-3 text-[1.6rem] uppercase text-left rounded-[0.4rem] transition-colors duration-150 ${
-                tab === id
-                  ? 'bg-[#E8C4B8] text-[#363434]'
-                  : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#ebe4e4] dark:hover:bg-[#333]'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+      <div className="flex-1 min-h-0 flex flex-col bg-white dark:bg-[#282626]">
+        <div className="shrink-0 flex items-center justify-between border-b border-[#796c6c] dark:border-[#414141]">
+          <div className="flex gap-1 px-2 pt-2">
+            {tabs.map(({ id, label }) => (
+              <button
+                key={id}
+                onClick={() => setTab(id)}
+                className={`px-6 py-3 text-[1.6rem] uppercase tracking-wide rounded-t-[0.4rem] transition-colors duration-150 ${
+                  tab === id
+                    ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
+                    : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333]'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="flex-1 min-w-0 border-l border-[#796c6c] dark:border-[#414141] overflow-y-auto">
+        <div className="flex-1 min-h-0 min-w-0 overflow-y-auto">
           {tab === 'keymap' && (
             <KeycodePicker
               definition={definition.definition}
               selectedKey={selectedKey}
               keymap={displayKeymap}
-              usedKeycodes={usedKeycodes}
               basicKeyToByte={basicKeyToByte}
               byteToKey={byteToKey}
               onUpdateKey={keymapStore.updateKey}
@@ -148,8 +168,10 @@ export const ConfigView = ({
             <LightingPane
               definition={definition}
               lightingData={lightingData}
+              customColors={customColors}
               updateBacklightValue={updateBacklightValue}
               updateCustomColor={updateCustomColor}
+              updateMenuValue={updateMenuValue}
             />
           )}
           {tab === 'save' && (

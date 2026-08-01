@@ -129,11 +129,12 @@ export const KeyboardView = ({
                 transition-colors duration-100
                 ${
                   isSelected
-                    ? 'bg-[#E8C4B8] text-[#363434] border-[#E8C4B8]'
-                    : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#E8C4B8] border-[#796c6c] dark:border-[#414141]'
+                    ? 'bg-[#e0e0e0] dark:bg-[#414141] text-[#363434] dark:text-[#d9d9d9] scale-[0.98]'
+                    : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#d9d9d9] border-[#796c6c] dark:border-[#414141]'
                 }
                 ${pressedKeys && isMatrixKey && pressedKeys.has(k.row * cols + k.col) ? 'ring-[0.3rem] ring-red-500/80 border-red-500' : ''}
-                ${selectable && !isEncoder && isMatrixKey ? 'cursor-pointer hover:border-[#E8C4B8]' : ''}
+                ${selectable && !isEncoder && isMatrixKey ? 'cursor-pointer hover:border-[#9c9c9c]' : ''}
+                ${isSelected ? 'z-10' : ''}
               `}
               style={{
                 left,
@@ -182,6 +183,9 @@ export const KeyboardView = ({
                     {label?.label ?? ''}
                   </span>
                 </div>
+              )}
+              {isSelected && (
+                <div className="absolute inset-0 rounded-[0.6rem] bg-[#bdbdbd] dark:bg-[#8a8a8a] keymap-selected-blink pointer-events-none" />
               )}
             </div>
           );

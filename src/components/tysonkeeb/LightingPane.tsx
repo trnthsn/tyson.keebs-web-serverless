@@ -11,7 +11,17 @@ import {
   type VIADefinitionV3,
 } from '@the-via/reader';
 import type { ParsedDefinition } from '@/utils/via-config/definitions';
-import type { LightingData } from '@/components/tysonkeeb/useTysonKeebDevice';
+import type {
+  CustomColor,
+  LightingData,
+} from '@/components/tysonkeeb/useTysonKeebDevice';
+import {
+  evalShowIf,
+  flattenV3Menus,
+  resolveV3Menus,
+  type FlattenedMenu,
+  type MenuControl,
+} from '@/utils/via-config/v3-menus';
 
 type ControlMeta = {
   command: LightingValue;
@@ -25,11 +35,18 @@ type ControlMeta = {
 type LightingPaneProps = {
   definition: ParsedDefinition;
   lightingData: LightingData | null;
+  customColors: CustomColor[] | null;
   updateBacklightValue: (
     command: number,
     ...rest: number[]
   ) => Promise<void>;
   updateCustomColor: (idx: number, hue: number, sat: number) => Promise<void>;
+  updateMenuValue: (
+    name: string,
+    channel: number,
+    id: number,
+    ...rest: number[]
+  ) => Promise<void>;
 };
 
 const ColorPicker = ({
@@ -50,7 +67,7 @@ const ColorPicker = ({
         max={255}
         value={color.hue}
         onChange={(e) => setColor(+e.target.value, color.sat)}
-        className="w-full accent-[#E8C4B8]"
+        className="w-full accent-[#9c9c9c]"
       />
     </div>
     <div className="flex items-center gap-2">
@@ -63,7 +80,7 @@ const ColorPicker = ({
         max={255}
         value={color.sat}
         onChange={(e) => setColor(color.hue, +e.target.value)}
-        className="w-full accent-[#E8C4B8]"
+        className="w-full accent-[#9c9c9c]"
       />
     </div>
   </div>
@@ -87,13 +104,26 @@ const ControlRow = ({
 export const LightingPane = ({
   definition,
   lightingData,
+  customColors,
   updateBacklightValue,
   updateCustomColor,
+  updateMenuValue,
 }: LightingPaneProps) => {
   const { t } = useTranslation();
   const [category, setCategory] = useState<'general' | 'layout' | 'advanced'>(
     'general',
   );
+
+  if (definition.version === 'v3') {
+    return (
+      <V3MenuPane
+        menus={resolveV3Menus(definition.definition.menus)}
+        lightingData={lightingData}
+        updateMenuValue={updateMenuValue}
+        t={t}
+      />
+    );
+  }
 
   const v2Definition = isVIADefinitionV2(definition.definition)
     ? definition.definition
@@ -134,7 +164,7 @@ export const LightingPane = ({
               type="checkbox"
               checked={!!valArr[0]}
               onChange={(e) => updateBacklightValue(meta.command, +e.target.checked)}
-              className="w-[4rem] h-[2rem] accent-[#E8C4B8]"
+              className="w-[4rem] h-[2rem] accent-[#9c9c9c]"
             />
           </ControlRow>
         );
@@ -147,7 +177,7 @@ export const LightingPane = ({
               max={meta.max}
               value={valArr[0]}
               onChange={(e) => updateBacklightValue(meta.command, +e.target.value)}
-              className="w-full accent-[#E8C4B8]"
+              className="w-full accent-[#9c9c9c]"
             />
           </ControlRow>
         );
@@ -192,7 +222,7 @@ export const LightingPane = ({
                 const args = e.target.checked ? [254, 254] : [255, 255];
                 updateBacklightValue(meta.command, args[0], args[1]);
               }}
-              className="w-[4rem] h-[2rem] accent-[#E8C4B8]"
+              className="w-[4rem] h-[2rem] accent-[#9c9c9c]"
             />
           </ControlRow>
         );
@@ -353,7 +383,7 @@ export const LightingPane = ({
     underglowEffects[
       lightingData[LightingValue.QMK_RGBLIGHT_EFFECT][0]
     ]?.[1] === 1;
-  const useCustomColors = !!lightingData.customColors;
+  const useCustomColors = !!customColors;
   const showCustomColors = useCustomColors && colorsNeeded > 2;
 
   const categories = [
@@ -378,8 +408,8 @@ export const LightingPane = ({
             onClick={() => setCategory(cat.id)}
             className={`block w-full text-left py-2 px-4 text-[1.6rem] uppercase tracking-wide transition-colors duration-150 ${
               activeCategory.id === cat.id
-                ? 'bg-[#E8C4B8] text-[#363434]'
-                : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#ebe4e4] dark:hover:bg-[#333]'
+                ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
+                : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333]'
             }`}
           >
             {cat.label}
@@ -402,8 +432,8 @@ export const LightingPane = ({
                     ? LightingValue.BACKLIGHT_COLOR_1
                     : LightingValue.BACKLIGHT_COLOR_2;
                 const valArr = lightingData[command];
-                if (showCustomColors && lightingData.customColors) {
-                  const color = lightingData.customColors[val - 1];
+                if (showCustomColors && customColors) {
+                  const color = customColors[val - 1];
                   if (!color) return null;
                   return (
                     <ControlRow
@@ -444,6 +474,131 @@ export const LightingPane = ({
         {activeCategory.id === 'advanced' &&
           supportedControls(AdvancedControls).map(renderControl)}
       </div>
+    </div>
+  );
+};
+
+type V3MenuPaneProps = {
+  menus: ReturnType<typeof resolveV3Menus>;
+  lightingData: LightingData | null;
+  updateMenuValue: LightingPaneProps['updateMenuValue'];
+  t: (key: string) => string;
+};
+
+const V3MenuPane = ({
+  menus,
+  lightingData,
+  updateMenuValue,
+  t,
+}: V3MenuPaneProps) => {
+  if (!lightingData) {
+    return (
+      <div className="h-full flex items-center justify-center text-[1.6rem] text-[#707070] dark:text-[#b9b9b9]">
+        {t('tysonkeeb.lightingUnavailable')}
+      </div>
+    );
+  }
+
+  const flattened = flattenV3Menus(menus);
+  const groups: { label: string; submenuLabel: string | null; items: FlattenedMenu[] }[] = [];
+  for (const item of flattened) {
+    let group = groups.find((g) => g.label === item.menuLabel);
+    if (!group) {
+      group = { label: item.menuLabel, submenuLabel: null, items: [] };
+      groups.push(group);
+    }
+    group.items.push(item);
+  }
+
+  const setControlValue = (control: MenuControl, ...values: number[]) =>
+    updateMenuValue(control.name, control.channel, control.id, ...values);
+
+  const renderControl = (item: FlattenedMenu) => {
+    const { control } = item;
+    if (!evalShowIf(control.showIf, lightingData)) return null;
+    const valArr = lightingData[control.name];
+    if (!valArr) return null;
+
+    switch (control.type) {
+      case 'range':
+        return (
+          <ControlRow key={control.name} label={control.label}>
+            <input
+              type="range"
+              min={control.min ?? 0}
+              max={control.max ?? 255}
+              value={valArr[0]}
+              onChange={(e) => setControlValue(control, +e.target.value)}
+              className="w-full accent-[#9c9c9c]"
+            />
+          </ControlRow>
+        );
+      case 'dropdown':
+        return (
+          <ControlRow key={control.name} label={control.label}>
+            <select
+              value={valArr[0]}
+              onChange={(e) => setControlValue(control, +e.target.value)}
+              className="w-full bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-3 py-2 rounded-[0.4rem]"
+            >
+              {(control.options ?? []).map((option, idx) => (
+                <option key={idx} value={idx}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </ControlRow>
+        );
+      case 'color':
+        return (
+          <ControlRow key={control.name} label={control.label}>
+            <ColorPicker
+              color={{ hue: valArr[0], sat: valArr[1] }}
+              setColor={(hue, sat) => setControlValue(control, hue, sat)}
+            />
+          </ControlRow>
+        );
+      case 'toggle':
+        return (
+          <ControlRow key={control.name} label={control.label}>
+            <input
+              type="checkbox"
+              checked={!!valArr[0]}
+              onChange={(e) => setControlValue(control, +e.target.checked)}
+              className="w-[4rem] h-[2rem] accent-[#9c9c9c]"
+            />
+          </ControlRow>
+        );
+    }
+  };
+
+  return (
+    <div className="h-full overflow-y-auto px-8 py-4">
+      {groups.length === 0 && (
+        <div className="h-full flex items-center justify-center text-[1.6rem] text-[#707070] dark:text-[#b9b9b9]">
+          {t('tysonkeeb.lightingUnavailable')}
+        </div>
+      )}
+      {groups.map((group) => (
+        <div key={group.label}>
+          <div className="py-4 text-[1.8rem] font-medium text-[#222] dark:text-[#d9d9d9] border-b border-[#796c6c] dark:border-[#414141]">
+            {group.label}
+          </div>
+          {group.items.map((item) => {
+            const rendered = renderControl(item);
+            if (!rendered) return null;
+            if (!item.submenuLabel) return rendered;
+            return (
+              <div key={item.control.name}>
+                <div className="py-4 text-[1.4rem] uppercase tracking-wide text-[#707070] dark:text-[#b9b9b9] border-b border-[#796c6c]/40 dark:border-[#414141]/40">
+                  {item.submenuLabel}
+                </div>
+                {rendered}
+              </div>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 };

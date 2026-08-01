@@ -4,8 +4,10 @@ import { TysonKeebTool } from '@/components/tysonkeeb/TysonKeebTool';
 
 const ViaConfigPage = () => {
   return (
-    <div className="h-[calc(100dvh-16rem)] md:h-[calc(100dvh-12rem)] min-h-[48rem]">
-      <TysonKeebTool />
+    <div className="px-6 md:px-12 py-12 md:py-16">
+      <div className="max-w-[120rem] mx-auto min-h-[60rem]">
+        <TysonKeebTool />
+      </div>
     </div>
   );
 };

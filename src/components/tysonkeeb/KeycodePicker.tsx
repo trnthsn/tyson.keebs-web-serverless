@@ -25,7 +25,6 @@ type KeycodePickerProps = {
   definition: VIADefinitionV2 | VIADefinitionV3;
   selectedKey: number | null;
   keymap: number[] | null;
-  usedKeycodes: Set<number>;
   basicKeyToByte: Record<string, number>;
   byteToKey: Record<number, string>;
   onUpdateKey: (keyIndex: number, value: number) => void;
@@ -81,7 +80,6 @@ export const KeycodePicker = ({
   definition,
   selectedKey,
   keymap,
-  usedKeycodes,
   basicKeyToByte,
   byteToKey,
   onUpdateKey,
@@ -175,8 +173,8 @@ export const KeycodePicker = ({
           onClick={() => setCategoryId('other')}
           className={`block w-full text-left py-2 px-4 text-[1.6rem] uppercase tracking-wide transition-colors duration-150 ${
             categoryId === 'other'
-              ? 'bg-[#E8C4B8] text-[#363434]'
-              : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#ebe4e4] dark:hover:bg-[#333]'
+              ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
+              : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333]'
           }`}
         >
           {t('tysonkeeb.other')}
@@ -187,8 +185,8 @@ export const KeycodePicker = ({
             onClick={() => setCategoryId(m.id)}
             className={`block w-full text-left py-2 px-4 text-[1.6rem] uppercase tracking-wide transition-colors duration-150 ${
               categoryId === m.id
-                ? 'bg-[#E8C4B8] text-[#363434]'
-                : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#ebe4e4] dark:hover:bg-[#333]'
+                ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
+                : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333]'
             }`}
           >
             {m.label}
@@ -196,24 +194,15 @@ export const KeycodePicker = ({
         ))}
         <button
           onClick={() => setModalOpen(true)}
-          className="block w-full text-left py-2 px-4 text-[1.6rem] uppercase tracking-wide text-[#222] dark:text-[#d9d9d9] hover:bg-[#ebe4e4] dark:hover:bg-[#333] transition-colors duration-150"
+          className="block w-full text-left py-2 px-4 text-[1.6rem] uppercase tracking-wide text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333] transition-colors duration-150"
         >
           {t('tysonkeeb.anyKeycode')}
         </button>
       </div>
 
       <div className="flex-1 flex flex-col min-w-0">
-        <div className="py-4 px-4 flex items-center justify-between border-b border-[#796c6c] dark:border-[#414141]">
-          <span className="text-[2rem] uppercase">{menu?.label}</span>
-          <span className="text-[1.6rem] text-[#707070] dark:text-[#b9b9b9] tabular-nums">
-            {selectedByte != null
-              ? `0x${selectedByte.toString(16).toUpperCase().padStart(4, '0')}`
-              : ''}
-          </span>
-        </div>
-
         <div className="flex-1 overflow-y-auto p-4">
-          <div className="grid grid-cols-8 gap-2 w-fit">
+          <div className="grid gap-2 grid-cols-[repeat(auto-fill,minmax(6.4rem,1fr))]">
             {menu?.keycodes.map((keycode, idx) => {
               const byte = getByteForCode(keycode.code, basicKeyToByte);
               if (byte == null) return null;
@@ -226,14 +215,10 @@ export const KeycodePicker = ({
                   onMouseEnter={() => setHoveredKeycode(byte)}
                   onMouseLeave={() => setHoveredKeycode(null)}
                   title={keycode.title}
-                  className={`h-[6.4rem] w-[6.4rem] flex items-center justify-center text-[1.4rem] rounded-[0.4rem] border transition-all duration-100 ${
-                    usedKeycodes.has(byte)
-                      ? 'opacity-40 border-[#B8C2C2]'
-                      : 'border-[#E8C4B8] opacity-100'
-                  } ${
+                  className={`h-[6.4rem] flex items-center justify-center text-[1.4rem] rounded-[0.4rem] border border-[#c9c9c9] transition-all duration-100 ${
                     hoveredKeycode === byte
-                      ? 'bg-[#E8C4B8] text-[#363434]'
-                      : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#E8C4B8]'
+                      ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
+                      : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#d9d9d9]'
                   } cursor-pointer`}
                 >
                   {getShortNameForKeycode(keycode)}
@@ -267,7 +252,7 @@ export const KeycodePicker = ({
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && inputIsValid(modalInput)) confirmModal();
               }}
-              className="w-full bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-4 py-3 rounded-[0.4rem] outline-none focus:border-[#E8C4B8]"
+              className="w-full bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-4 py-3 rounded-[0.4rem] outline-none focus:border-[#9c9c9c]"
             />
             {suggestions.length > 0 && (
               <div className="mt-2 max-h-[24rem] overflow-y-auto border border-[#796c6c] dark:border-[#414141] rounded-[0.4rem]">
@@ -275,7 +260,7 @@ export const KeycodePicker = ({
                   <button
                     key={item.code}
                     onClick={() => setModalInput(item.code)}
-                    className="block w-full text-left px-4 py-2 text-[1.4rem] text-[#222] dark:text-[#d9d9d9] hover:bg-[#ebe4e4] dark:hover:bg-[#444]"
+                    className="block w-full text-left px-4 py-2 text-[1.4rem] text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#444]"
                   >
                     {item.code} - {item.name}
                   </button>
@@ -297,7 +282,7 @@ export const KeycodePicker = ({
                 onClick={confirmModal}
                 className={`px-6 py-2 text-[1.6rem] rounded-[0.4rem] border transition-colors duration-150 ${
                   inputIsValid(modalInput)
-                    ? 'border-[#E8C4B8] bg-[#E8C4B8] text-[#363434]'
+                    ? 'border-[#9c9c9c] bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
                     : 'border-[#796c6c] dark:border-[#414141] text-[#707070] dark:text-[#b9b9b9] cursor-not-allowed'
                 }`}
               >

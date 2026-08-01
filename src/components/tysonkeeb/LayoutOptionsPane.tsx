@@ -53,7 +53,7 @@ const LayoutControl = ({
         type="checkbox"
         checked={!!selectedOption}
         onChange={(e) => onChange(+e.target.checked)}
-        className="w-[4rem] h-[2rem] accent-[#E8C4B8]"
+        className="w-[4rem] h-[2rem] accent-[#9c9c9c]"
       />
     </div>
   );

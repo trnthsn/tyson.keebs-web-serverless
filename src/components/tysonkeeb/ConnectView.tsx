@@ -30,7 +30,7 @@ export const ConnectView = ({
 
   if (mounted && !isWebHidAvailable) {
     return (
-      <div className="h-full flex flex-col items-center justify-center gap-6 text-center px-8">
+      <div className="flex-1 flex flex-col items-center justify-center gap-6 text-center px-8">
         <div className="text-[2.4rem] font-medium text-[#222] dark:text-[#d9d9d9]">
           {t('tysonkeeb.webhidUnavailable')}
         </div>
@@ -42,7 +42,7 @@ export const ConnectView = ({
   }
 
   return (
-    <div className="h-full flex flex-col items-center justify-center gap-6 text-center px-8">
+    <div className="flex-1 flex flex-col items-center justify-center gap-6 text-center px-8">
       <div className="text-[2.4rem] font-medium text-[#222] dark:text-[#d9d9d9]">
         {t('tysonkeeb.connectTitle')}
       </div>
@@ -67,7 +67,7 @@ export const ConnectView = ({
       <button
         onClick={isConnecting ? undefined : onConnect}
         disabled={isConnecting}
-        className={`px-10 py-3 text-[1.8rem] uppercase tracking-wide rounded-[0.4rem] border border-[#E8C4B8] bg-[#E8C4B8] text-[#363434] transition-opacity ${
+        className={`px-10 py-3 text-[1.8rem] uppercase tracking-wide rounded-[0.4rem] border border-[#9c9c9c] bg-[#e0e0e0] text-[#363434] dark:border-[#414141] dark:bg-[#414141] dark:text-[#d9d9d9] transition-opacity ${
           isConnecting ? 'opacity-50 cursor-wait' : 'hover:opacity-90'
         }`}
       >

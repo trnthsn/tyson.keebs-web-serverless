@@ -14,6 +14,9 @@ import {
   saveLighting,
   getCustomColor,
   setCustomColor,
+  getCustomMenuValue,
+  setCustomMenuValue,
+  saveCustomMenu,
   type DeviceInfo,
 } from '@/utils/via-config/hid';
 import {
@@ -35,11 +38,14 @@ import {
   unpackBits,
 } from '@/utils/via-config/bit-pack';
 import { getLightingDefinition, LightingValue } from '@the-via/reader';
+import {
+  flattenV3Menus,
+  resolveV3Menus,
+} from '@/utils/via-config/v3-menus';
 
-export type LightingData = {
-  [command: number]: number[];
-  customColors?: { hue: number; sat: number }[];
-};
+export type LightingData = Record<string, number[]>;
+
+export type CustomColor = { hue: number; sat: number };
 
 const commandParamLengths: Record<number, number> = {
   [LightingValue.BACKLIGHT_COLOR_1]: 2,
@@ -95,6 +101,7 @@ export const useTysonKeebDevice = () => {
 
   // lighting state (mirrors via-app lightingSlice)
   const [lightingData, setLightingData] = useState<LightingData | null>(null);
+  const [customColors, setCustomColors] = useState<CustomColor[] | null>(null);
 
   // layout options state (mirrors via-app definitionsSlice layoutOptionsMap)
   const [layoutOptions, setLayoutOptions] = useState<number[] | null>(null);
@@ -170,7 +177,25 @@ export const useTysonKeebDevice = () => {
 
   const loadLighting = useCallback(
     async (deviceInfo: DeviceInfo, definition: ParsedDefinition) => {
-      if (definition.version !== 'v2') return;
+      if (definition.version === 'v3') {
+        if (deviceInfo.protocol < 11) return;
+        const flattened = flattenV3Menus(
+          resolveV3Menus(definition.definition.menus),
+        );
+        const commands = flattened.map(({ control }) => control);
+        if (commands.length === 0) return;
+        const res = await Promise.all(
+          commands.map((c) =>
+            getCustomMenuValue(deviceInfo, c.channel, c.id, c.bytes),
+          ),
+        );
+        const values = commands.reduce(
+          (acc, c, idx) => ({ ...acc, [c.name]: res[idx] }),
+          {} as LightingData,
+        );
+        setLightingData(values);
+        return;
+      }
       const { supportedLightingValues, effects } = getLightingDefinition(
         definition.definition.lighting,
       );
@@ -183,12 +208,12 @@ export const useTysonKeebDevice = () => {
         -1
       ) {
         const count = Math.max(...effects.map(([, num]) => num));
-        const customColors = await Promise.all(
+        const colors = await Promise.all(
           Array(count)
             .fill(0)
             .map((_, idx) => getCustomColor(deviceInfo, idx)),
         );
-        props = { customColors };
+        setCustomColors(colors);
       }
 
       const res = await Promise.all(
@@ -211,7 +236,6 @@ export const useTysonKeebDevice = () => {
     },
     [],
   );
-
   const disconnect = useCallback(async () => {
     cleanupRef.current?.();
     cleanupRef.current = null;
@@ -227,6 +251,7 @@ export const useTysonKeebDevice = () => {
     setSelectedLayer(0);
     setSelectedKeyState(null);
     setLightingData(null);
+    setCustomColors(null);
     setLayoutOptions(null);
   }, []);
 
@@ -328,14 +353,21 @@ export const useTysonKeebDevice = () => {
   const updateCustomColor = useCallback(
     async (idx: number, hue: number, sat: number) => {
       if (!deviceInfo) return;
-      setLightingData((current) => ({
-        ...current,
-        customColors: (current?.customColors || []).map((c, i) =>
-          i === idx ? { hue, sat } : c,
-        ),
-      }));
+      setCustomColors((current) =>
+        (current ?? []).map((c, i) => (i === idx ? { hue, sat } : c)),
+      );
       await setCustomColor(deviceInfo, idx, hue, sat);
       await saveLighting(deviceInfo);
+    },
+    [deviceInfo],
+  );
+
+  const updateMenuValue = useCallback(
+    async (name: string, channel: number, id: number, ...rest: number[]) => {
+      if (!deviceInfo) return;
+      setLightingData((current) => ({ ...current, [name]: [...rest] }));
+      await setCustomMenuValue(deviceInfo, channel, id, ...rest);
+      await saveCustomMenu(deviceInfo, channel);
     },
     [deviceInfo],
   );
@@ -363,8 +395,10 @@ export const useTysonKeebDevice = () => {
     disconnect,
     keymapStore,
     lightingData,
+    customColors,
     updateBacklightValue,
     updateCustomColor,
+    updateMenuValue,
     layoutOptions,
     updateLayoutOption,
     keys,

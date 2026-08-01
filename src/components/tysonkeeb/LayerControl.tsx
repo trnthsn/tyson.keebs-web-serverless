@@ -25,8 +25,8 @@ export const LayerControl = ({
           onClick={() => onSelectLayer(idx)}
           className={`px-2 py-1 text-[2rem] tabular-nums transition-colors duration-150 ${
             idx === selectedLayer
-              ? 'bg-[#E8C4B8] text-[#363434]'
-              : 'bg-transparent text-[#222] dark:text-[#d9d9d9] hover:bg-[#ebe4e4] dark:hover:bg-[#333]'
+              ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
+              : 'bg-transparent text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333]'
           }`}
         >
           {idx}
