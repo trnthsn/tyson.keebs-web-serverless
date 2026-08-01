@@ -16,11 +16,11 @@ import {
 
 export const CSSVarObject = {
   keyWidth: 52,
-  keyXSpacing: 2,
+  keyXSpacing: 3,
   keyHeight: 54,
-  keyYSpacing: 2,
-  keyXPos: 52 + 2,
-  keyYPos: 54 + 2,
+  keyYSpacing: 3,
+  keyXPos: 52 + 3,
+  keyYPos: 54 + 3,
   faceXPadding: [6, 6],
   faceYPadding: [2, 10],
   insideBorder: 10,
@@ -70,6 +70,56 @@ export function calculatePointPosition({
 
   return [transformedXPos, transformedYPos] as [number, number];
 }
+
+// Mirrors via-app getComboKeyProps: for keys with BOTH w2 and h2 defined,
+// returns the two normalized rects forming the stepped (ISO Enter) shape and
+// a clip-path polygon that keeps only their union within the bounding box.
+export const getComboKeyProps = (
+  k: VIAKey,
+): {
+  clipPath: null | string;
+  normalizedRects:
+    | null
+    | [[number, number, number, number], [number, number, number, number]];
+} => {
+  if (k.w2 === undefined || k.h2 === undefined) {
+    return { clipPath: null, normalizedRects: null };
+  }
+
+  const { x, y, x2 = 0, y2 = 0, w, w2, h, h2 } = k;
+  const boundingBoxWidth = Math.max(k.w, k.w2);
+  const boundingBoxHeight = Math.max(k.h, k.h2);
+  const minX = Math.min(x, x + x2);
+  const minY = Math.min(y, y + y2);
+  const [nx, nx2, ny, ny2, nw, nw2, nh, nh2] =
+    w === boundingBoxWidth
+      ? [x + x2 - minX, x - minX, y + y2 - minY, y - minY, w2, w, h2, h]
+      : [x - minX, x + x2 - minX, y - minY, y + y2 - minY, w, w2, h, h2];
+  const getPolygonPath = (corners: number[][]) =>
+    `polygon(${corners.map((c) => `${100 * c[0]}% ${100 * c[1]}%`).join(',')})`;
+
+  const corners = [
+    [nx2 / boundingBoxWidth, ny2 / boundingBoxHeight],
+    [nx / boundingBoxWidth, ny2 / boundingBoxHeight],
+    [nx / boundingBoxWidth, ny / boundingBoxHeight],
+    [(nx + nw) / boundingBoxWidth, ny / boundingBoxHeight],
+    [(nx + nw) / boundingBoxWidth, ny2 / boundingBoxHeight],
+    [(nx2 + nw2) / boundingBoxWidth, ny2 / boundingBoxHeight],
+    [(nx2 + nw2) / boundingBoxWidth, (ny2 + nh2) / boundingBoxHeight],
+    [(nx + nw) / boundingBoxWidth, (ny2 + nh2) / boundingBoxHeight],
+    [(nx + nw) / boundingBoxWidth, (ny + nh) / boundingBoxHeight],
+    [nx / boundingBoxWidth, (ny + nh) / boundingBoxHeight],
+    [nx / boundingBoxWidth, (ny2 + nh2) / boundingBoxHeight],
+    [nx2 / boundingBoxWidth, (ny2 + nh2) / boundingBoxHeight],
+  ];
+  return {
+    clipPath: getPolygonPath(corners),
+    normalizedRects: [
+      [nx, ny, nw, nh],
+      [nx2, ny2, nw2, nh2],
+    ],
+  };
+};
 
 const sortByX = (a: VIAKey, b: VIAKey) => {
   const aPoint = calculatePointPosition(a);
@@ -168,7 +218,7 @@ export const getLabel = (
 ): KeyLabel => {
   let label: string = '';
   let size: number = 1.0;
-  let offset: [number, number] = [0, 0];
+  const offset: [number, number] = [0, 0];
 
   let tooltipLabel: string = '';
   if (

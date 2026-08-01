@@ -5,6 +5,7 @@ import type { VIADefinitionV2, VIADefinitionV3, VIAKey } from '@the-via/reader';
 import {
   CSSVarObject,
   calculatePointPosition,
+  getComboKeyProps,
   getLabel,
 } from '@/utils/via-config/keyboard-rendering';
 
@@ -12,7 +13,25 @@ const keyWidth = CSSVarObject.keyWidth;
 const keyHeight = CSSVarObject.keyHeight;
 const keyXSpacing = CSSVarObject.keyXSpacing;
 const keyYSpacing = CSSVarObject.keyYSpacing;
-const casePadding = 36;
+const keyXPos = CSSVarObject.keyXPos;
+const keyYPos = CSSVarObject.keyYPos;
+const casePadding = 10;
+
+type KeyGeom = {
+  left: number;
+  top: number;
+  outerWidth: number;
+  outerHeight: number;
+  combo: {
+    clipPath: string;
+    shiftX: number;
+    boundingW: number;
+    boundingH: number;
+    r1: [number, number, number, number];
+    r2: [number, number, number, number];
+  } | null;
+  rects: { left: number; top: number; width: number; height: number }[];
+};
 
 type KeyboardViewProps = {
   keys: VIAKey[];
@@ -42,22 +61,65 @@ export const KeyboardView = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
-  const { positions, bounds } = useMemo(() => {
-    const positions = keys.map(calculatePointPosition);
-    const xs = positions.map(([x]) => x);
-    const ys = positions.map(([, y]) => y);
-    const minX = Math.min(...xs);
-    const minY = Math.min(...ys);
-    const maxX = Math.max(...xs);
-    const maxY = Math.max(...ys);
+  const { geoms, leftEdge, topEdge, keyboardWidth, keyboardHeight } = useMemo(() => {
+    const geoms = keys.map((k): KeyGeom | null => {
+      if (k.d) return null;
+      const [x, y] = calculatePointPosition(k);
+      const outerWidth = k.w * keyWidth + (k.w - 1) * keyXSpacing;
+      const outerHeight = k.h * keyHeight + (k.h - 1) * keyYSpacing;
+      const left = x - outerWidth / 2;
+      const top = y - outerHeight / 2;
+      const combo = getComboKeyProps(k);
+      let rects: { left: number; top: number; width: number; height: number }[];
+      let comboGeom: KeyGeom['combo'] = null;
+      if (!combo.clipPath) {
+        rects = [{ left, top, width: outerWidth, height: outerHeight }];
+      } else {
+        const [r1, r2] = combo.normalizedRects as [
+          [number, number, number, number],
+          [number, number, number, number],
+        ];
+        const shiftX = (-Math.abs(r1[0] - r2[0]) * keyXPos) / 2;
+        const boundingW = Math.max(r1[2], r2[2]) * keyXPos - keyXSpacing;
+        const boundingH = Math.max(r1[3], r2[3]) * keyYPos - keyYSpacing;
+        rects = [r1, r2].map((r) => ({
+          left: left + shiftX + r[0] * keyXPos,
+          top: top + r[1] * keyYPos,
+          width: r[2] * keyXPos - keyXSpacing,
+          height: r[3] * keyYPos - keyYSpacing,
+        }));
+        comboGeom = {
+          clipPath: combo.clipPath,
+          shiftX,
+          boundingW,
+          boundingH,
+          r1,
+          r2,
+        };
+      }
+      return { left, top, outerWidth, outerHeight, combo: comboGeom, rects };
+    });
+    let leftEdge = Infinity;
+    let topEdge = Infinity;
+    let rightEdge = -Infinity;
+    let bottomEdge = -Infinity;
+    geoms.forEach((geom) => {
+      if (!geom) return;
+      geom.rects.forEach((r) => {
+        leftEdge = Math.min(leftEdge, r.left);
+        topEdge = Math.min(topEdge, r.top);
+        rightEdge = Math.max(rightEdge, r.left + r.width);
+        bottomEdge = Math.max(bottomEdge, r.top + r.height);
+      });
+    });
     return {
-      positions,
-      bounds: { minX, minY, maxX, maxY },
+      geoms,
+      leftEdge,
+      topEdge,
+      keyboardWidth: rightEdge - leftEdge,
+      keyboardHeight: bottomEdge - topEdge,
     };
   }, [keys]);
-
-  const keyboardWidth = bounds.maxX - bounds.minX;
-  const keyboardHeight = bounds.maxY - bounds.minY;
 
   useEffect(() => {
     const el = containerRef.current;
@@ -86,29 +148,30 @@ export const KeyboardView = ({
       className="w-full h-full overflow-hidden flex items-center justify-center"
     >
       <div
-        className="rounded-[1.4rem] bg-[linear-gradient(200deg,#8f8f8f_40%,#737373,#636363_80%)] dark:bg-[linear-gradient(200deg,#3a3a3a_40%,#2f2f2f,#282828_80%)]"
+        className="rounded-[0.8rem] bg-[#afb0ae] flex items-center justify-center"
         style={{
           padding: casePadding,
           transform: `scale(${scale})`,
           transformOrigin: 'center',
-          boxShadow:
-            '0 0 0 1px rgba(0,0,0,0.4), 0 0.8rem 2rem rgba(0,0,0,0.35), inset -2px -2px 0 rgba(0,0,0,0.2), inset 2px 2px 0 rgba(255,255,255,0.2)',
         }}
       >
         <div
           style={{
-            width: keyboardWidth,
-            height: keyboardHeight,
+            width: keyboardWidth + 10,
+            height: keyboardHeight + 10,
             position: 'relative',
+            background: 'linear-gradient(200deg,#1a1a1a 40%,#2c2c2c,#232323 80%)',
+            borderRadius: 8,
+            boxShadow:
+              'inset -1px -1px 0 rgb(0 0 0 / 20%), inset 1px 1px 0 rgb(255 255 255 / 20%)',
           }}
         >
         {keys.map((k, i) => {
           if (k.d) return null;
-          const [x, y] = positions[i];
-          const left = x - (k.w2 || k.w) * (keyWidth / 2) - (k.w2 || k.w - 1) * (keyXSpacing / 2) - bounds.minX;
-          const top = y - k.h * (keyHeight / 2) - (k.h - 1) * (keyYSpacing / 2) - bounds.minY;
-          const width = (k.w2 || k.w) * keyWidth + ((k.w2 || k.w) - 1) * keyXSpacing;
-          const height = k.h * keyHeight + (k.h - 1) * keyYSpacing;
+          const geom = geoms[i];
+          if (!geom) return null;
+          const left = geom.left - leftEdge + 5;
+          const top = geom.top - topEdge + 5;
           const isSelected = selectedKey === i;
           const isEncoder = k.ei !== undefined;
           const isMatrixKey = k.row >= 0 && k.col >= 0;
@@ -127,6 +190,83 @@ export const KeyboardView = ({
                   byteToKey,
                 )
               : null;
+          const keycapBgClass = `rounded-[0.6rem] ${
+            isSelected ? 'scale-[0.96] bg-[#c9c9c9] dark:bg-[#4a4a4a]' : 'bg-[#bdbdbd] dark:bg-[#3f3f3f]'
+          }`;
+          const renderFace = (
+            primary: boolean,
+            shiftLegend = false,
+            squareBottomRight = false,
+          ) => (
+            <div
+              className={`w-full h-full rounded-[0.35rem] relative overflow-hidden ${
+                isSelected
+                  ? 'bg-[#ffffff] dark:bg-[#484848] text-[#363434] dark:text-[#d9d9d9]'
+                  : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#d9d9d9]'
+              }`}
+              style={squareBottomRight ? { borderBottomRightRadius: 0 } : undefined}
+            >
+              {primary &&
+                (isEncoder ? (
+                  <div className="absolute inset-0 flex items-center justify-center text-[1.6rem]">
+                    ↻
+                  </div>
+                ) : label?.topLabel != null && label?.bottomLabel != null ? (
+                  <>
+                    <div
+                      className="absolute leading-none"
+                      style={{
+                        left: 4,
+                        top: 4 + (label.offset?.[0] || 0) * 12,
+                        fontSize: 16,
+                      }}
+                    >
+                      {label.topLabel}
+                    </div>
+                    <div
+                      className="absolute leading-none"
+                      style={{
+                        left: 4,
+                        bottom: 4 + (label.offset?.[1] || 0) * 12,
+                        fontSize: 16,
+                      }}
+                    >
+                      {label.bottomLabel}
+                    </div>
+                  </>
+                ) : label?.centerLabel != null ? (
+                  <div
+                    className="absolute inset-y-0 flex items-center font-bold"
+                    style={{
+                      left: 3,
+                      fontSize: 13 * (label.size || 1),
+                      transform: shiftLegend ? 'translateY(-1em)' : undefined,
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: 'block',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {label.label}
+                    </span>
+                  </div>
+                ) : (
+                  <div
+                    className="absolute leading-none"
+                    style={{ left: 4, top: 4, fontSize: 22 }}
+                  >
+                    {label?.label ?? ''}
+                  </div>
+                ))}
+              {isSelected && (
+                <div className="absolute inset-0 rounded-[0.35rem] bg-[#bdbdbd] dark:bg-[#8a8a8a] keymap-selected-blink pointer-events-none" />
+              )}
+            </div>
+          );
           return (
             <div
               key={i}
@@ -146,78 +286,106 @@ export const KeyboardView = ({
               style={{
                 left,
                 top,
-                width,
-                height,
+                width: geom.outerWidth,
+                height: geom.outerHeight,
                 transform: `rotate(${k.r}deg)`,
               }}
             >
-              <div
-                className={`w-full h-full rounded-[0.6rem] transition-transform duration-100 ${
-                  isSelected
-                    ? 'scale-[0.96] bg-[#c9c9c9] dark:bg-[#4a4a4a]'
-                    : 'bg-[#bdbdbd] dark:bg-[#3f3f3f]'
-                } ${selectable && !isEncoder && isMatrixKey ? 'hover:scale-[1.02]' : ''}`}
-                style={{
-                  padding: '2px 6px 8px 6px',
-                  boxShadow:
-                    'inset -2px -2px 0 rgba(0,0,0,0.2), inset 2px 2px 0 rgba(255,255,255,0.25)',
-                }}
-              >
+              {geom.combo ? (
                 <div
-                  className={`w-full h-full rounded-[0.35rem] relative overflow-hidden ${
-                    isSelected
-                      ? 'bg-[#ffffff] dark:bg-[#484848] text-[#363434] dark:text-[#d9d9d9]'
-                      : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#d9d9d9]'
-                  }`}
+                  className="relative"
                   style={{
-                    boxShadow:
-                      'inset -1px -1px 0 rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.1)',
+                    width: geom.combo.boundingW,
+                    height: geom.combo.boundingH,
+                    transform: `translateX(${geom.combo.shiftX}px)${
+                      isSelected ? ' scale(0.96)' : ''
+                    }`,
+                    clipPath: geom.combo.clipPath,
                   }}
                 >
-                  {isEncoder ? (
-                    <div className="absolute inset-0 flex items-center justify-center text-[1.6rem]">
-                      ↻
-                    </div>
-                  ) : label?.topLabel != null && label?.bottomLabel != null ? (
-                    <>
-                      <div
-                        className="absolute left-[0.8rem] top-[0.6rem] text-[1.1rem] leading-none"
-                        style={{ transform: `translateY(${(label.offset?.[0] || 0) * 1.1}rem)` }}
-                      >
-                        {label.topLabel}
-                      </div>
-                      <div
-                        className="absolute left-[0.8rem] bottom-[0.6rem] text-[1.1rem] leading-none"
-                        style={{ transform: `translateY(${-(label.offset?.[1] || 0) * 1.1}rem)` }}
-                      >
-                        {label.bottomLabel}
-                      </div>
-                    </>
-                  ) : (
+                  <div
+                    className="absolute"
+                    style={{
+                      left: geom.combo.r2[0] * keyXPos,
+                      top: geom.combo.r2[1] * keyYPos,
+                      width: geom.combo.r2[2] * keyXPos - keyXSpacing,
+                      height: geom.combo.r2[3] * keyYPos - keyYSpacing,
+                    }}
+                  >
                     <div
-                      className="absolute inset-0 flex items-center justify-center text-center font-medium leading-tight"
+                      className={`w-full h-full ${keycapBgClass}`}
                       style={{
-                        fontSize: `${1.4 * (label?.size || 1)}rem`,
-                        padding: '0 0.4rem',
+                        padding: '2px 6px 8px 6px',
+                        boxShadow:
+                          'inset -1px -1px 0 rgb(0 0 0 / 20%), inset 1px 1px 0 rgb(255 255 255 / 20%)',
                       }}
+                    />
+                  </div>
+                  <div
+                    className="absolute"
+                    style={{
+                      left: geom.combo.r1[0] * keyXPos,
+                      top: geom.combo.r1[1] * keyYPos,
+                      width: geom.combo.r1[2] * keyXPos - keyXSpacing,
+                      height: geom.combo.r1[3] * keyYPos - keyYSpacing,
+                    }}
+                  >
+                    <div
+                      className={`w-full h-full ${keycapBgClass}`}
+                      style={{
+                        padding: '2px 6px 8px 6px',
+                        boxShadow:
+                          'inset -1px -1px 0 rgb(0 0 0 / 20%), inset 1px 1px 0 rgb(255 255 255 / 20%)',
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="absolute"
+                    style={{
+                      left: geom.combo.r2[0] * keyXPos,
+                      top: geom.combo.r2[1] * keyYPos,
+                      width: geom.combo.r2[2] * keyXPos - keyXSpacing,
+                      height: geom.combo.r2[3] * keyYPos - keyYSpacing,
+                    }}
+                  >
+                    <div
+                      className={`w-full h-full ${isSelected ? 'scale-[0.96]' : ''}`}
+                      style={{ padding: '2px 6px 8px 6px' }}
                     >
-                      <span
-                        style={{
-                          display: 'block',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        {label?.label ?? ''}
-                      </span>
+                      {renderFace(false)}
                     </div>
-                  )}
-                  {isSelected && (
-                    <div className="absolute inset-0 rounded-[0.35rem] bg-[#bdbdbd] dark:bg-[#8a8a8a] keymap-selected-blink pointer-events-none" />
-                  )}
+                  </div>
+                  <div
+                    className="absolute"
+                    style={{
+                      left: geom.combo.r1[0] * keyXPos,
+                      top: geom.combo.r1[1] * keyYPos,
+                      width: geom.combo.r1[2] * keyXPos - keyXSpacing,
+                      height: geom.combo.r1[3] * keyYPos - keyYSpacing,
+                    }}
+                  >
+                    <div
+                      className={`w-full h-full ${isSelected ? 'scale-[0.96]' : ''}`}
+                      style={{ padding: '2px 6px 8px 6px' }}
+                    >
+                      {renderFace(true, true, true)}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div
+                  className={`w-full h-full transition-transform duration-100 ${keycapBgClass} ${
+                    selectable && !isEncoder && isMatrixKey ? 'hover:scale-[1.02]' : ''
+                  }`}
+                  style={{
+                    padding: '2px 6px 8px 6px',
+                    boxShadow:
+                      'inset -1px -1px 0 rgb(0 0 0 / 20%), inset 1px 1px 0 rgb(255 255 255 / 20%)',
+                  }}
+                >
+                  {renderFace(true)}
+                </div>
+              )}
             </div>
           );
         })}
