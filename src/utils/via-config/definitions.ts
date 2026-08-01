@@ -10,7 +10,7 @@ import {
 import type { VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader';
 import resourcesData from '@/data/resources.json';
 
-type ParsedDefinition =
+export type ParsedDefinition =
   | { version: 'v2'; definition: VIADefinitionV2 }
   | { version: 'v3'; definition: VIADefinitionV3 };
 
