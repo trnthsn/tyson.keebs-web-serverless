@@ -201,7 +201,7 @@ export const LightingPane = ({
               onChange={(e) =>
                 updateBacklightValue(meta.command, +e.target.value)
               }
-              className="w-full bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-3 py-2 rounded-[0.4rem]"
+              className="w-full bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-3 py-2"
             >
               {options.map((option, idx) => (
                 <option key={idx} value={idx}>
@@ -539,7 +539,7 @@ const V3MenuPane = ({
             <select
               value={valArr[0]}
               onChange={(e) => setControlValue(control, +e.target.value)}
-              className="w-full bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-3 py-2 rounded-[0.4rem]"
+              className="w-full bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-3 py-2"
             >
               {(control.options ?? []).map((option, idx) => (
                 <option key={idx} value={idx}>

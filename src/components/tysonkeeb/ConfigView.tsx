@@ -94,7 +94,10 @@ export const ConfigView = ({
           <LayerControl
             layerCount={layerCount}
             selectedLayer={selectedLayer}
-            onSelectLayer={keymapStore.setSelectedLayer}
+            onSelectLayer={(layer) => {
+              keymapStore.setSelectedLayer(layer);
+              keymapStore.setSelectedKey(null);
+            }}
           />
         </div>
         <div className="absolute top-0 right-0 z-10 p-4">
@@ -105,17 +108,22 @@ export const ConfigView = ({
             {t('tysonkeeb.disconnect')}
           </button>
         </div>
-        <KeyboardView
-          keys={keys}
-          cols={cols}
-          keymap={displayKeymap}
-          selectedKey={selectedKey}
-          selectable={isSelectable}
-          definition={definition.definition}
-          basicKeyToByte={basicKeyToByte}
-          byteToKey={byteToKey}
-          onKeyClick={(i) => keymapStore.setSelectedKey(i)}
-        />
+        <div
+          className="w-full h-full"
+          onClick={() => keymapStore.setSelectedKey(null)}
+        >
+          <KeyboardView
+            keys={keys}
+            cols={cols}
+            keymap={displayKeymap}
+            selectedKey={selectedKey}
+            selectable={isSelectable}
+            definition={definition.definition}
+            basicKeyToByte={basicKeyToByte}
+            byteToKey={byteToKey}
+            onKeyClick={(i) => keymapStore.setSelectedKey(i)}
+          />
+        </div>
         {loadProgress < 1 && (
           <div className="absolute inset-0 z-20 bg-white/70 dark:bg-black/70 flex flex-col items-center justify-center gap-4">
             <div className="w-[4rem] h-[4rem] border-4 border-[#9c9c9c] border-t-transparent rounded-full animate-spin" />

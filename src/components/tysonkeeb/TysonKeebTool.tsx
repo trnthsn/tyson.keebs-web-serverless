@@ -121,7 +121,7 @@ export const TysonKeebTool = () => {
             <button
               onClick={isConnecting ? undefined : () => void connect()}
               disabled={isConnecting}
-              className={`inline-flex items-center justify-center gap-2 px-5 py-2 text-[1.3rem] tracking-wide rounded-[0.4rem] bg-[#121212] dark:bg-white text-white dark:text-[#121212] transition-opacity ${
+              className={`inline-flex items-center justify-center gap-2 px-5 py-2 text-[1.3rem] tracking-wide bg-[#121212] dark:bg-white text-white dark:text-[#121212] transition-opacity ${
                 isConnecting ? 'opacity-50 cursor-wait' : 'hover:opacity-90'
               }`}
             >

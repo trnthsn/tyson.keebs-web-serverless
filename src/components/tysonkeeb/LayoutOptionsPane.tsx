@@ -33,7 +33,7 @@ const LayoutControl = ({
         <select
           value={selectedOption}
           onChange={(e) => onChange(+e.target.value)}
-          className="min-w-[20rem] bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-3 py-2 rounded-[0.4rem]"
+          className="min-w-[20rem] bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-3 py-2"
         >
           {optionLabels.map((optionLabel, idx) => (
             <option key={idx} value={idx}>

@@ -133,13 +133,13 @@ export const SaveLoadView = ({
 
       <button
         onClick={saveLayout}
-        className="w-full py-3 mb-4 text-[1.6rem] uppercase tracking-wide rounded-[0.4rem] border border-[#9c9c9c] bg-[#e0e0e0] text-[#363434] dark:border-[#414141] dark:bg-[#414141] dark:text-[#d9d9d9] hover:opacity-90 transition-opacity"
+        className="w-full py-3 mb-4 text-[1.6rem] uppercase tracking-wide border border-[#9c9c9c] bg-[#e0e0e0] text-[#363434] dark:border-[#414141] dark:bg-[#414141] dark:text-[#d9d9d9] hover:opacity-90 transition-opacity"
       >
         {t('tysonkeeb.saveLayout')}
       </button>
       <button
         onClick={() => fileInputRef.current?.click()}
-        className="w-full py-3 text-[1.6rem] uppercase tracking-wide rounded-[0.4rem] border border-[#9c9c9c] text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333] transition-colors"
+        className="w-full py-3 text-[1.6rem] uppercase tracking-wide border border-[#9c9c9c] text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333] transition-colors"
       >
         {t('tysonkeeb.loadLayout')}
       </button>

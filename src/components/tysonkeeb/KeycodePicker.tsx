@@ -215,7 +215,7 @@ export const KeycodePicker = ({
                   onMouseEnter={() => setHoveredKeycode(byte)}
                   onMouseLeave={() => setHoveredKeycode(null)}
                   title={keycode.title}
-                  className={`h-[6.4rem] flex items-center justify-center text-[1.4rem] rounded-[0.4rem] border border-[#c9c9c9] transition-all duration-100 ${
+                  className={`h-[6.4rem] flex items-center justify-center text-[1.4rem] border border-[#c9c9c9] transition-all duration-100 ${
                     hoveredKeycode === byte
                       ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
                       : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#d9d9d9]'
@@ -273,14 +273,14 @@ export const KeycodePicker = ({
                   setModalOpen(false);
                   setModalInput('');
                 }}
-                className="px-6 py-2 text-[1.6rem] rounded-[0.4rem] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9]"
+                className="px-6 py-2 text-[1.6rem] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9]"
               >
                 {t('tysonkeeb.cancel')}
               </button>
               <button
                 disabled={!inputIsValid(modalInput)}
                 onClick={confirmModal}
-                className={`px-6 py-2 text-[1.6rem] rounded-[0.4rem] border transition-colors duration-150 ${
+                className={`px-6 py-2 text-[1.6rem] border transition-colors duration-150 ${
                   inputIsValid(modalInput)
                     ? 'border-[#9c9c9c] bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
                     : 'border-[#796c6c] dark:border-[#414141] text-[#707070] dark:text-[#b9b9b9] cursor-not-allowed'
