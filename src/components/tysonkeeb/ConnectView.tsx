@@ -67,7 +67,7 @@ export const ConnectView = ({
       <button
         onClick={isConnecting ? undefined : onConnect}
         disabled={isConnecting}
-        className={`px-10 py-3 text-[1.8rem] uppercase tracking-wide rounded-[0.4rem] border border-[#9c9c9c] bg-[#e0e0e0] text-[#363434] dark:border-[#414141] dark:bg-[#414141] dark:text-[#d9d9d9] transition-opacity ${
+        className={`inline-flex items-center justify-center gap-2 px-5 py-2 text-[1.3rem] tracking-wide rounded-[0.4rem] bg-[#121212] dark:bg-white text-white dark:text-[#121212] transition-opacity ${
           isConnecting ? 'opacity-50 cursor-wait' : 'hover:opacity-90'
         }`}
       >
@@ -81,7 +81,7 @@ export const ConnectView = ({
       {deviceInfo && (
         <button
           onClick={onDisconnect}
-          className="text-[1.4rem] uppercase tracking-wide text-[#222] dark:text-[#d9d9d9] hover:opacity-70 transition-opacity"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 text-[1.3rem] tracking-wide border border-[#121212] dark:border-white text-[#121212] dark:text-white hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-150"
         >
           {t('tysonkeeb.disconnect')}
         </button>

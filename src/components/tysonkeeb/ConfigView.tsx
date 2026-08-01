@@ -100,7 +100,7 @@ export const ConfigView = ({
         <div className="absolute top-0 right-0 z-10 p-4">
           <button
             onClick={onDisconnect}
-            className="px-4 py-2 text-[1.6rem] uppercase text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333] transition-colors duration-150"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-[1.3rem] tracking-wide border border-[#121212] dark:border-white text-[#121212] dark:text-white hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-150"
           >
             {t('tysonkeeb.disconnect')}
           </button>
@@ -134,7 +134,7 @@ export const ConfigView = ({
               <button
                 key={id}
                 onClick={() => setTab(id)}
-                className={`px-6 py-3 text-[1.6rem] uppercase tracking-wide rounded-t-[0.4rem] transition-colors duration-150 ${
+                className={`px-6 py-3 text-[1.6rem] uppercase tracking-wide transition-colors duration-150 ${
                   tab === id
                     ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
                     : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333]'
