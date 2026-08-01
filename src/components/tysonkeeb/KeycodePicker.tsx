@@ -219,9 +219,11 @@ export const KeycodePicker = ({
                     hoveredKeycode === byte
                       ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
                       : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#d9d9d9]'
-                  } cursor-pointer`}
+                  } cursor-pointer overflow-hidden`}
                 >
-                  {getShortNameForKeycode(keycode)}
+                  <span className="block overflow-hidden text-ellipsis whitespace-nowrap min-w-0 px-1">
+                    {getShortNameForKeycode(keycode)}
+                  </span>
                 </button>
               );
             })}

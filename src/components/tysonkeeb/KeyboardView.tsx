@@ -12,6 +12,7 @@ const keyWidth = CSSVarObject.keyWidth;
 const keyHeight = CSSVarObject.keyHeight;
 const keyXSpacing = CSSVarObject.keyXSpacing;
 const keyYSpacing = CSSVarObject.keyYSpacing;
+const casePadding = 36;
 
 type KeyboardViewProps = {
   keys: VIAKey[];
@@ -41,23 +42,6 @@ export const KeyboardView = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const update = () => {
-      const { width, height } = el.getBoundingClientRect();
-      if (width > 0 && height > 0) {
-        setScale(
-          Math.min(width / (keyboardWidth + 80), height / (keyboardHeight + 40), 1),
-        );
-      }
-    };
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [keys]);
-
   const { positions, bounds } = useMemo(() => {
     const positions = keys.map(calculatePointPosition);
     const xs = positions.map(([x]) => x);
@@ -75,20 +59,49 @@ export const KeyboardView = ({
   const keyboardWidth = bounds.maxX - bounds.minX;
   const keyboardHeight = bounds.maxY - bounds.minY;
 
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => {
+      const { width, height } = el.getBoundingClientRect();
+      if (width > 0 && height > 0) {
+        setScale(
+          Math.min(
+            width / (keyboardWidth + 2 * casePadding + 80),
+            height / (keyboardHeight + 2 * casePadding + 40),
+            1,
+          ),
+        );
+      }
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [keys, keyboardWidth, keyboardHeight]);
+
   return (
     <div
       ref={containerRef}
       className="w-full h-full overflow-hidden flex items-center justify-center"
     >
       <div
+        className="rounded-[1.4rem] bg-[linear-gradient(200deg,#8f8f8f_40%,#737373,#636363_80%)] dark:bg-[linear-gradient(200deg,#3a3a3a_40%,#2f2f2f,#282828_80%)]"
         style={{
-          width: keyboardWidth,
-          height: keyboardHeight,
-          position: 'relative',
+          padding: casePadding,
           transform: `scale(${scale})`,
           transformOrigin: 'center',
+          boxShadow:
+            '0 0 0 1px rgba(0,0,0,0.4), 0 0.8rem 2rem rgba(0,0,0,0.35), inset -2px -2px 0 rgba(0,0,0,0.2), inset 2px 2px 0 rgba(255,255,255,0.2)',
         }}
       >
+        <div
+          style={{
+            width: keyboardWidth,
+            height: keyboardHeight,
+            position: 'relative',
+          }}
+        >
         {keys.map((k, i) => {
           if (k.d) return null;
           const [x, y] = positions[i];
@@ -125,15 +138,9 @@ export const KeyboardView = ({
               }}
               title={label?.tooltipLabel || undefined}
               className={`
-                absolute rounded-[0.6rem] border select-none
-                transition-colors duration-100
-                ${
-                  isSelected
-                    ? 'bg-[#e0e0e0] dark:bg-[#414141] text-[#363434] dark:text-[#d9d9d9] scale-[0.98]'
-                    : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#d9d9d9] border-[#796c6c] dark:border-[#414141]'
-                }
-                ${pressedKeys && isMatrixKey && pressedKeys.has(k.row * cols + k.col) ? 'ring-[0.3rem] ring-red-500/80 border-red-500' : ''}
-                ${selectable && !isEncoder && isMatrixKey ? 'cursor-pointer hover:border-[#9c9c9c]' : ''}
+                absolute select-none
+                ${pressedKeys && isMatrixKey && pressedKeys.has(k.row * cols + k.col) ? 'ring-[0.3rem] ring-red-500/80' : ''}
+                ${selectable && !isEncoder && isMatrixKey ? 'cursor-pointer' : ''}
                 ${isSelected ? 'z-10' : ''}
               `}
               style={{
@@ -144,52 +151,77 @@ export const KeyboardView = ({
                 transform: `rotate(${k.r}deg)`,
               }}
             >
-              {isEncoder ? (
-                <div className="absolute inset-0 flex items-center justify-center text-[1.6rem]">
-                  ↻
-                </div>
-              ) : label?.topLabel != null && label?.bottomLabel != null ? (
-                <>
-                  <div
-                    className="absolute left-[0.8rem] top-[0.6rem] text-[1.1rem] leading-none"
-                    style={{ transform: `translateY(${(label.offset?.[0] || 0) * 1.1}rem)` }}
-                  >
-                    {label.topLabel}
-                  </div>
-                  <div
-                    className="absolute left-[0.8rem] bottom-[0.6rem] text-[1.1rem] leading-none"
-                    style={{ transform: `translateY(${-(label.offset?.[1] || 0) * 1.1}rem)` }}
-                  >
-                    {label.bottomLabel}
-                  </div>
-                </>
-              ) : (
+              <div
+                className={`w-full h-full rounded-[0.6rem] transition-transform duration-100 ${
+                  isSelected
+                    ? 'scale-[0.96] bg-[#c9c9c9] dark:bg-[#4a4a4a]'
+                    : 'bg-[#bdbdbd] dark:bg-[#3f3f3f]'
+                } ${selectable && !isEncoder && isMatrixKey ? 'hover:scale-[1.02]' : ''}`}
+                style={{
+                  padding: '2px 6px 8px 6px',
+                  boxShadow:
+                    'inset -2px -2px 0 rgba(0,0,0,0.2), inset 2px 2px 0 rgba(255,255,255,0.25)',
+                }}
+              >
                 <div
-                  className="absolute inset-0 flex items-center justify-center text-center font-medium leading-tight"
+                  className={`w-full h-full rounded-[0.35rem] relative overflow-hidden ${
+                    isSelected
+                      ? 'bg-[#ffffff] dark:bg-[#484848] text-[#363434] dark:text-[#d9d9d9]'
+                      : 'bg-[#f0f0f0] dark:bg-[#363434] text-[#363434] dark:text-[#d9d9d9]'
+                  }`}
                   style={{
-                    fontSize: `${1.4 * (label?.size || 1)}rem`,
-                    padding: '0 0.4rem',
+                    boxShadow:
+                      'inset -1px -1px 0 rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.1)',
                   }}
                 >
-                  <span
-                    style={{
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      wordBreak: 'break-word',
-                    }}
-                  >
-                    {label?.label ?? ''}
-                  </span>
+                  {isEncoder ? (
+                    <div className="absolute inset-0 flex items-center justify-center text-[1.6rem]">
+                      ↻
+                    </div>
+                  ) : label?.topLabel != null && label?.bottomLabel != null ? (
+                    <>
+                      <div
+                        className="absolute left-[0.8rem] top-[0.6rem] text-[1.1rem] leading-none"
+                        style={{ transform: `translateY(${(label.offset?.[0] || 0) * 1.1}rem)` }}
+                      >
+                        {label.topLabel}
+                      </div>
+                      <div
+                        className="absolute left-[0.8rem] bottom-[0.6rem] text-[1.1rem] leading-none"
+                        style={{ transform: `translateY(${-(label.offset?.[1] || 0) * 1.1}rem)` }}
+                      >
+                        {label.bottomLabel}
+                      </div>
+                    </>
+                  ) : (
+                    <div
+                      className="absolute inset-0 flex items-center justify-center text-center font-medium leading-tight"
+                      style={{
+                        fontSize: `${1.4 * (label?.size || 1)}rem`,
+                        padding: '0 0.4rem',
+                      }}
+                    >
+                      <span
+                        style={{
+                          display: 'block',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {label?.label ?? ''}
+                      </span>
+                    </div>
+                  )}
+                  {isSelected && (
+                    <div className="absolute inset-0 rounded-[0.35rem] bg-[#bdbdbd] dark:bg-[#8a8a8a] keymap-selected-blink pointer-events-none" />
+                  )}
                 </div>
-              )}
-              {isSelected && (
-                <div className="absolute inset-0 rounded-[0.6rem] bg-[#bdbdbd] dark:bg-[#8a8a8a] keymap-selected-blink pointer-events-none" />
-              )}
+              </div>
             </div>
           );
         })}
+      </div>
       </div>
     </div>
   );
