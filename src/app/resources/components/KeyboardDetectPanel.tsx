@@ -57,6 +57,12 @@ export const KeyboardDetectPanel = ({
 
       {detectedKeyboard ? (
         <div className="mt-5 border border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Usb size={15} strokeWidth={1.7} className="text-[#121212] dark:text-white" />
+            <p className="text-[1.4rem] font-medium text-[#121212] dark:text-white">
+              {t('resources.detectedKeyboard')}: {detectedKeyboard.productName}
+            </p>
+          </div>
           {matchedDefinition ? (
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-start gap-3">
@@ -64,9 +70,6 @@ export const KeyboardDetectPanel = ({
                 <div>
                   <p className="text-[1.4rem] text-[#121212] dark:text-white">
                     {t('resources.definitionMatched', { name: matchedDefinition.keyboardModel })}
-                  </p>
-                  <p className="text-[1.2rem] text-[rgba(18,18,18,0.55)] dark:text-[rgba(255,255,255,0.55)] mt-1">
-                    {detectedKeyboard.productName}
                   </p>
                 </div>
               </div>
@@ -153,9 +156,6 @@ export const KeyboardDetectPanel = ({
               <div>
                 <p className="text-[1.4rem] text-[rgba(18,18,18,0.65)] dark:text-[rgba(255,255,255,0.65)]">
                   {t('resources.noDetectedDefinition')}
-                </p>
-                <p className="text-[1.2rem] text-[rgba(18,18,18,0.55)] dark:text-[rgba(255,255,255,0.55)] mt-1">
-                  {detectedKeyboard.productName}
                 </p>
               </div>
             </div>

@@ -96,6 +96,7 @@
     "definitionNotFound": "Could not find a keyboard definition for this device in the resources.",
     "loadingKeymap": "Loading keymap...",
     "lightingUnavailable": "Lighting is only supported for v2 keyboard definitions.",
+    "lightingUnderDevelopment": "Lighting configuration is under development.",
     "brightness": "Brightness",
     "effect": "Effect",
     "effectSpeed": "Effect Speed",

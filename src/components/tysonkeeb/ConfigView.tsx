@@ -40,10 +40,13 @@ type ConfigViewProps = {
     id: number,
     ...rest: number[]
   ) => Promise<void>;
+  deviceName: string;
   onDisconnect: () => void;
 };
 
 type Tab = 'keymap' | 'layouts' | 'lighting' | 'save';
+
+const LIGHTING_UNDER_DEVELOPMENT = true;
 
 export const ConfigView = ({
   definition,
@@ -59,6 +62,7 @@ export const ConfigView = ({
   updateBacklightValue,
   updateCustomColor,
   updateMenuValue,
+  deviceName,
   onDisconnect,
 }: ConfigViewProps) => {
   const { t } = useTranslation();
@@ -100,7 +104,8 @@ export const ConfigView = ({
             }}
           />
         </div>
-        <div className="absolute top-0 right-0 z-10 p-4">
+        <div className="absolute top-0 right-0 z-10 p-4 flex items-center gap-4">
+          <div className="text-[1.4rem] text-[#222] dark:text-[#d9d9d9]">{deviceName}</div>
           <button
             onClick={onDisconnect}
             className="inline-flex items-center justify-center gap-2 px-4 py-2 text-[1.3rem] tracking-wide border border-[#121212] dark:border-white text-[#121212] dark:text-white hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-150"
@@ -173,14 +178,20 @@ export const ConfigView = ({
             />
           )}
           {tab === 'lighting' && (
-            <LightingPane
-              definition={definition}
-              lightingData={lightingData}
-              customColors={customColors}
-              updateBacklightValue={updateBacklightValue}
-              updateCustomColor={updateCustomColor}
-              updateMenuValue={updateMenuValue}
-            />
+            LIGHTING_UNDER_DEVELOPMENT ? (
+              <div className="flex items-center justify-center h-full py-24 text-[1.6rem] text-[#707070] dark:text-[#b9b9b9]">
+                {t('tysonkeeb.lightingUnderDevelopment')}
+              </div>
+            ) : (
+              <LightingPane
+                definition={definition}
+                lightingData={lightingData}
+                customColors={customColors}
+                updateBacklightValue={updateBacklightValue}
+                updateCustomColor={updateCustomColor}
+                updateMenuValue={updateMenuValue}
+              />
+            )
           )}
           {tab === 'save' && (
             <SaveLoadView

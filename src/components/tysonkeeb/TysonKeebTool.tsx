@@ -98,6 +98,7 @@ export const TysonKeebTool = () => {
             updateBacklightValue={updateBacklightValue}
             updateCustomColor={updateCustomColor}
             updateMenuValue={updateMenuValue}
+            deviceName={deviceInfo ? deviceInfo.productName : ''}
             onDisconnect={() => void disconnect()}
           />
         )}

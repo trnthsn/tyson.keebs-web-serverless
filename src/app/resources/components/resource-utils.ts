@@ -41,15 +41,8 @@ const keyboardModelAliases: Record<string, string> = {
 
 const normalizeKeyboardName = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-export const resolveKeyboardModelFromName = (
-  productName: string,
-  candidates: Resource[],
-  resources: Resource[]
-) => {
+const resolveModelWithinCandidates = (productName: string, candidates: Resource[]) => {
   const normalizedProductName = normalizeKeyboardName(productName);
-  const allModels = Array.from(new Set(resources.map((resource) => resource.keyboardModel))).sort(
-    (a, b) => normalizeKeyboardName(b).length - normalizeKeyboardName(a).length
-  );
 
   const exactCandidate = candidates.find(
     (resource) => normalizedProductName === normalizeKeyboardName(resource.keyboardModel)
@@ -67,12 +60,45 @@ export const resolveKeyboardModelFromName = (
   const matchingAlias = Object.entries(keyboardModelAliases).find(([alias]) =>
     normalizedProductName.includes(alias)
   );
-  if (matchingAlias) return matchingAlias[1];
+  if (matchingAlias) {
+    const aliasCandidate = candidates.find(
+      (resource) =>
+        normalizeKeyboardName(resource.keyboardModel) === normalizeKeyboardName(matchingAlias[1])
+    );
+    if (aliasCandidate) return aliasCandidate.keyboardModel;
+  }
 
-  const matchingModel = allModels.find((model) => {
-    const normalizedModel = normalizeKeyboardName(model);
-    return normalizedProductName === normalizedModel || normalizedProductName.includes(normalizedModel);
-  });
+  return candidates[0].keyboardModel;
+};
 
-  return matchingModel ?? candidates[0]?.keyboardModel ?? null;
+export type KeyboardLookupResult = {
+  model: string;
+  definition: Resource;
+  firmware: Resource | null;
+};
+
+export const lookupKeyboard = (
+  detected: { vendorId: number; productId: number; productName: string },
+  resources: Resource[]
+): KeyboardLookupResult | null => {
+  const vendorProductId = computeVendorProductId(detected.vendorId, detected.productId);
+
+  const definitions = resources.filter(
+    (resource) =>
+      resource.category === 'JSON_DEFINITION' && resource.vendorProductId === vendorProductId
+  );
+  if (definitions.length === 0) return null;
+
+  const model = resolveModelWithinCandidates(detected.productName, definitions);
+  const definition = definitions.find(
+    (resource) => resource.keyboardModel === model
+  ) ?? definitions[0];
+  const firmware =
+    resources.find(
+      (resource) =>
+        resource.category === 'FIRMWARE' &&
+        resource.keyboardModel.toLowerCase() === definition.keyboardModel.toLowerCase()
+    ) ?? null;
+
+  return { model: definition.keyboardModel, definition, firmware };
 };

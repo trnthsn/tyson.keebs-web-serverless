@@ -9,11 +9,7 @@ import { ResourceCard } from './components/ResourceCard';
 import { ResourceFilters } from './components/ResourceFilters';
 import { ResourcePagination } from './components/ResourcePagination';
 import type { DetectedKeyboard, Resource, ResourceCategory } from './components/types';
-import {
-  computeVendorProductId,
-  getHid,
-  resolveKeyboardModelFromName,
-} from './components/resource-utils';
+import { computeVendorProductId, getHid, lookupKeyboard } from './components/resource-utils';
 
 const PAGE_SIZE = 12;
 const resources = resourcesData as Resource[];
@@ -66,48 +62,13 @@ const ResourcesPage = () => {
     router.replace(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false });
   }, [debouncedKeyword, activeCategory, page, router, pathname]);
 
-  const matchedDefinitions = useMemo(
-    () =>
-      detectedKeyboard
-        ? resources.filter(
-            (resource) =>
-              resource.category === 'JSON_DEFINITION' &&
-              resource.vendorProductId === detectedKeyboard.vendorProductId
-          )
-        : [],
+  const lookupResult = useMemo(
+    () => (detectedKeyboard ? lookupKeyboard(detectedKeyboard, resources) : null),
     [detectedKeyboard]
   );
 
-  const resolvedKeyboardModel = useMemo(
-    () =>
-      detectedKeyboard
-        ? resolveKeyboardModelFromName(detectedKeyboard.productName, matchedDefinitions, resources)
-        : null,
-    [detectedKeyboard, matchedDefinitions]
-  );
-
-  const matchedDefinition = useMemo(
-    () =>
-      resolvedKeyboardModel
-        ? matchedDefinitions.find(
-            (resource) =>
-              resource.keyboardModel.toLowerCase() === resolvedKeyboardModel.toLowerCase()
-          ) ?? matchedDefinitions[0] ?? null
-        : null,
-    [matchedDefinitions, resolvedKeyboardModel]
-  );
-
-  const matchedFirmware = useMemo(
-    () =>
-      resolvedKeyboardModel
-        ? resources.find(
-            (resource) =>
-              resource.category === 'FIRMWARE' &&
-              resource.keyboardModel.toLowerCase() === resolvedKeyboardModel.toLowerCase()
-          ) ?? null
-        : null,
-    [resolvedKeyboardModel]
-  );
+  const matchedDefinition = lookupResult?.definition ?? null;
+  const matchedFirmware = lookupResult?.firmware ?? null;
 
   const filtered = useMemo(() => {
     let result = resources;

@@ -96,6 +96,7 @@
     "definitionNotFound": "Không tìm thấy định nghĩa bàn phím cho thiết bị này trong resources.",
     "loadingKeymap": "Đang tải keymap...",
     "lightingUnavailable": "Đèn chỉ được hỗ trợ cho định nghĩa bàn phím v2.",
+    "lightingUnderDevelopment": "Tính năng cấu hình đèn đang được phát triển.",
     "brightness": "Độ sáng",
     "effect": "Hiệu ứng",
     "effectSpeed": "Tốc độ hiệu ứng",
