@@ -94,7 +94,7 @@ export const ConfigView = ({
   return (
     <div className="flex-1 min-h-0 flex flex-col">
       <div className="relative h-[50rem] shrink-0 border-b border-[#796c6c] dark:border-[#414141]">
-        <div className="absolute top-0 left-0 z-10 p-4">
+        <div className="absolute top-0 left-0 right-0 z-10 p-4 pt-6 flex justify-between items-center gap-4 mb-4">
           <LayerControl
             layerCount={layerCount}
             selectedLayer={selectedLayer}
@@ -103,18 +103,18 @@ export const ConfigView = ({
               keymapStore.setSelectedKey(null);
             }}
           />
-        </div>
-        <div className="absolute top-0 right-0 z-10 p-4 flex items-center gap-4">
-          <div className="text-[1.4rem] text-[#222] dark:text-[#d9d9d9]">{deviceName}</div>
-          <button
-            onClick={onDisconnect}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-[1.3rem] tracking-wide border border-[#121212] dark:border-white text-[#121212] dark:text-white hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-150"
-          >
-            {t('tysonkeeb.disconnect')}
-          </button>
+          <div className="flex items-center gap-4">
+            <div className="text-[1.4rem] text-[#222] dark:text-[#d9d9d9]">{deviceName}</div>
+            <button
+              onClick={onDisconnect}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 text-[1.3rem] tracking-wide border border-[#121212] dark:border-white text-[#121212] dark:text-white hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-150"
+            >
+              {t('tysonkeeb.disconnect')}
+            </button>
+          </div>
         </div>
         <div
-          className="w-full h-full"
+          className="w-full h-full pt-20"
           onClick={() => keymapStore.setSelectedKey(null)}
         >
           <KeyboardView
