@@ -81,6 +81,8 @@
     "config": "Cấu hình",
     "keyTester": "Kiểm tra phím",
     "keysPressed": "phím đang nhấn",
+    "reset": "Đặt lại",
+    "resetKeyboard": "Đặt lại bàn phím",
     "layer": "Layer",
     "keymap": "Keymap",
     "lighting": "Đèn",

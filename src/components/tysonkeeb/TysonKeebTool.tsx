@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTysonKeebDevice } from '@/components/tysonkeeb/useTysonKeebDevice';
 import { ConnectView } from '@/components/tysonkeeb/ConnectView';
@@ -36,26 +36,42 @@ export const TysonKeebTool = () => {
   } = useTysonKeebDevice();
 
   const connected = !!deviceInfo && !!definition;
-
-  useEffect(() => {
-    if (connected && tab === 'connect') {
-      setTab('config');
-    } else if (!connected && tab === 'config') {
-      setTab('connect');
-    }
-  }, [connected, tab]);
+  const activeTab: Tab = connected
+    ? tab === 'keytester'
+      ? 'keytester'
+      : 'config'
+    : 'connect';
 
   const tabs: { id: Tab; label: string }[] = [
     ...(connected
       ? [{ id: 'config' as Tab, label: t('tysonkeeb.config') }]
       : []),
-    // { id: 'keytester', label: t('tysonkeeb.keyTester') },
+    { id: 'keytester', label: t('tysonkeeb.keyTester') },
   ];
 
   return (
     <div className="min-h-[60rem] flex flex-col bg-white dark:bg-[#222]">
       <div className="flex-1 min-h-0 flex flex-col">
-        {tab === 'connect' && (
+        {connected && activeTab !== 'connect' && (
+          <div className="shrink-0 flex items-center justify-between border-b border-[#796c6c] dark:border-[#414141]">
+            <div className="flex gap-1 pt-2">
+              {tabs.map(({ id, label }) => (
+                <button
+                  key={id}
+                  onClick={() => setTab(id)}
+                  className={`px-6 py-3 text-[1.6rem] uppercase tracking-wide transition-colors duration-150 ${
+                    activeTab === id
+                      ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
+                      : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333]'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {activeTab === 'connect' && (
           <ConnectView
             deviceInfo={deviceInfo}
             isConnecting={isConnecting}
@@ -64,7 +80,7 @@ export const TysonKeebTool = () => {
             onDisconnect={() => void disconnect()}
           />
         )}
-        {tab === 'config' && connected && (
+        {activeTab === 'config' && connected && (
           <ConfigView
             definition={definition}
             keymapStore={keymapStore}
@@ -85,33 +101,15 @@ export const TysonKeebTool = () => {
             onDisconnect={() => void disconnect()}
           />
         )}
-        {tab === 'keytester' && connected && (
+        {activeTab === 'keytester' && connected && (
           <KeyTesterView
             deviceInfo={deviceInfo}
             definition={definition}
             keys={keys}
+            keymap={keymapStore.layers?.[keymapStore.selectedLayer] ?? null}
             basicKeyToByte={basicKeyToByte}
             byteToKey={byteToKey}
           />
-        )}
-        {tab === 'keytester' && !connected && (
-          <div className="flex-1 flex flex-col items-center justify-center gap-6 text-center px-8">
-            <div className="text-[2.4rem] font-medium text-[#222] dark:text-[#d9d9d9]">
-              {t('tysonkeeb.connectTitle')}
-            </div>
-            <p className="text-[1.6rem] text-[#707070] dark:text-[#b9b9b9] max-w-[50rem]">
-              {t('tysonkeeb.connectHint')}
-            </p>
-            <button
-              onClick={isConnecting ? undefined : () => void connect()}
-              disabled={isConnecting}
-              className={`inline-flex items-center justify-center gap-2 px-5 py-2 text-[1.3rem] tracking-wide bg-[#121212] dark:bg-white text-white dark:text-[#121212] transition-opacity ${
-                isConnecting ? 'opacity-50 cursor-wait' : 'hover:opacity-90'
-              }`}
-            >
-              {isConnecting ? t('tysonkeeb.connecting') : t('tysonkeeb.connect')}
-            </button>
-          </div>
         )}
         {deviceInfo && !definition && !isConnecting && !error && (
           <div className="flex-1 flex items-center justify-center text-[1.6rem] text-[#707070] dark:text-[#b9b9b9]">

@@ -139,7 +139,7 @@ export const ConfigView = ({
 
       <div className="flex-1 min-h-0 flex flex-col bg-white dark:bg-[#282626]">
         <div className="shrink-0 flex items-center justify-between border-b border-[#796c6c] dark:border-[#414141]">
-          <div className="flex gap-1 px-2 pt-2">
+          <div className="flex gap-1 pt-2">
             {tabs.map(({ id, label }) => (
               <button
                 key={id}
