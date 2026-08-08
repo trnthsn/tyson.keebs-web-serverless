@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 2311",
-    "generate": "node scripts/generate-resources.mjs",
-    "prebuild": "node scripts/generate-resources.mjs",
+    "generate": "node scripts/generate-resources.mjs && node scripts/generate-changelog.mjs",
+    "prebuild": "node scripts/generate-resources.mjs && node scripts/generate-changelog.mjs",
     "build": "next build",
     "start": "next start --port 2311",
     "lint": "eslint"

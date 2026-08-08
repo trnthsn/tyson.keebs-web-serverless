@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Drawer } from 'antd';
+import VersionDropdown from './VersionDropdown';
 // import ThemeToggle from './ThemeToggle';
 // import LanguageSwitcher from './LanguageSwitcher';
 
@@ -44,6 +45,7 @@ const Navbar = () => {
           </nav>
 
           <div className="flex items-center gap-4">
+            <VersionDropdown />
             {/* <div className="hidden md:flex items-center gap-4">
               <LanguageSwitcher />
               <ThemeToggle />

@@ -1,12 +1,12 @@
-import { execSync } from "child_process";
+import { readFileSync } from "fs";
 import type { NextConfig } from "next";
 
 const getBuildVersion = (): string => {
   try {
-    const count = execSync("git rev-list --count --first-parent HEAD", {
-      encoding: "utf8",
-    }).trim();
-    return `1.0.${count}`;
+    const changelog = JSON.parse(
+      readFileSync("src/data/changelog.json", "utf8"),
+    ) as { version: string }[];
+    return changelog[0]?.version ?? "1.0.0";
   } catch {
     return "1.0.0";
   }

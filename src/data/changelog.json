@@ -1,0 +1,135 @@
+[
+  {
+    "version": "1.0.19",
+    "hash": "68e8ca94d92f33e81a2fcd9354738d5be81e9fc5",
+    "subject": "Add build version display to footer",
+    "date": "2026-08-09",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/68e8ca94d92f33e81a2fcd9354738d5be81e9fc5"
+  },
+  {
+    "version": "1.0.18",
+    "hash": "b5b4860d1f503d731a7388e420830e41e8d7c01b",
+    "subject": "Enhance key tester functionality and UI",
+    "date": "2026-08-09",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/b5b4860d1f503d731a7388e420830e41e8d7c01b"
+  },
+  {
+    "version": "1.0.17",
+    "hash": "56d3f52bdbc5ae84c6b1fd4409034f49fdac4141",
+    "subject": "Refactor layout components",
+    "date": "2026-08-09",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/56d3f52bdbc5ae84c6b1fd4409034f49fdac4141"
+  },
+  {
+    "version": "1.0.16",
+    "hash": "d2abbdf388e26206d626f1339b044b797ca495f6",
+    "subject": "Update arrow rendering label",
+    "date": "2026-08-09",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/d2abbdf388e26206d626f1339b044b797ca495f6"
+  },
+  {
+    "version": "1.0.15",
+    "hash": "cfd2ee828e1b69abfbfcc693bbfba7086ea37f08",
+    "subject": "Enhance lighting configuration",
+    "date": "2026-08-09",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/cfd2ee828e1b69abfbfcc693bbfba7086ea37f08"
+  },
+  {
+    "version": "1.0.14",
+    "hash": "06862a0efca5aa23b65be844832a50cc6ed365c8",
+    "subject": "Update style previewer",
+    "date": "2026-08-02",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/06862a0efca5aa23b65be844832a50cc6ed365c8"
+  },
+  {
+    "version": "1.0.13",
+    "hash": "f1ab0b455bea62f732d42a51f6d8e04a816b64f4",
+    "subject": "Update resolve keyboard definition",
+    "date": "2026-08-02",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/f1ab0b455bea62f732d42a51f6d8e04a816b64f4"
+  },
+  {
+    "version": "1.0.12",
+    "hash": "85b5ef3f8c36f8cdb67873ab1c1e81d00a5b7267",
+    "subject": "Update fix ISO Key",
+    "date": "2026-08-02",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/85b5ef3f8c36f8cdb67873ab1c1e81d00a5b7267"
+  },
+  {
+    "version": "1.0.11",
+    "hash": "3d82bdf39748993950fca9ae79f6abb37c4fe63b",
+    "subject": "Update preview board",
+    "date": "2026-08-02",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/3d82bdf39748993950fca9ae79f6abb37c4fe63b"
+  },
+  {
+    "version": "1.0.10",
+    "hash": "98181a9736351feae894613936eaaade5aaeade1",
+    "subject": "Refactor component styles",
+    "date": "2026-08-02",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/98181a9736351feae894613936eaaade5aaeade1"
+  },
+  {
+    "version": "1.0.9",
+    "hash": "960e882679e624deff0d3bb3d30e832c035bc429",
+    "subject": "Support Keymap on Tyson.Keebs",
+    "date": "2026-08-01",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/960e882679e624deff0d3bb3d30e832c035bc429"
+  },
+  {
+    "version": "1.0.8",
+    "hash": "5b2a7881188a86584a1a22a45e080734b1a758fa",
+    "subject": "Support sync query params",
+    "date": "2026-07-22",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/5b2a7881188a86584a1a22a45e080734b1a758fa"
+  },
+  {
+    "version": "1.0.7",
+    "hash": "e340a93c3f3af425778b9da8d669c2009ad125b3",
+    "subject": "Refactor components",
+    "date": "2026-07-22",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/e340a93c3f3af425778b9da8d669c2009ad125b3"
+  },
+  {
+    "version": "1.0.6",
+    "hash": "e7c40c6346623375a72a3be2665dcb851ffaeb2b",
+    "subject": "Refactor, update logic detect keyboard",
+    "date": "2026-07-21",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/e7c40c6346623375a72a3be2665dcb851ffaeb2b"
+  },
+  {
+    "version": "1.0.5",
+    "hash": "84a83981f9b428903cc7f7dc867efbfe72273868",
+    "subject": "Handle auto detect to download firmware and json",
+    "date": "2026-07-21",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/84a83981f9b428903cc7f7dc867efbfe72273868"
+  },
+  {
+    "version": "1.0.4",
+    "hash": "8151a7c30712ff2f4157f10511512f0bb3c461bd",
+    "subject": "Update fallback theme",
+    "date": "2026-04-28",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/8151a7c30712ff2f4157f10511512f0bb3c461bd"
+  },
+  {
+    "version": "1.0.3",
+    "hash": "f038e71df213adc6198cf9d4f1e38a46efc178bb",
+    "subject": "Update mobile layout",
+    "date": "2026-04-28",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/f038e71df213adc6198cf9d4f1e38a46efc178bb"
+  },
+  {
+    "version": "1.0.2",
+    "hash": "7143d0e4ef19562dfec9a1bad403eb50cccac940",
+    "subject": "Update init serverless sites",
+    "date": "2026-04-28",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/7143d0e4ef19562dfec9a1bad403eb50cccac940"
+  },
+  {
+    "version": "1.0.1",
+    "hash": "a2657758f8f287db8f7f6f1839f3c5ae569215d7",
+    "subject": "Initial commit from Create Next App",
+    "date": "2026-04-28",
+    "url": "https://github.com/trnthsn/Tyson.Keebs_PCB/commit/a2657758f8f287db8f7f6f1839f3c5ae569215d7"
+  }
+]

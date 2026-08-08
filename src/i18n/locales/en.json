@@ -80,6 +80,7 @@
     "disconnect": "Disconnect",
     "config": "Config",
     "keyTester": "Key Tester",
+    "changeLog": "Changelog",
     "keysPressed": "keys pressed",
     "reset": "Reset",
     "resetKeyboard": "Reset Keyboard",
