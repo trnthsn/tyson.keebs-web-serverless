@@ -61,8 +61,11 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="mt-16 pt-8 border-t border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] text-[1.2rem] text-center transition-colors duration-300">
+<div className="mt-16 pt-8 border-t border-[rgba(18,18,18,0.1)] dark:border-[rgba(255,255,255,0.1)] text-[1.2rem] text-center transition-colors duration-300">
           &copy; {year} Tyson.Keebs. All rights reserved.
+          <span className="ml-2 font-mono text-[rgba(18,18,18,0.5)] dark:text-[rgba(255,255,255,0.5)]">
+            v{process.env.NEXT_PUBLIC_BUILD_VERSION}
+          </span>
         </div>
       </div>
     </footer>
