@@ -22,9 +22,11 @@ export const TysonKeebTool = () => {
     keymapStore,
     lightingData,
     customColors,
+    perKeyRGB,
     updateBacklightValue,
     updateCustomColor,
     updateMenuValue,
+    updatePerKeyRGB,
     layoutOptions,
     updateLayoutOption,
     keys,
@@ -52,27 +54,6 @@ export const TysonKeebTool = () => {
 
   return (
     <div className="min-h-[60rem] flex flex-col bg-white dark:bg-[#222]">
-      <div className="h-[6rem] shrink-0 flex items-center px-6 border-b border-[#796c6c] dark:border-[#414141]">
-        <div className="text-[2.4rem] font-medium text-[#222] dark:text-[#d9d9d9] mr-8">
-          {t('tysonkeeb.title')}
-        </div>
-        <div className="flex gap-1">
-          {tabs.map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => setTab(id)}
-              className={`px-4 py-2 text-[1.6rem] uppercase tracking-wide transition-colors duration-150 ${
-                tab === id
-                  ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
-                  : 'text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333]'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="flex-1 min-h-0 flex flex-col">
         {tab === 'connect' && (
           <ConnectView
@@ -89,6 +70,7 @@ export const TysonKeebTool = () => {
             keymapStore={keymapStore}
             lightingData={lightingData}
             customColors={customColors}
+            perKeyRGB={perKeyRGB}
             keys={keys}
             cols={cols}
             layoutOptions={layoutOptions}
@@ -98,6 +80,7 @@ export const TysonKeebTool = () => {
             updateBacklightValue={updateBacklightValue}
             updateCustomColor={updateCustomColor}
             updateMenuValue={updateMenuValue}
+            updatePerKeyRGB={updatePerKeyRGB}
             deviceName={deviceInfo ? deviceInfo.productName : ''}
             onDisconnect={() => void disconnect()}
           />

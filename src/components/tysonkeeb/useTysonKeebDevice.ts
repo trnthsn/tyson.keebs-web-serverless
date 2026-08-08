@@ -17,6 +17,8 @@ import {
   getCustomMenuValue,
   setCustomMenuValue,
   saveCustomMenu,
+  getPerKeyRGBMatrix,
+  setPerKeyRGBMatrix,
   type DeviceInfo,
 } from '@/utils/via-config/hid';
 import {
@@ -102,13 +104,16 @@ export const useTysonKeebDevice = () => {
   // lighting state (mirrors via-app lightingSlice)
   const [lightingData, setLightingData] = useState<LightingData | null>(null);
   const [customColors, setCustomColors] = useState<CustomColor[] | null>(null);
+  const [perKeyRGB, setPerKeyRGB] = useState<number[][] | null>(null);
 
   // layout options state (mirrors via-app definitionsSlice layoutOptionsMap)
   const [layoutOptions, setLayoutOptions] = useState<number[] | null>(null);
 
   const cleanupRef = useRef<(() => void) | null>(null);
   const selectedKeyRef = useRef<number | null>(null);
+  const deviceInfoRef = useRef<DeviceInfo | null>(null);
   selectedKeyRef.current = selectedKey;
+  deviceInfoRef.current = deviceInfo;
 
   const loadKeymap = useCallback(
     async (deviceInfo: DeviceInfo, definition: ParsedDefinition) => {
@@ -194,6 +199,17 @@ export const useTysonKeebDevice = () => {
           {} as LightingData,
         );
         setLightingData(values);
+
+        const maxLedIndex = Math.max(
+          ...definition.definition.layouts.keys.map((key) => key.li ?? -1),
+        );
+        if (maxLedIndex >= 0) {
+          const ledIndices = Array(maxLedIndex + 1)
+            .fill(0)
+            .map((_, i) => i);
+          const rgb = await getPerKeyRGBMatrix(deviceInfo, ledIndices);
+          setPerKeyRGB(rgb);
+        }
         return;
       }
       const { supportedLightingValues, effects } = getLightingDefinition(
@@ -252,6 +268,7 @@ export const useTysonKeebDevice = () => {
     setSelectedKeyState(null);
     setLightingData(null);
     setCustomColors(null);
+    setPerKeyRGB(null);
     setLayoutOptions(null);
   }, []);
 
@@ -283,6 +300,9 @@ export const useTysonKeebDevice = () => {
   useEffect(() => {
     return () => {
       cleanupRef.current?.();
+      if (deviceInfoRef.current) {
+        void disconnectDevice(deviceInfoRef.current.device);
+      }
     };
   }, []);
 
@@ -372,6 +392,17 @@ export const useTysonKeebDevice = () => {
     [deviceInfo],
   );
 
+  const updatePerKeyRGB = useCallback(
+    async (index: number, hue: number, sat: number) => {
+      if (!deviceInfo) return;
+      setPerKeyRGB((current) =>
+        (current ?? []).map((c, i) => (i === index ? [hue, sat] : c)),
+      );
+      await setPerKeyRGBMatrix(deviceInfo, index, hue, sat);
+    },
+    [deviceInfo],
+  );
+
   const keymapStore: KeymapStore = {
     layers,
     layerCount,
@@ -396,9 +427,11 @@ export const useTysonKeebDevice = () => {
     keymapStore,
     lightingData,
     customColors,
+    perKeyRGB,
     updateBacklightValue,
     updateCustomColor,
     updateMenuValue,
+    updatePerKeyRGB,
     layoutOptions,
     updateLayoutOption,
     keys,

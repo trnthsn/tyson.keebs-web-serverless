@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  title: "TysonKeebs - VIA Config & Resources",
+  title: "TysonKeebs - Keymap Config & Resources",
   description: "VIA keyboard configurator and firmware resources for TysonKeebs PCBs",
 };
 

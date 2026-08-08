@@ -1,19 +1,19 @@
 {
   "nav": {
-    "viaConfig": "VIA Config",
+    "viaConfig": "Keymap Config",
     "resources": "Resources"
   },
   "home": {
     "heroTitle": "Custom Keyboard PCBs",
     "heroSubtitle": "VIA-compatible hotswap and solder PCBs for your next mechanical keyboard build.",
-    "openViaConfig": "Open VIA Config",
+    "openViaConfig": "Open Keymap Config",
     "browseResources": "Browse Resources",
-    "brandTitle": "Built for enthusiasts, by enthusiasts.",
-    "brandDescription": "Every Tyson.Keebs product is designed with obsessive attention to detail. From PCB layout to case compatibility, we obsess over the details so you can focus on what matters most — the feel of every keystroke.",
+    "brandTitle": "Built for enthusiasts, by an enthusiast.",
+    "brandDescription": "Every Tyson.Keebs product is designed with obsessive attention to detail. From PCB layout to case compatibility, we obsess over the details so you can focus on what matters most - the feel of every keystroke.",
     "est": "Est. 2024"
   },
   "via": {
-    "title": "VIA Config",
+    "title": "Keymap Config",
     "description": "Connect your VIA-compatible keyboard to remap keys, configure layers, and customize your typing experience.",
     "connect": "Connect Keyboard",
     "disconnect": "Disconnect",
@@ -64,7 +64,7 @@
   "footer": {
     "brand": "Custom PCB mechanical keyboards. Precision engineered. Minimalist design.",
     "tools": "Tools",
-    "viaConfig": "VIA Config",
+    "viaConfig": "Keymap Config",
     "resources": "Resources",
     "connect": "Connect"
   },
@@ -73,7 +73,7 @@
     "next": "Next"
   },
   "tysonkeeb": {
-    "title": "VIA Config",
+    "title": "Keymap Config",
     "connect": "Connect",
     "connected": "Connected",
     "connecting": "Connecting...",
@@ -96,7 +96,9 @@
     "definitionNotFound": "Could not find a keyboard definition for this device in the resources.",
     "loadingKeymap": "Loading keymap...",
     "lightingUnavailable": "Lighting is only supported for v2 keyboard definitions.",
-    "lightingUnderDevelopment": "Lighting configuration is under development.",
+    "click": "Click",
+    "ledIndex": "LED",
+    "presets": "Presets",
     "brightness": "Brightness",
     "effect": "Effect",
     "effectSpeed": "Effect Speed",

@@ -48,9 +48,9 @@ export type DeviceInfo = {
   protocol: number;
 };
 
-const shiftTo16Bit = ([hi, lo]: [number, number]): number => (hi << 8) | lo;
+export const shiftTo16Bit = ([hi, lo]: [number, number]): number => (hi << 8) | lo;
 
-const shiftFrom16Bit = (value: number): [number, number] => [
+export const shiftFrom16Bit = (value: number): [number, number] => [
   value >> 8,
   value & 255,
 ];
@@ -498,7 +498,7 @@ export const getCustomMenuValue = async (
     APICommand.BACKLIGHT_CONFIG_GET_VALUE,
     [channel, id],
   );
-  return res.slice(4, 4 + resultLength);
+  return res.slice(3, 3 + resultLength);
 };
 
 export const setCustomMenuValue = async (
@@ -521,4 +521,45 @@ export const saveCustomMenu = async (
   await hidCommand(deviceInfo.device, APICommand.BACKLIGHT_CONFIG_SAVE, [
     channel,
   ]);
+};
+
+const PER_KEY_RGB_CHANNEL_COMMAND = [0, 1];
+
+export const getPerKeyRGBMatrix = async (
+  deviceInfo: DeviceInfo,
+  ledIndexMapping: number[],
+): Promise<number[][]> => {
+  const res = await Promise.all(
+    ledIndexMapping.map((ledIndex) =>
+      hidCommand(
+        deviceInfo.device,
+        APICommand.BACKLIGHT_CONFIG_GET_VALUE,
+        [
+          ...PER_KEY_RGB_CHANNEL_COMMAND,
+          ledIndex,
+          1,
+        ],
+      ),
+    ),
+  );
+  return res.map((r) => [...r.slice(5, 7)]);
+};
+
+export const setPerKeyRGBMatrix = async (
+  deviceInfo: DeviceInfo,
+  index: number,
+  hue: number,
+  sat: number,
+) => {
+  await hidCommand(
+    deviceInfo.device,
+    APICommand.BACKLIGHT_CONFIG_SET_VALUE,
+    [
+      ...PER_KEY_RGB_CHANNEL_COMMAND,
+      index,
+      1,
+      hue,
+      sat,
+    ],
+  );
 };

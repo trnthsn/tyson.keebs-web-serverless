@@ -151,6 +151,8 @@ const ResourcesPage = () => {
         vendorProductId: computeVendorProductId(device.vendorId, device.productId),
       };
 
+      try { await device.close(); } catch { /* already closed */ }
+
       setDetectedKeyboard(detected);
     } catch (err: unknown) {
       setDetectError(err instanceof Error ? err.message : t('resources.detectFailed'));

@@ -35,7 +35,7 @@ const Navbar = () => {
             </Link>
             <div className="hidden md:flex items-center gap-8 ml-12">
               <Link href="/via" className={linkClass('/via')}>
-                VIA Config
+                Keymap Config
               </Link>
               <Link href="/resources" className={linkClass('/resources')}>
                 Resources
@@ -85,7 +85,7 @@ const Navbar = () => {
                     onClick={() => setMobileMenuOpen(false)}
                     className="block py-3 text-[1.6rem] !text-[#121212] dark:!text-white hover:opacity-60 transition-opacity no-underline"
                   >
-                    VIA Config
+                    Keymap Config
                   </Link>
                   <Link
                     href="/resources"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -10,18 +10,20 @@ import {
   type VIADefinitionV2,
   type VIADefinitionV3,
 } from '@the-via/reader';
+import { evalExpr } from '@the-via/pelpi';
 import type { ParsedDefinition } from '@/utils/via-config/definitions';
 import type {
   CustomColor,
   LightingData,
 } from '@/components/tysonkeeb/useTysonKeebDevice';
 import {
-  evalShowIf,
   flattenV3Menus,
   resolveV3Menus,
   type FlattenedMenu,
   type MenuControl,
 } from '@/utils/via-config/v3-menus';
+import { shiftFrom16Bit, shiftTo16Bit } from '@/utils/via-config/hid';
+import { getRGB, getHex, get256HSV } from '@/utils/color-math';
 
 type ControlMeta = {
   command: LightingValue;
@@ -36,6 +38,7 @@ type LightingPaneProps = {
   definition: ParsedDefinition;
   lightingData: LightingData | null;
   customColors: CustomColor[] | null;
+  perKeyRGB: number[][] | null;
   updateBacklightValue: (
     command: number,
     ...rest: number[]
@@ -47,6 +50,25 @@ type LightingPaneProps = {
     id: number,
     ...rest: number[]
   ) => Promise<void>;
+  updatePerKeyRGB: (index: number, hue: number, sat: number) => Promise<void>;
+};
+
+const hsvToRgbString = (hue: number, sat: number): string => {
+  const h = (hue / 255) * 360;
+  const s = sat / 255;
+  const v = 1;
+  const c = v * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = v - c;
+  let r = 0, g = 0, b = 0;
+  if (h < 60) { r = c; g = x; }
+  else if (h < 120) { r = x; g = c; }
+  else if (h < 180) { g = c; b = x; }
+  else if (h < 240) { g = x; b = c; }
+  else if (h < 300) { r = x; b = c; }
+  else { r = c; b = x; }
+  const toHex = (n: number) => Math.round((n + m) * 255).toString(16).padStart(2, '0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
 const ColorPicker = ({
@@ -55,36 +77,129 @@ const ColorPicker = ({
 }: {
   color: { hue: number; sat: number };
   setColor: (hue: number, sat: number) => void;
-}) => (
-  <div className="flex flex-col gap-1 w-[24rem]">
-    <div className="flex items-center gap-2">
-      <span className="text-[1.2rem] w-[3rem] uppercase text-[#707070] dark:text-[#b9b9b9]">
-        Hue
-      </span>
-      <input
-        type="range"
-        min={0}
-        max={255}
-        value={color.hue}
-        onChange={(e) => setColor(+e.target.value, color.sat)}
-        className="w-full accent-[#9c9c9c]"
+}) => {
+  const [open, setOpen] = useState(false);
+  const [hexInput, setHexInput] = useState(getHex(color));
+  const squareRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+
+  useEffect(() => {
+    setHexInput(getHex(color));
+  }, [color.hue, color.sat]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(e.target as Node) &&
+        thumbRef.current &&
+        !thumbRef.current.contains(e.target as Node)
+      ) {
+        if (!dragging.current) setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [open]);
+
+  const updateFromPosition = useCallback(
+    (clientX: number, clientY: number) => {
+      if (!squareRef.current) return;
+      const rect = squareRef.current.getBoundingClientRect();
+      const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+      const y = Math.max(0, Math.min(clientY - rect.top, rect.height));
+      const hue = Math.round((255 * x) / rect.width);
+      const sat = Math.round(255 * (1 - y / rect.height));
+      setColor(hue, sat);
+    },
+    [setColor],
+  );
+
+  const onSquareMouseDown = (e: React.MouseEvent) => {
+    dragging.current = true;
+    updateFromPosition(e.clientX, e.clientY);
+    const onMove = (ev: MouseEvent) => updateFromPosition(ev.clientX, ev.clientY);
+    const onUp = () => {
+      dragging.current = false;
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  };
+
+  const onHexKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return;
+    const val = (e.target as HTMLInputElement).value.trim();
+    const hex = val.startsWith('#') ? val : `#${val}`;
+    if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(hex)) {
+      const [h, s] = get256HSV(hex);
+      setColor(h, s);
+      setHexInput(getHex({ hue: h, sat: s }));
+    } else {
+      setHexInput(getHex(color));
+    }
+  };
+
+  const lensX = (color.hue / 255) * 100;
+  const lensY = (1 - color.sat / 255) * 100;
+  const rgbString = getRGB(color);
+
+  return (
+    <div className="relative flex flex-row-reverse items-center">
+      <div
+        ref={thumbRef}
+        onClick={() => setOpen((o) => !o)}
+        className="w-[2.8rem] h-[2.8rem] rounded-full border-[3px] border-[#796c6c] dark:border-[#414141] cursor-pointer hover:opacity-80 transition-opacity"
+        style={{ background: rgbString }}
       />
+      {open && (
+        <div
+          ref={popupRef}
+          className="absolute right-[3.6rem] top-[-0.8rem] z-50 flex flex-col items-center bg-white dark:bg-[#1e1e1e] border-[3px] border-[#796c6c] dark:border-[#414141] shadow-lg"
+          style={{ width: '18rem' }}
+        >
+          <div className="w-full px-2 py-1 text-center border-b border-[#796c6c] dark:border-[#414141]">
+            <input
+              type="text"
+              value={hexInput}
+              onChange={(e) => setHexInput(e.target.value)}
+              onKeyDown={onHexKeyDown}
+              className="w-full text-center bg-transparent text-[1.6rem] font-light text-[#222] dark:text-[#d9d9d9] outline-none"
+            />
+          </div>
+          <div className="w-full h-[2rem]" style={{ background: rgbString }} />
+          <div
+            ref={squareRef}
+            onMouseDown={onSquareMouseDown}
+            className="relative w-full h-[18rem] cursor-crosshair select-none"
+            style={{
+              background: `linear-gradient(to right, red, yellow, lime, aqua, blue, magenta, red)`,
+            }}
+          >
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'linear-gradient(to top, white, rgba(0,0,0,0))',
+              }}
+            />
+            <div
+              className="absolute w-[1rem] h-[1rem] rounded-full border-2 border-black opacity-70 bg-white/20 pointer-events-none"
+              style={{
+                left: `${lensX}%`,
+                top: `${lensY}%`,
+                transform: 'translate(-50%, -50%)',
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
-    <div className="flex items-center gap-2">
-      <span className="text-[1.2rem] w-[3rem] uppercase text-[#707070] dark:text-[#b9b9b9]">
-        Sat
-      </span>
-      <input
-        type="range"
-        min={0}
-        max={255}
-        value={color.sat}
-        onChange={(e) => setColor(color.hue, +e.target.value)}
-        className="w-full accent-[#9c9c9c]"
-      />
-    </div>
-  </div>
-);
+  );
+};
 
 const ControlRow = ({
   label,
@@ -101,13 +216,98 @@ const ControlRow = ({
   </div>
 );
 
+const decodeNullTerminatedUTF8 = (value?: number[]): string => {
+  if (!value || value.length === 0) return '';
+  const terminatorIdx = value.indexOf(0);
+  const bytes = value.slice(
+    0,
+    terminatorIdx === -1 ? undefined : terminatorIdx,
+  );
+  return new TextDecoder().decode(new Uint8Array(bytes));
+};
+
+const PerKeyColorPalette = ({
+  perKeyRGB,
+  updatePerKeyRGB,
+}: {
+  perKeyRGB: number[][];
+  updatePerKeyRGB: (index: number, hue: number, sat: number) => Promise<void>;
+}) => {
+  const { t } = useTranslation();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const currentColor = perKeyRGB[selectedIndex] ?? [0, 0];
+
+  const presetColors = Array(10)
+    .fill(0)
+    .map((_, i) => ({
+      hue: Math.round((i * 255) / 10),
+      sat: 255,
+    }));
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2 flex-wrap">
+        {perKeyRGB.map((color, idx) => (
+          <button
+            key={idx}
+            onClick={() => setSelectedIndex(idx)}
+            className={`w-[2.5rem] h-[2.5rem] rounded-full border-2 transition-transform ${
+              idx === selectedIndex ? 'border-[#9c9c9c] scale-110' : 'border-transparent scale-90'
+            }`}
+            style={{ backgroundColor: hsvToRgbString(color[0], color[1]) }}
+            title={`LED ${idx}`}
+          />
+        ))}
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-[1.2rem] uppercase text-[#707070] dark:text-[#b9b9b9]">
+          {t('tysonkeeb.ledIndex')}
+        </span>
+        <input
+          type="number"
+          min={0}
+          max={perKeyRGB.length - 1}
+          value={selectedIndex}
+          onChange={(e) =>
+            setSelectedIndex(
+              Math.max(0, Math.min(perKeyRGB.length - 1, +e.target.value)),
+            )
+          }
+          className="w-[6rem] bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.4rem] px-2 py-1"
+        />
+      </div>
+      <ColorPicker
+        color={{ hue: currentColor[0], sat: currentColor[1] }}
+        setColor={(hue, sat) => updatePerKeyRGB(selectedIndex, hue, sat)}
+      />
+      <div className="flex items-center gap-2">
+        <span className="text-[1.2rem] uppercase text-[#707070] dark:text-[#b9b9b9]">
+          {t('tysonkeeb.presets')}
+        </span>
+        <div className="flex gap-1">
+          {presetColors.map((preset, idx) => (
+            <button
+              key={idx}
+              onClick={() => updatePerKeyRGB(selectedIndex, preset.hue, preset.sat)}
+              className="w-[2rem] h-[2rem] rounded-full border border-[#796c6c]/40 dark:border-[#414141]/40 hover:scale-110 transition-transform"
+              style={{ backgroundColor: hsvToRgbString(preset.hue, preset.sat) }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const LightingPane = ({
   definition,
   lightingData,
   customColors,
+  perKeyRGB,
   updateBacklightValue,
   updateCustomColor,
   updateMenuValue,
+  updatePerKeyRGB,
 }: LightingPaneProps) => {
   const { t } = useTranslation();
   const [category, setCategory] = useState<'general' | 'layout' | 'advanced'>(
@@ -119,7 +319,9 @@ export const LightingPane = ({
       <V3MenuPane
         menus={resolveV3Menus(definition.definition.menus)}
         lightingData={lightingData}
+        perKeyRGB={perKeyRGB}
         updateMenuValue={updateMenuValue}
+        updatePerKeyRGB={updatePerKeyRGB}
         t={t}
       />
     );
@@ -129,11 +331,6 @@ export const LightingPane = ({
     ? definition.definition
     : null;
 
-  const supported = useMemo(() => {
-    if (!v2Definition) return [] as LightingValue[];
-    return getLightingDefinition(v2Definition.lighting).supportedLightingValues;
-  }, [v2Definition]);
-
   if (!v2Definition || !lightingData) {
     return (
       <div className="h-full flex items-center justify-center text-[1.6rem] text-[#707070] dark:text-[#b9b9b9]">
@@ -141,6 +338,8 @@ export const LightingPane = ({
       </div>
     );
   }
+
+  const supported = getLightingDefinition(v2Definition.lighting).supportedLightingValues;
 
   const lightingDefinition = getLightingDefinition(v2Definition.lighting);
   const { effects, underglowEffects } = lightingDefinition;
@@ -481,14 +680,18 @@ export const LightingPane = ({
 type V3MenuPaneProps = {
   menus: ReturnType<typeof resolveV3Menus>;
   lightingData: LightingData | null;
+  perKeyRGB: number[][] | null;
   updateMenuValue: LightingPaneProps['updateMenuValue'];
-  t: (key: string) => string;
+  updatePerKeyRGB: LightingPaneProps['updatePerKeyRGB'];
+  t: (key: string, opts?: Record<string, unknown>) => string;
 };
 
 const V3MenuPane = ({
   menus,
   lightingData,
+  perKeyRGB,
   updateMenuValue,
+  updatePerKeyRGB,
   t,
 }: V3MenuPaneProps) => {
   if (!lightingData) {
@@ -510,17 +713,91 @@ const V3MenuPane = ({
     group.items.push(item);
   }
 
+  const pelpiState: Record<string, number> = {};
+  for (const [key, val] of Object.entries(lightingData)) {
+    if (Array.isArray(val) && typeof val[0] === 'number') {
+      pelpiState[key] = val[0];
+    }
+  }
+
+  const evalShowIf = (expr: string | undefined): boolean => {
+    if (!expr) return true;
+    try {
+      return !!evalExpr(expr, pelpiState);
+    } catch {
+      return true;
+    }
+  };
+
   const setControlValue = (control: MenuControl, ...values: number[]) =>
     updateMenuValue(control.name, control.channel, control.id, ...values);
 
   const renderControl = (item: FlattenedMenu) => {
     const { control } = item;
-    if (!evalShowIf(control.showIf, lightingData)) return null;
+    if (!evalShowIf(control.showIf)) return null;
     const valArr = lightingData[control.name];
-    if (!valArr) return null;
 
     switch (control.type) {
+      case 'label': {
+        const text = Array.isArray(valArr) && valArr.length > 0
+          ? decodeNullTerminatedUTF8(valArr)
+          : control.label;
+        return (
+          <ControlRow key={control.name} label={control.label}>
+            <span className="text-[1.4rem] text-[#707070] dark:text-[#b9b9b9]">
+              {text || '\u00A0'}
+            </span>
+          </ControlRow>
+        );
+      }
+      case 'button': {
+        const buttonOption = (Array.isArray(control.options) ? control.options : [1]) as number[];
+        return (
+          <ControlRow key={control.name} label={control.label}>
+            <button
+              onClick={() => {
+                updateMenuValue(control.name, control.channel, control.id, buttonOption[0]);
+              }}
+              className="px-4 py-2 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.4rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-150"
+            >
+              {t('tysonkeeb.click')}
+            </button>
+          </ControlRow>
+        );
+      }
+      case 'keycode': {
+        if (!valArr) return null;
+        const keycodeValue = shiftTo16Bit([valArr[0], valArr[1]]);
+        return (
+          <ControlRow key={control.name} label={control.label}>
+            <input
+              type="number"
+              min={0}
+              max={65535}
+              value={keycodeValue}
+              onChange={(e) => {
+                const val = Math.max(0, Math.min(65535, +e.target.value));
+                const [hi, lo] = shiftFrom16Bit(val);
+                setControlValue(control, hi, lo);
+              }}
+              className="w-[10rem] bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.4rem] px-3 py-2"
+            />
+          </ControlRow>
+        );
+      }
+      case 'color-palette': {
+        if (!perKeyRGB || perKeyRGB.length === 0) return null;
+        return (
+          <ControlRow key={control.name} label={control.label}>
+            <PerKeyColorPalette
+              perKeyRGB={perKeyRGB}
+              updatePerKeyRGB={updatePerKeyRGB}
+            />
+          </ControlRow>
+        );
+      }
       case 'range':
+        if (!valArr) return null;
         return (
           <ControlRow key={control.name} label={control.label}>
             <input
@@ -534,6 +811,7 @@ const V3MenuPane = ({
           </ControlRow>
         );
       case 'dropdown':
+        if (!valArr) return null;
         return (
           <ControlRow key={control.name} label={control.label}>
             <select
@@ -541,15 +819,23 @@ const V3MenuPane = ({
               onChange={(e) => setControlValue(control, +e.target.value)}
               className="w-full bg-[#f0f0f0] dark:bg-[#222] border border-[#796c6c] dark:border-[#414141] text-[#222] dark:text-[#d9d9d9] text-[1.6rem] px-3 py-2"
             >
-              {(control.options ?? []).map((option, idx) => (
-                <option key={idx} value={idx}>
-                  {option}
-                </option>
-              ))}
+              {((control.options ?? []) as unknown[]).map((option, idx) => {
+                const [label, value] = typeof option === 'string'
+                  ? [option, idx]
+                  : Array.isArray(option)
+                    ? [String(option[0]), option[1] ?? idx]
+                    : [String(option), idx];
+                return (
+                  <option key={idx} value={value}>
+                    {String(label)}
+                  </option>
+                );
+              })}
             </select>
           </ControlRow>
         );
       case 'color':
+        if (!valArr) return null;
         return (
           <ControlRow key={control.name} label={control.label}>
             <ColorPicker
@@ -559,6 +845,7 @@ const V3MenuPane = ({
           </ControlRow>
         );
       case 'toggle':
+        if (!valArr) return null;
         return (
           <ControlRow key={control.name} label={control.label}>
             <input
@@ -579,26 +866,35 @@ const V3MenuPane = ({
           {t('tysonkeeb.lightingUnavailable')}
         </div>
       )}
-      {groups.map((group) => (
-        <div key={group.label}>
-          <div className="py-4 text-[1.8rem] font-medium text-[#222] dark:text-[#d9d9d9] border-b border-[#796c6c] dark:border-[#414141]">
-            {group.label}
-          </div>
-          {group.items.map((item) => {
-            const rendered = renderControl(item);
-            if (!rendered) return null;
-            if (!item.submenuLabel) return rendered;
-            return (
-              <div key={item.control.name}>
-                <div className="py-4 text-[1.4rem] uppercase tracking-wide text-[#707070] dark:text-[#b9b9b9] border-b border-[#796c6c]/40 dark:border-[#414141]/40">
-                  {item.submenuLabel}
-                </div>
-                {rendered}
-              </div>
+      {groups.map((group) => {
+        const renderedItems: React.ReactNode[] = [];
+        let lastSubmenu: string | null | undefined = undefined;
+        for (const item of group.items) {
+          const rendered = renderControl(item);
+          if (!rendered) continue;
+          if (item.submenuLabel && item.submenuLabel !== lastSubmenu) {
+            renderedItems.push(
+              <div key={`sub-${item.submenuLabel}`} className="py-4 text-[1.4rem] uppercase tracking-wide text-[#707070] dark:text-[#b9b9b9] border-b border-[#796c6c]/40 dark:border-[#414141]/40">
+                {item.submenuLabel}
+              </div>,
             );
-          })}
-        </div>
-      ))}
+            lastSubmenu = item.submenuLabel;
+          } else if (!item.submenuLabel && lastSubmenu !== null) {
+            lastSubmenu = null;
+          }
+          renderedItems.push(
+            <div key={item.control.name}>{rendered}</div>,
+          );
+        }
+        return (
+          <div key={group.label}>
+            <div className="py-4 text-[1.8rem] font-medium text-[#222] dark:text-[#d9d9d9] border-b border-[#796c6c] dark:border-[#414141]">
+              {group.label}
+            </div>
+            {renderedItems}
+          </div>
+        );
+      })}
     </div>
   );
 };

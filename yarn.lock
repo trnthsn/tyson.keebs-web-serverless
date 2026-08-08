@@ -1726,14 +1726,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@the-via/reader@npm:^1.13.0":
-  version: 1.13.0
-  resolution: "@the-via/reader@npm:1.13.0"
+"@the-via/pelpi@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@the-via/pelpi@npm:0.0.3"
+  dependencies:
+    chalk: "npm:^4.1.0"
+  checksum: 10c0/763d1411958b30ca068c03f5d4ee6fb8a9efe9b0f0ff9ac765b41e5f6bb2ec61242b28b7dda87bc489a3680c2dc85b438f52737f0dd62bea0924a00f22ae91c7
+  languageName: node
+  linkType: hard
+
+"@the-via/reader@npm:^1.14.3":
+  version: 1.14.3
+  resolution: "@the-via/reader@npm:1.14.3"
   dependencies:
     ajv: "npm:^8.18.0"
     ajv-formats: "npm:^3.0.1"
     invariant: "npm:^2.2.4"
-  checksum: 10c0/4032f00d86256937c077dadda9b40460374e470f655bf5ef2dd0eaa2f2c0a2b28510a1cb3453957d0ea46fbad36686b98f3734165bd702d8d8c975db44b2475f
+  checksum: 10c0/ce08427c7015154eefe3c3da253a09e66fc6d7aa94c874a5b6c57540674e391e1b0095f6f4523a1d7a0957d6b667f3ee76670160e6e97cd5e886b1aa0ba86edd
   languageName: node
   linkType: hard
 
@@ -2465,7 +2474,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0":
+"chalk@npm:^4.0.0, chalk@npm:^4.1.0":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -5312,7 +5321,8 @@ __metadata:
   dependencies:
     "@base-ui/react": "npm:^1.4.1"
     "@tailwindcss/postcss": "npm:^4"
-    "@the-via/reader": "npm:^1.13.0"
+    "@the-via/pelpi": "npm:^0.0.3"
+    "@the-via/reader": "npm:^1.14.3"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"

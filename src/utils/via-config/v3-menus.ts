@@ -1,17 +1,12 @@
 import { commonMenus } from '@the-via/reader';
 
-// V3 definitions express lighting (and other features) as menus. Common
-// menus (e.g. qmk_rgblight) are resolved from the reader and rendered
-// generically; values are read/written via the custom menu protocol
-// commands (0x08/0x07/0x09) using [channel, id] addressing.
-
 export type MenuControl = {
   name: string;
   channel: number;
   id: number;
-  type: 'range' | 'dropdown' | 'color' | 'toggle';
+  type: 'range' | 'dropdown' | 'color' | 'toggle' | 'keycode' | 'button' | 'label' | 'color-palette';
   label: string;
-  options?: string[];
+  options?: unknown;
   min?: number;
   max?: number;
   showIf?: string;
@@ -61,16 +56,21 @@ const toMenuControl = (node: MenuNode): MenuControl | null => {
     type: node.type as MenuControl['type'],
     label: node.label ?? name,
     showIf: node.showIf,
-    bytes: node.type === 'color' ? 2 : 1,
+    bytes: node.type === 'color' ? 2 : node.type === 'keycode' ? 2 : 1,
   };
   if (node.type === 'dropdown' && Array.isArray(node.options)) {
-    control.options = node.options.map((o) =>
-      typeof o === 'string' ? o : Array.isArray(o) ? String(o[0]) : String(o),
-    );
+    control.options = node.options;
   }
   if (node.type === 'range' && Array.isArray(node.options)) {
     control.min = node.options[0];
     control.max = node.options[1];
+    control.options = node.options as [number, number];
+  }
+  if (node.type === 'button' && Array.isArray(node.options)) {
+    control.options = node.options as [number];
+  }
+  if (node.type === 'toggle' && Array.isArray(node.options)) {
+    control.options = node.options as [number, number][];
   }
   return control;
 };
@@ -111,19 +111,10 @@ export const flattenV3Menus = (menus: MenuNode[]): FlattenedMenu[] => {
   return out;
 };
 
-export const evalShowIf = (
-  expr: string | undefined,
-  values: Record<string, number[] | undefined>,
-): boolean => {
-  if (!expr) return true;
-  try {
-    const compiled = expr.replace(/\{[a-zA-Z0-9_]+\}/g, (match) => {
-      const value = values[match.slice(1, -1)]?.[0];
-      return String(value ?? 0);
-    });
-    // eslint-disable-next-line no-new-func
-    return !!new Function(`return (${compiled});`)();
-  } catch {
-    return true;
-  }
-};
+export const isCustomMenuCommandContent = (
+  content: unknown,
+): content is [string, number, number, ...number[]] =>
+  Array.isArray(content) &&
+  content.length >= 3 &&
+  typeof content[0] === 'string' &&
+  content.slice(1).every((value) => typeof value === 'number');

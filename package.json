@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
-    "@the-via/reader": "^1.13.0",
+    "@the-via/pelpi": "^0.0.3",
+    "@the-via/reader": "^1.14.3",
     "antd": "^6.3.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

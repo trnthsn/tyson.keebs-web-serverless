@@ -2,18 +2,13 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  getLightingDefinition,
-  isVIADefinitionV2,
-  type VIAKey,
-} from '@the-via/reader';
+import type { VIAKey } from '@the-via/reader';
 import type { ParsedDefinition } from '@/utils/via-config/definitions';
 import type {
   CustomColor,
   KeymapStore,
   LightingData,
 } from '@/components/tysonkeeb/useTysonKeebDevice';
-import { resolveV3Menus } from '@/utils/via-config/v3-menus';
 import { KeyboardView } from '@/components/tysonkeeb/KeyboardView';
 import { LayerControl } from '@/components/tysonkeeb/LayerControl';
 import { KeycodePicker } from '@/components/tysonkeeb/KeycodePicker';
@@ -26,6 +21,7 @@ type ConfigViewProps = {
   keymapStore: KeymapStore;
   lightingData: LightingData | null;
   customColors: CustomColor[] | null;
+  perKeyRGB: number[][] | null;
   keys: VIAKey[];
   cols: number;
   layoutOptions: number[] | null;
@@ -40,19 +36,19 @@ type ConfigViewProps = {
     id: number,
     ...rest: number[]
   ) => Promise<void>;
+  updatePerKeyRGB: (index: number, hue: number, sat: number) => Promise<void>;
   deviceName: string;
   onDisconnect: () => void;
 };
 
 type Tab = 'keymap' | 'layouts' | 'lighting' | 'save';
 
-const LIGHTING_UNDER_DEVELOPMENT = true;
-
 export const ConfigView = ({
   definition,
   keymapStore,
   lightingData,
   customColors,
+  perKeyRGB,
   keys,
   cols,
   layoutOptions,
@@ -62,6 +58,7 @@ export const ConfigView = ({
   updateBacklightValue,
   updateCustomColor,
   updateMenuValue,
+  updatePerKeyRGB,
   deviceName,
   onDisconnect,
 }: ConfigViewProps) => {
@@ -94,7 +91,7 @@ export const ConfigView = ({
   return (
     <div className="flex-1 min-h-0 flex flex-col">
       <div className="relative h-[50rem] shrink-0 border-b border-[#796c6c] dark:border-[#414141]">
-        <div className="absolute top-0 left-0 right-0 z-10 p-4 pt-6 flex justify-between items-center gap-4 mb-4">
+        <div className="absolute top-0 left-0 right-0 z-10 pt-6 flex justify-between items-center gap-4">
           <LayerControl
             layerCount={layerCount}
             selectedLayer={selectedLayer}
@@ -178,20 +175,16 @@ export const ConfigView = ({
             />
           )}
           {tab === 'lighting' && (
-            LIGHTING_UNDER_DEVELOPMENT ? (
-              <div className="flex items-center justify-center h-full py-24 text-[1.6rem] text-[#707070] dark:text-[#b9b9b9]">
-                {t('tysonkeeb.lightingUnderDevelopment')}
-              </div>
-            ) : (
-              <LightingPane
-                definition={definition}
-                lightingData={lightingData}
-                customColors={customColors}
-                updateBacklightValue={updateBacklightValue}
-                updateCustomColor={updateCustomColor}
-                updateMenuValue={updateMenuValue}
-              />
-            )
+            <LightingPane
+              definition={definition}
+              lightingData={lightingData}
+              customColors={customColors}
+              perKeyRGB={perKeyRGB}
+              updateBacklightValue={updateBacklightValue}
+              updateCustomColor={updateCustomColor}
+              updateMenuValue={updateMenuValue}
+              updatePerKeyRGB={updatePerKeyRGB}
+            />
           )}
           {tab === 'save' && (
             <SaveLoadView

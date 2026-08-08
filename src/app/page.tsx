@@ -1,12 +1,18 @@
-'use client';
-
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
+import en from '@/i18n/locales/en.json';
+
+const t = (key: string): string => {
+  const parts = key.split('.');
+  let val: unknown = en;
+  for (const part of parts) {
+    if (val && typeof val === 'object') val = (val as Record<string, unknown>)[part];
+    else return key;
+  }
+  return typeof val === 'string' ? val : key;
+};
 
 const Home = () => {
-  const { t } = useTranslation();
-
   return (
     <main>
       <section className="relative bg-[#fbfbfb] dark:bg-[#1a1a1a] transition-colors duration-300">

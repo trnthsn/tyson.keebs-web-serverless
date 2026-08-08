@@ -1,19 +1,19 @@
 {
   "nav": {
-    "viaConfig": "VIA Config",
+    "viaConfig": "Cấu hình Keymap",
     "resources": "Tài nguyên"
   },
   "home": {
     "heroTitle": "PCB Bàn Phím Cơ",
     "heroSubtitle": "PCB hotswap và solder tương thích VIA cho bàn phím cơ tiếp theo của bạn.",
-    "openViaConfig": "Mở VIA Config",
+    "openViaConfig": "Mở Cấu hình Keymap",
     "browseResources": "Duyệt tài nguyên",
-    "brandTitle": "Được xây dựng bởi người đam mê, dành cho người đam mê.",
+    "brandTitle": "Được xây dựng bởi người đam mê, bởi một người đam mê.",
     "brandDescription": "Mọi sản phẩm Tyson.Keebs đều được thiết kế với sự chú ý tỉ mỉ đến từng chi tiết. Từ bố cục PCB đến khả năng tương thích case, chúng tôi chú trọng từng chi tiết để bạn có thể tập trung vào điều quan trọng nhất — cảm giác của mỗi lần gõ phím.",
     "est": "Thành lập 2024"
   },
   "via": {
-    "title": "VIA Config",
+    "title": "Cấu hình Keymap",
     "description": "Kết nối bàn phím tương thích VIA để remap phím, cấu hình layer và cá nhân hóa trải nghiệm gõ của bạn.",
     "connect": "Kết nối bàn phím",
     "disconnect": "Ngắt kết nối",
@@ -64,7 +64,7 @@
   "footer": {
     "brand": "PCB bàn phím cơ tùy chỉnh. Thiết kế chính xác. Tối giản.",
     "tools": "Công cụ",
-    "viaConfig": "VIA Config",
+    "viaConfig": "Cấu hình Keymap",
     "resources": "Tài nguyên",
     "connect": "Kết nối"
   },
@@ -96,7 +96,9 @@
     "definitionNotFound": "Không tìm thấy định nghĩa bàn phím cho thiết bị này trong resources.",
     "loadingKeymap": "Đang tải keymap...",
     "lightingUnavailable": "Đèn chỉ được hỗ trợ cho định nghĩa bàn phím v2.",
-    "lightingUnderDevelopment": "Tính năng cấu hình đèn đang được phát triển.",
+    "click": "Nhấn",
+    "ledIndex": "LED",
+    "presets": "Màu có sẵn",
     "brightness": "Độ sáng",
     "effect": "Hiệu ứng",
     "effectSpeed": "Tốc độ hiệu ứng",
