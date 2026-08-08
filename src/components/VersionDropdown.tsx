@@ -3,7 +3,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
-import changelog from '@/data/changelog.json';
+
+type ChangelogEntry = {
+  version: string;
+  subject: string;
+  date: string;
+  url: string;
+};
+
+const changelog: ChangelogEntry[] = JSON.parse(
+  process.env.NEXT_PUBLIC_CHANGELOG ?? '[]',
+);
 
 const VersionDropdown = () => {
   const { t } = useTranslation();
@@ -48,25 +58,21 @@ const VersionDropdown = () => {
           </div>
           <ul>
             {changelog.map((entry) => (
-              <li key={entry.version}>
-                <a
-                  href={entry.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-3 px-4 py-3 hover:bg-[#f0f0f0] dark:hover:bg-[#333] transition-colors duration-150"
-                >
-                  <span className="shrink-0 mt-0.5 font-mono text-[1.2rem] text-[#707070] dark:text-[#b9b9b9]">
-                    v{entry.version}
+              <li
+                key={entry.version}
+                className="flex items-start gap-3 px-4 py-3 hover:bg-[#f0f0f0] dark:hover:bg-[#333] transition-colors duration-150"
+              >
+                <span className="shrink-0 mt-0.5 font-mono text-[1.2rem] text-[#707070] dark:text-[#b9b9b9]">
+                  v{entry.version}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[1.3rem] text-[#222] dark:text-[#d9d9d9] leading-snug break-words">
+                    {entry.subject}
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[1.3rem] text-[#222] dark:text-[#d9d9d9] leading-snug break-words">
-                      {entry.subject}
-                    </span>
-                    <span className="block text-[1.1rem] text-[#9a9a9a] dark:text-[#8f8f8f]">
-                      {entry.date}
-                    </span>
+                  <span className="block text-[1.1rem] text-[#9a9a9a] dark:text-[#8f8f8f]">
+                    {entry.date}
                   </span>
-                </a>
+                </span>
               </li>
             ))}
           </ul>
