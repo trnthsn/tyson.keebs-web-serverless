@@ -53,7 +53,7 @@ const LayoutControl = ({
         type="checkbox"
         checked={!!selectedOption}
         onChange={(e) => onChange(+e.target.checked)}
-        className="w-[4rem] h-[2rem] accent-[#9c9c9c]"
+        className="w-[4rem] h-[2rem] accent-[#9c9c9c] cursor-pointer"
       />
     </div>
   );
@@ -77,12 +77,6 @@ export const LayoutOptionsPane = ({
 
   return (
     <div className="h-full overflow-y-auto px-8 py-6">
-      <div className="text-[1.6rem] font-medium mb-2 text-[#222] dark:text-[#d9d9d9]">
-        {t('tysonkeeb.layouts')}
-      </div>
-      <p className="text-[1.4rem] text-[#707070] dark:text-[#b9b9b9] mb-6">
-        {t('tysonkeeb.layoutsHint')}
-      </p>
       {labels.map((label, idx) => (
         <LayoutControl
           key={idx}

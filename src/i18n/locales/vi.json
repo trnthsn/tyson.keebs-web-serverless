@@ -121,6 +121,8 @@
     "saveLoadHint": "Lưu bố cục hiện tại ra tệp, hoặc tải bố cục đã lưu từ tệp.",
     "saveLayout": "Lưu Bố cục",
     "loadLayout": "Tải Bố cục",
+    "saveCurrentLayout": "Lưu bố cục hiện tại",
+    "loadSavedLayout": "Tải bố cục đã lưu",
     "layoutSaved": "Đã lưu bố cục thành công.",
     "layoutLoaded": "Đã tải bố cục thành công.",
     "fileReadCancelled": "Đã hủy đọc tệp.",

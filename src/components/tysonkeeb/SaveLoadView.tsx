@@ -124,25 +124,18 @@ export const SaveLoadView = ({
 
   return (
     <div className="h-full overflow-y-auto px-8 py-6">
-      <div className="text-[1.6rem] font-medium mb-2 text-[#222] dark:text-[#d9d9d9]">
-        {t('tysonkeeb.saveLoad')}
-      </div>
-      <p className="text-[1.4rem] text-[#707070] dark:text-[#b9b9b9] mb-6">
-        {t('tysonkeeb.saveLoadHint')}
-      </p>
-
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 max-w-[40rem]">
         <button
           onClick={saveLayout}
-          className="flex-1 py-3 text-[1.6rem] uppercase tracking-wide border border-[#9c9c9c] bg-[#e0e0e0] text-[#363434] dark:border-[#414141] dark:bg-[#414141] dark:text-[#d9d9d9] hover:opacity-90 transition-opacity"
+          className="w-full px-6 py-3 text-[1.6rem] uppercase tracking-wide border border-[#9c9c9c] bg-[#e0e0e0] text-[#363434] dark:border-[#414141] dark:bg-[#414141] dark:text-[#d9d9d9] hover:opacity-90 transition-opacity"
         >
-          {t('tysonkeeb.saveLayout')}
+          {t('tysonkeeb.saveCurrentLayout')}
         </button>
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex-1 py-3 text-[1.6rem] uppercase tracking-wide border border-[#9c9c9c] text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333] transition-colors"
+          className="w-full px-6 py-3 text-[1.6rem] uppercase tracking-wide border border-[#9c9c9c] text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333] transition-colors"
         >
-          {t('tysonkeeb.loadLayout')}
+          {t('tysonkeeb.loadSavedLayout')}
         </button>
       </div>
       <input

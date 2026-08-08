@@ -363,7 +363,7 @@ export const LightingPane = ({
               type="checkbox"
               checked={!!valArr[0]}
               onChange={(e) => updateBacklightValue(meta.command, +e.target.checked)}
-              className="w-[4rem] h-[2rem] accent-[#9c9c9c]"
+              className="w-[4rem] h-[2rem] accent-[#9c9c9c] cursor-pointer"
             />
           </ControlRow>
         );
