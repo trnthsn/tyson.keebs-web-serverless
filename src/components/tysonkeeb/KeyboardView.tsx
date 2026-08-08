@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import type { VIADefinitionV2, VIADefinitionV3, VIAKey } from '@the-via/reader';
 import {
   CSSVarObject,
@@ -8,6 +9,38 @@ import {
   getComboKeyProps,
   getLabel,
 } from '@/utils/via-config/keyboard-rendering';
+import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
+
+const ARROW_MAP: Record<string, ReactNode> = {
+  '↑': <ArrowUp size={14} strokeWidth={2.5} className="inline-block align-middle" />,
+  '↓': <ArrowDown size={14} strokeWidth={2.5} className="inline-block align-middle" />,
+  '←': <ArrowLeft size={14} strokeWidth={2.5} className="inline-block align-middle" />,
+  '→': <ArrowRight size={14} strokeWidth={2.5} className="inline-block align-middle" />,
+};
+
+const renderLabel = (text: string | undefined): ReactNode => {
+  if (!text) return text;
+  const hasArrow = Object.keys(ARROW_MAP).some((a) => text.includes(a));
+  if (!hasArrow) return text;
+  const parts: ReactNode[] = [];
+  let remaining = text;
+  let key = 0;
+  while (remaining.length > 0) {
+    const arrowEntry = Object.entries(ARROW_MAP).find(([ch]) => remaining.startsWith(ch));
+    if (arrowEntry) {
+      parts.push(<span key={key++} className="inline-flex items-center">{arrowEntry[1]}</span>);
+      remaining = remaining.slice(arrowEntry[0].length);
+    } else {
+      const nextArrowIdx = Object.keys(ARROW_MAP)
+        .map((ch) => remaining.indexOf(ch))
+        .filter((idx) => idx >= 0);
+      const cutAt = nextArrowIdx.length > 0 ? Math.min(...nextArrowIdx) : remaining.length;
+      parts.push(<span key={key++}>{remaining.slice(0, cutAt)}</span>);
+      remaining = remaining.slice(cutAt);
+    }
+  }
+  return <>{parts}</>;
+};
 
 const keyWidth = CSSVarObject.keyWidth;
 const keyHeight = CSSVarObject.keyHeight;
@@ -221,7 +254,7 @@ export const KeyboardView = ({
                         fontSize: 16,
                       }}
                     >
-                      {label.topLabel}
+                      {renderLabel(label.topLabel)}
                     </div>
                     <div
                       className="absolute leading-none"
@@ -231,7 +264,7 @@ export const KeyboardView = ({
                         fontSize: 16,
                       }}
                     >
-                      {label.bottomLabel}
+                      {renderLabel(label.bottomLabel)}
                     </div>
                   </>
                 ) : label?.centerLabel != null ? (
@@ -251,7 +284,7 @@ export const KeyboardView = ({
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      {label.label}
+                      {renderLabel(label.label)}
                     </span>
                   </div>
                 ) : (
@@ -259,7 +292,7 @@ export const KeyboardView = ({
                     className="absolute leading-none"
                     style={{ left: 4, top: 4, fontSize: 22 }}
                   >
-                    {label?.label ?? ''}
+                    {renderLabel(label?.label ?? '')}
                   </div>
                 ))}
               {isSelected && (
