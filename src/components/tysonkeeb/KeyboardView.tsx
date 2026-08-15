@@ -436,8 +436,8 @@ export const KeyboardView = ({
 
     return {
       layout,
-      keyboardWidth: rightEdge - leftEdge,
-      keyboardHeight: bottomEdge - topEdge,
+      keyboardWidth: Number.isFinite(rightEdge - leftEdge) ? rightEdge - leftEdge : 0,
+      keyboardHeight: Number.isFinite(bottomEdge - topEdge) ? bottomEdge - topEdge : 0,
     };
   }, [keys, cols, keymap, definition, basicKeyToByte, byteToKey]);
 

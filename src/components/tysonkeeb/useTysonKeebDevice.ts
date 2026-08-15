@@ -287,6 +287,11 @@ export const useTysonKeebDevice = () => {
       const parsed = await fetchDefinition(info.vendorProductId);
       if (parsed) {
         setDefinition(parsed);
+        setLayoutOptions(
+          parsed.definition.layouts.labels?.length
+            ? parsed.definition.layouts.labels.map(() => 0)
+            : null,
+        );
         await Promise.all([loadKeymap(info, parsed), loadLighting(info, parsed)]);
         await loadLayoutOptions(info, parsed);
       }

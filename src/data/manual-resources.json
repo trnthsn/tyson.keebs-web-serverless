@@ -1,0 +1,31 @@
+[
+  {
+    "id": "via-mkvn2025",
+    "name": "MKVN2025 VIA Definition",
+    "description": "VIA keymap JSON definition for MKVN2025",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "MKVN2025",
+    "vendorProductId": -568909787,
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/Deemen17/MKVN2025_Build_Guide/main/firmware/via/mkvn2025_via.json",
+        "format": "JSON",
+        "size": "1 KB"
+      }
+    ]
+  },
+  {
+    "id": "fw-mkvn2025",
+    "name": "MKVN2025 Firmware",
+    "description": "VIA-compatible firmware for MKVN2025",
+    "category": "FIRMWARE",
+    "keyboardModel": "MKVN2025",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/Deemen17/MKVN2025_Build_Guide/main/firmware/via/deemen17_mkvn2025_via.bin",
+        "format": "BIN",
+        "size": "30 KB"
+      }
+    ]
+  }
+]

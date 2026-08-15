@@ -185,6 +185,10 @@ const main = async () => {
 
   const fs = await import('fs');
   const path = await import('path');
+  const manualPath = path.resolve(process.cwd(), 'src/data/manual-resources.json');
+  const manualResources = JSON.parse(fs.readFileSync(manualPath, 'utf8'));
+  resources.push(...manualResources);
+
   const outputPath = path.resolve(process.cwd(), 'src/data/resources.json');
   fs.writeFileSync(outputPath, JSON.stringify(resources, null, 2));
   console.log(`Generated resources.json with ${resources.length} entries → ${outputPath}`);
