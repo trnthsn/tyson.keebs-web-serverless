@@ -525,6 +525,20 @@
     ]
   },
   {
+    "id": "via-36",
+    "name": "S6xty5Full VIA Definition",
+    "description": "VIA keymap JSON definition for S6xty5Full",
+    "category": "JSON_DEFINITION",
+    "keyboardModel": "S6xty5Full",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Via/trnthsn_s6xty5_full_via.json",
+        "format": "JSON",
+        "size": "2 KB"
+      }
+    ]
+  },
+  {
     "id": "fw-36",
     "name": "E8ghty Firmware",
     "description": "VIA-compatible firmware for E8ghty",
@@ -1176,10 +1190,16 @@
     "keyboardModel": "Tyson65Whale",
     "files": [
       {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson65Whale/F072/trnthsn_tyson65whale_stm32f072_via.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "size": "36 KB"
+      },
+      {
         "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson65Whale/F103/trnthsn_tyson65whale_stm32f103_via.uf2",
         "format": "UF2",
         "mcu": "F103",
-        "size": "85 KB"
+        "size": "73 KB"
       }
     ]
   },
@@ -1262,6 +1282,14 @@
         "size": "43 KB"
       },
       {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F072/trnthsn_tyson80_blackcore_stm32f072_via_new.bin",
+        "format": "BIN",
+        "mcu": "F072",
+        "variant": "Blackcore (New)",
+        "version": "VIA",
+        "size": "36 KB"
+      },
+      {
         "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F072/trnthsn_tyson80_stm32f072_via.bin",
         "format": "BIN",
         "mcu": "F072",
@@ -1276,6 +1304,14 @@
         "variant": "Blackcore",
         "version": "VIA",
         "size": "85 KB"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F103/trnthsn_tyson80_blackcore_stm32f103_via_new.uf2",
+        "format": "UF2",
+        "mcu": "F103",
+        "variant": "Blackcore (New)",
+        "version": "VIA",
+        "size": "73 KB"
       },
       {
         "url": "https://raw.githubusercontent.com/trnthsn/Tyson.Keebs_PCB/main/Firmware/Tyson80/F103/trnthsn_tyson80_stm32f103_native_via.uf2",
