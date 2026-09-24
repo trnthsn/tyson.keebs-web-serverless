@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-09-24T18:17:14.477Z",
+  "generator": "scripts/generate-resources.mjs",
+  "source": {
+    "owner": "trnthsn",
+    "repo": "Tyson.Keebs_PCB",
+    "branch": "main",
+    "commitSha": "8c85752e775bda7c10c0db2052a540ddae93c6f5"
+  },
+  "counts": {
+    "total": 80,
+    "definitions": 37,
+    "firmware": 42,
+    "bootloader": 1,
+    "manual": 2,
+    "skipped": 1
+  },
+  "skipped": [
+    {
+      "path": "Via/trnthsn_s6xty5_full_via.json",
+      "reason": "definition is not a JSON object"
+    }
+  ]
+}

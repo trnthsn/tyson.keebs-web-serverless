@@ -29,7 +29,7 @@ const Footer = () => {
             </h4>
             <ul className="space-y-2 text-[1.4rem]">
               <li>
-                <Link href="/via" className="hover:text-[#121212] dark:hover:text-white transition-colors">
+                <Link href="/keymap" className="hover:text-[#121212] dark:hover:text-white transition-colors">
                   {t('footer.viaConfig')}
                 </Link>
               </li>

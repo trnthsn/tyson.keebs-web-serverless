@@ -29,7 +29,7 @@ const Home = () => {
             </p>
             <div className="flex gap-4">
               <Link
-                href="/via"
+                href="/keymap"
                 className="inline-flex items-center px-8 py-3 bg-[#121212] dark:bg-white text-white dark:text-[#121212] text-[1.4rem] tracking-wide hover:bg-[#333] dark:hover:bg-[#e0e0e0] transition-colors duration-200"
               >
                 {t('home.openViaConfig')}

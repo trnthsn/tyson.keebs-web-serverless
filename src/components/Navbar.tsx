@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Drawer } from 'antd';
-import VersionDropdown from './VersionDropdown';
 // import ThemeToggle from './ThemeToggle';
 // import LanguageSwitcher from './LanguageSwitcher';
 
@@ -35,7 +34,7 @@ const Navbar = () => {
               {`<Tyson.Keebs />`}
             </Link>
             <div className="hidden md:flex items-center gap-8 ml-12">
-              <Link href="/via" className={linkClass('/via')}>
+              <Link href="/keymap" className={linkClass('/keymap')}>
                 Keymap Config
               </Link>
               <Link href="/resources" className={linkClass('/resources')}>
@@ -45,7 +44,6 @@ const Navbar = () => {
           </nav>
 
           <div className="flex items-center gap-4">
-            <VersionDropdown />
             {/* <div className="hidden md:flex items-center gap-4">
               <LanguageSwitcher />
               <ThemeToggle />
@@ -83,7 +81,7 @@ const Navbar = () => {
 
                 <nav className="flex-1 px-6 py-8 space-y-1">
                   <Link
-                    href="/via"
+                    href="/keymap"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block py-3 text-[1.6rem] !text-[#121212] dark:!text-white hover:opacity-60 transition-opacity no-underline"
                   >

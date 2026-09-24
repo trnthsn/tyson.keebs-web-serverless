@@ -5,6 +5,8 @@ export type ResourceFile = {
   variant?: string;
   version?: string;
   size?: string;
+  /** Raw size in bytes (emitted by scripts/generate-resources.mjs). */
+  sizeBytes?: number;
 };
 
 export type Resource = {
@@ -13,6 +15,8 @@ export type Resource = {
   description: string;
   category: string;
   keyboardModel: string;
+  /** Normalized lookup key, e.g. "S6xty5Neo R2" -> "s6xty5neo-r2". */
+  keyboardModelSlug?: string;
   vendorProductId?: number;
   files: ResourceFile[];
 };
