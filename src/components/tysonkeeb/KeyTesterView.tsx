@@ -6,6 +6,7 @@ import type { VIAKey } from '@the-via/reader';
 import type { ParsedDefinition } from '@/utils/via-config/definitions';
 import { getMatrixState, type DeviceInfo } from '@/utils/via-config/hid';
 import { TestKeyState } from '@/utils/via-config/test-key-state';
+import { preventTesterKeyIfNeeded } from '@/utils/via-config/key-tester-guard';
 import { KeyboardView } from '@/components/tysonkeeb/KeyboardView';
 
 type KeyTesterViewProps = {
@@ -16,8 +17,6 @@ type KeyTesterViewProps = {
   basicKeyToByte: Record<string, number>;
   byteToKey: Record<number, string>;
 };
-
-const blockedKeys = new Set(['Space', ' ', 'Tab', 'PageUp', 'PageDown', 'Home', 'End']);
 
 export const KeyTesterView = ({
   deviceInfo,
@@ -36,13 +35,21 @@ export const KeyTesterView = ({
   const keyCount = rows * cols;
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (blockedKeys.has(event.code) || blockedKeys.has(event.key)) {
-        event.preventDefault();
-      }
+    // Matrix state comes from HID, not host key events. Suppress host
+    // default actions (F1-F24 help/search, Tab focus move, Space scroll,
+    // Alt/Meta shortcuts, etc.) so testing the external keyboard does not
+    // trigger browser/OS behavior. Capture phase beats browser shortcuts.
+    const handleKey = (event: KeyboardEvent) => {
+      preventTesterKeyIfNeeded(event);
     };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKey, { capture: true });
+    document.addEventListener('keyup', handleKey, { capture: true });
+    document.addEventListener('keypress', handleKey, { capture: true });
+    return () => {
+      document.removeEventListener('keydown', handleKey, { capture: true });
+      document.removeEventListener('keyup', handleKey, { capture: true });
+      document.removeEventListener('keypress', handleKey, { capture: true });
+    };
   }, []);
 
   useEffect(() => {
