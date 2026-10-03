@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import {
   LightingValue,
@@ -80,6 +81,7 @@ const ColorPicker = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [hexInput, setHexInput] = useState(getHex(color));
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   const squareRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
@@ -88,6 +90,44 @@ const ColorPicker = ({
   useEffect(() => {
     setHexInput(getHex(color));
   }, [color.hue, color.sat]);
+
+  const updatePosition = useCallback(() => {
+    const thumb = thumbRef.current?.getBoundingClientRect();
+    if (!thumb) return;
+    const rootFont =
+      parseFloat(getComputedStyle(document.documentElement).fontSize) || 10;
+    const popupW = 18 * rootFont;
+    const gap = 0.8 * rootFont;
+    const popupH =
+      popupRef.current?.getBoundingClientRect().height ?? 26 * rootFont;
+    let left = thumb.left - popupW - gap;
+    if (left < 8) {
+      left = thumb.right + gap;
+    }
+    if (left + popupW > window.innerWidth - 8) {
+      left = Math.max(8, window.innerWidth - popupW - 8);
+    }
+    let top = thumb.top - gap;
+    if (top + popupH > window.innerHeight - 8) {
+      top = Math.max(8, window.innerHeight - popupH - 8);
+    }
+    if (top < 8) {
+      top = 8;
+    }
+    setPos({ top, left });
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const raf = requestAnimationFrame(updatePosition);
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
+  }, [open, updatePosition]);
 
   useEffect(() => {
     if (!open) return;
@@ -101,8 +141,15 @@ const ColorPicker = ({
         if (!dragging.current) setOpen(false);
       }
     };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
     document.addEventListener('mousedown', onClick);
-    return () => document.removeEventListener('mousedown', onClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClick);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [open]);
 
   const updateFromPosition = useCallback(
@@ -149,19 +196,26 @@ const ColorPicker = ({
   const rgbString = getRGB(color);
 
   return (
-    <div className="relative flex flex-row-reverse items-center">
+    <div className="flex flex-row-reverse items-center">
       <div
         ref={thumbRef}
         onClick={() => setOpen((o) => !o)}
         className="w-[2.8rem] h-[2.8rem] rounded-full border-[3px] border-[#796c6c] dark:border-[#414141] cursor-pointer hover:opacity-80 transition-opacity"
         style={{ background: rgbString }}
       />
-      {open && (
-        <div
-          ref={popupRef}
-          className="absolute right-[3.6rem] top-[-0.8rem] z-50 flex flex-col items-center bg-white dark:bg-[#1e1e1e] border-[3px] border-[#796c6c] dark:border-[#414141] shadow-lg"
-          style={{ width: '18rem' }}
-        >
+      {open &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            ref={popupRef}
+            className="fixed z-[100] flex flex-col items-center bg-white dark:bg-[#1e1e1e] border-[3px] border-[#796c6c] dark:border-[#414141] shadow-lg"
+            style={{
+              width: '18rem',
+              top: pos?.top ?? 0,
+              left: pos?.left ?? 0,
+              visibility: pos ? 'visible' : 'hidden',
+            }}
+          >
           <div className="w-full px-2 py-1 text-center border-b border-[#796c6c] dark:border-[#414141]">
             <input
               type="text"
@@ -195,8 +249,9 @@ const ColorPicker = ({
               }}
             />
           </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 };

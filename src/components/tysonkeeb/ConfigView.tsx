@@ -129,9 +129,8 @@ export const ConfigView = ({
         {loadProgress < 1 && (
           <div className="absolute inset-0 z-20 bg-white/70 dark:bg-black/70 flex flex-col items-center justify-center gap-4">
             <div className="w-[4rem] h-[4rem] border-4 border-[#9c9c9c] border-t-transparent rounded-full animate-spin" />
-            <div className="text-[1.6rem] text-[#222] dark:text-[#d9d9d9] tabular-nums">
-              {t('tysonkeeb.loadingKeymap')}{' '}
-              {Math.round(loadProgress * 100)}%
+            <div className="text-[1.6rem] text-[#222] dark:text-[#d9d9d9]">
+              {t('tysonkeeb.loadingKeymap')}
             </div>
           </div>
         )}
