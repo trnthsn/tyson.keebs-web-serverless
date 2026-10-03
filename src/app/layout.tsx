@@ -11,7 +11,10 @@ import { cn } from "@/lib/utils";
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  title: "TysonKeebs - Keymap Config & Resources",
+  title: {
+    default: "Tyson.Keebs",
+    template: "%s | Tyson.Keebs",
+  },
   description: "VIA keyboard configurator and firmware resources for TysonKeebs PCBs",
 };
 
