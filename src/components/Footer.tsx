@@ -12,12 +12,13 @@ const Footer = () => {
       <div className="max-w-[120rem] mx-auto px-6 md:px-6 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h4
-              className="text-[1.6rem] text-[#121212] dark:text-white mb-4"
-              style={{ fontFamily: "'Jost', sans-serif" }}
+            <Link
+              href="/"
+              className="inline-block text-[2rem] md:text-[2.4rem] italic font-bold tracking-tight text-[#121212] dark:text-white mb-4"
+              style={{ fontFamily: "'Open Sans', sans-serif" }}
             >
-              Tyson.Keebs
-            </h4>
+              {`<Tyson.Keebs />`}
+            </Link>
             <p className="text-[1.4rem] leading-relaxed">{t('footer.brand')}</p>
           </div>
           <div>
@@ -56,6 +57,16 @@ const Footer = () => {
                   className="hover:text-[#121212] dark:hover:text-white transition-colors"
                 >
                   GitHub
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/trnthsn/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#121212] dark:hover:text-white transition-colors"
+                >
+                  LinkedIn
                 </a>
               </li>
             </ul>

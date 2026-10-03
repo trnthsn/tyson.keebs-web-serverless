@@ -78,7 +78,7 @@
     "connected": "Đã kết nối",
     "connecting": "Đang kết nối...",
     "disconnect": "Ngắt kết nối",
-    "reloadDefinition": "Tải lại định nghĩa",
+    "reloadDefinition": "Tải lại",
     "reloadingDefinition": "Đang tải lại...",
     "reloadDefinitionFailed": "Không thể tải lại định nghĩa bàn phím. Định nghĩa hiện tại vẫn được giữ.",
     "reloadBundledDefinition": "Tải lại định nghĩa bàn phím",
