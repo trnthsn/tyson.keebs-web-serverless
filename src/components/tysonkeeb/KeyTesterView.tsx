@@ -28,6 +28,7 @@ export const KeyTesterView = ({
 }: KeyTesterViewProps) => {
   const { t } = useTranslation();
   const [keyStates, setKeyStates] = useState<TestKeyState[]>([]);
+  const [debugMatrix, setDebugMatrix] = useState(false);
   const statesRef = useRef<TestKeyState[]>([]);
 
   const { rows, cols } = definition.definition.matrix;
@@ -116,6 +117,7 @@ export const KeyTesterView = ({
             keymap={keymap}
             selectedKey={null}
             selectable={false}
+            debugMatrix={debugMatrix}
             pressedKeys={keyStates}
             definition={definition.definition}
             basicKeyToByte={basicKeyToByte}
@@ -124,16 +126,41 @@ export const KeyTesterView = ({
           />
         </div>
       </div>
-      <div className="flex items-center justify-between gap-2 py-4 px-6 border-t border-[#796c6c] dark:border-[#414141]">
-        <div className="text-[1.6rem] text-[#222] dark:text-[#d9d9d9]">
-          {t('tysonkeeb.resetKeyboard')}
+      <div className="border-t border-[#796c6c] dark:border-[#414141]">
+        <div className="flex items-center justify-between gap-2 py-4 px-6 border-b border-[#796c6c]/40 dark:border-[#414141]/40">
+          <div className="text-[1.6rem] text-[#222] dark:text-[#d9d9d9]">
+            {t('tysonkeeb.debug')}
+          </div>
+          <button
+            role="switch"
+            aria-checked={debugMatrix}
+            onClick={() => setDebugMatrix((d) => !d)}
+            className={`relative w-[4.4rem] h-[2.4rem] rounded-full border transition-colors duration-150 ${
+              debugMatrix
+                ? 'bg-[#121212] border-[#121212] dark:bg-white dark:border-white'
+                : 'bg-transparent border-[#121212] dark:border-white'
+            }`}
+          >
+            <span
+              className={`absolute top-1/2 -translate-y-1/2 w-[1.6rem] h-[1.6rem] rounded-full transition-all duration-150 ${
+                debugMatrix
+                  ? 'left-[2.2rem] bg-white dark:bg-[#121212]'
+                  : 'left-[0.4rem] bg-[#121212] dark:bg-white'
+              }`}
+            />
+          </button>
         </div>
-        <button
-          onClick={resetTestKeys}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 text-[1.3rem] tracking-wide border border-[#121212] dark:border-white text-[#121212] dark:text-white hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-150"
-        >
-          {t('tysonkeeb.reset')}
-        </button>
+        <div className="flex items-center justify-between gap-2 py-4 px-6">
+          <div className="text-[1.6rem] text-[#222] dark:text-[#d9d9d9]">
+            {t('tysonkeeb.resetKeyboard')}
+          </div>
+          <button
+            onClick={resetTestKeys}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-[1.3rem] tracking-wide border border-[#121212] dark:border-white text-[#121212] dark:text-white hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-150"
+          >
+            {t('tysonkeeb.reset')}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -80,6 +80,8 @@ type KeyData = {
   outerWidth: number;
   outerHeight: number;
   rotation: number;
+  row: number | null;
+  col: number | null;
   matrixIndex: number | null;
   isEncoder: boolean;
   isMatrixKey: boolean;
@@ -109,12 +111,14 @@ const KeyFrame = memo(function KeyFrame({
   keyState,
   selectable,
   selected,
+  debugMatrix,
   onKeyClick,
 }: {
   data: KeyData;
   keyState: TestKeyState;
   selectable: boolean;
   selected: boolean;
+  debugMatrix: boolean;
   onKeyClick: (index: number) => void;
 }) {
   const isKeyDown = keyState === TestKeyState.KeyDown;
@@ -140,7 +144,11 @@ const KeyFrame = memo(function KeyFrame({
       )}
       {primary && (
         <div className="absolute inset-0 z-10">
-          {data.isEncoder ? (
+          {debugMatrix && data.row != null && data.col != null ? (
+            <div className="absolute leading-none" style={{ left: 4, top: 4, fontSize: 16 }}>
+              {data.row},{data.col}
+            </div>
+          ) : data.isEncoder ? (
             <div className="absolute inset-0 flex items-center justify-center text-[1.6rem]">
               ↻
             </div>
@@ -349,6 +357,7 @@ type KeyboardViewProps = {
   keymap: number[] | null;
   selectedKey: number | null;
   selectable: boolean;
+  debugMatrix?: boolean;
   pressedKeys?: TestKeyState[] | Set<number>;
   definition: VIADefinitionV2 | VIADefinitionV3;
   basicKeyToByte: Record<string, number>;
@@ -362,6 +371,7 @@ export const KeyboardView = ({
   keymap,
   selectedKey,
   selectable,
+  debugMatrix,
   pressedKeys,
   definition,
   basicKeyToByte,
@@ -426,6 +436,8 @@ export const KeyboardView = ({
         outerWidth: geom.outerWidth,
         outerHeight: geom.outerHeight,
         rotation: k.r,
+        row: isMatrixKey ? k.row : null,
+        col: isMatrixKey ? k.col : null,
         matrixIndex,
         isEncoder: k.ei !== undefined,
         isMatrixKey,
@@ -497,6 +509,7 @@ export const KeyboardView = ({
               }
               selectable={selectable}
               selected={selectedKey === data.index}
+              debugMatrix={debugMatrix ?? false}
               onKeyClick={onKeyClick}
             />
           ))}

@@ -88,6 +88,7 @@
     "keysPressed": "keys pressed",
     "reset": "Reset",
     "resetKeyboard": "Reset Keyboard",
+    "debug": "Debug",
     "layer": "Layer",
     "keymap": "Keymap",
     "lighting": "Lighting",
