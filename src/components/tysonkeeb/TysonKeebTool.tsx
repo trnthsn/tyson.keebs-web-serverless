@@ -19,6 +19,9 @@ export const TysonKeebTool = () => {
     error,
     connect,
     disconnect,
+    reloadDefinition,
+    isReloading,
+    reloadError,
     keymapStore,
     lightingData,
     customColors,
@@ -99,6 +102,9 @@ export const TysonKeebTool = () => {
             updatePerKeyRGB={updatePerKeyRGB}
             deviceName={deviceInfo ? deviceInfo.productName : ''}
             onDisconnect={() => void disconnect()}
+            onReloadDefinition={() => reloadDefinition()}
+            isReloading={isReloading}
+            reloadError={reloadError}
           />
         )}
         {activeTab === 'keytester' && connected && (

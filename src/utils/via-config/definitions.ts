@@ -63,6 +63,49 @@ const parseDefinition = (json: unknown): ParsedDefinition | null => {
   return null;
 };
 
+const fetchBundledDefinition = async (
+  vendorProductId: number,
+): Promise<{ parsed: ParsedDefinition; name: string } | null> => {
+  const matchingResources = resources.filter(
+    (r) => r.category === 'JSON_DEFINITION' && r.vendorProductId === vendorProductId,
+  );
+
+  for (const resource of matchingResources) {
+    for (const file of resource.files) {
+      try {
+        const res = await fetch(file.url);
+        const json = await res.json();
+        const parsed = parseDefinition(json);
+        if (parsed) {
+          return { parsed, name: resource.name };
+        }
+      } catch {
+        // fetch or parse error
+      }
+    }
+  }
+
+  return null;
+};
+
+const writeDefinitionCache = async (
+  vendorProductId: number,
+  parsed: ParsedDefinition,
+  name: string,
+): Promise<void> => {
+  inMemoryCache.set(vendorProductId, parsed);
+  try {
+    await db.table<CachedDefinition>('definitions').put({
+      vendorProductId,
+      data: parsed,
+      name,
+      cachedAt: Date.now(),
+    });
+  } catch {
+    // IndexedDB unavailable
+  }
+};
+
 export const fetchDefinition = async (
   vendorProductId: number
 ): Promise<ParsedDefinition | null> => {
@@ -80,37 +123,24 @@ export const fetchDefinition = async (
     // IndexedDB unavailable
   }
 
-  const matchingResources = resources.filter(
-    (r) => r.category === 'JSON_DEFINITION' && r.vendorProductId === vendorProductId
-  );
-
-  for (const resource of matchingResources) {
-    for (const file of resource.files) {
-      try {
-        const res = await fetch(file.url);
-        const json = await res.json();
-        const parsed = parseDefinition(json);
-        if (parsed) {
-          inMemoryCache.set(vendorProductId, parsed);
-          try {
-            await db.table<CachedDefinition>('definitions').put({
-              vendorProductId,
-              data: parsed,
-              name: resource.name,
-              cachedAt: Date.now(),
-            });
-          } catch {
-            // IndexedDB unavailable
-          }
-          return parsed;
-        }
-      } catch {
-        // fetch or parse error
-      }
-    }
+  const bundled = await fetchBundledDefinition(vendorProductId);
+  if (bundled) {
+    await writeDefinitionCache(vendorProductId, bundled.parsed, bundled.name);
+    return bundled.parsed;
   }
 
   return null;
+};
+
+export const refreshDefinition = async (
+  vendorProductId: number,
+): Promise<ParsedDefinition | null> => {
+  const bundled = await fetchBundledDefinition(vendorProductId);
+  if (!bundled) {
+    return null;
+  }
+  await writeDefinitionCache(vendorProductId, bundled.parsed, bundled.name);
+  return bundled.parsed;
 };
 
 export const getCachedDefinition = async (

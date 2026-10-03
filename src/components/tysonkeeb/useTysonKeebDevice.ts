@@ -23,6 +23,7 @@ import {
 } from '@/utils/via-config/hid';
 import {
   fetchDefinition,
+  refreshDefinition,
   type ParsedDefinition,
 } from '@/utils/via-config/definitions';
 import { getBasicKeyDict } from '@/utils/via-config/key-to-byte/dictionary-store';
@@ -92,6 +93,8 @@ export const useTysonKeebDevice = () => {
   const [definition, setDefinition] = useState<ParsedDefinition | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isReloading, setIsReloading] = useState(false);
+  const [reloadError, setReloadError] = useState<string | null>(null);
 
   // keymap state (mirrors via-app keymapSlice)
   const [layers, setLayers] = useState<number[][] | null>(null);
@@ -261,6 +264,8 @@ export const useTysonKeebDevice = () => {
       }
       return null;
     });
+    setIsReloading(false);
+    setReloadError(null);
     setDefinition(null);
     setLayers(null);
     setLoadedLayerCount(0);
@@ -275,6 +280,7 @@ export const useTysonKeebDevice = () => {
   const connect = useCallback(async () => {
     setIsConnecting(true);
     setError(null);
+    setReloadError(null);
     try {
       const info = await requestDevice();
 
@@ -301,6 +307,38 @@ export const useTysonKeebDevice = () => {
       setIsConnecting(false);
     }
   }, [disconnect, loadKeymap, loadLighting, loadLayoutOptions]);
+
+  const reloadDefinition = useCallback(async () => {
+    if (!deviceInfo || isReloading) return;
+    setIsReloading(true);
+    setReloadError(null);
+    try {
+      const parsed = await refreshDefinition(deviceInfo.vendorProductId);
+      if (!parsed) {
+        setReloadError('Failed to reload definition');
+        return;
+      }
+      setDefinition(parsed);
+      setLayers(null);
+      setLoadedLayerCount(0);
+      setSelectedLayer(0);
+      setSelectedKeyState(null);
+      setLightingData(null);
+      setCustomColors(null);
+      setPerKeyRGB(null);
+      setLayoutOptions(
+        parsed.definition.layouts.labels?.length
+          ? parsed.definition.layouts.labels.map(() => 0)
+          : null,
+      );
+      await Promise.all([loadKeymap(deviceInfo, parsed), loadLighting(deviceInfo, parsed)]);
+      await loadLayoutOptions(deviceInfo, parsed);
+    } catch {
+      setReloadError('Failed to reload definition');
+    } finally {
+      setIsReloading(false);
+    }
+  }, [deviceInfo, isReloading, loadKeymap, loadLighting, loadLayoutOptions]);
 
   useEffect(() => {
     return () => {
@@ -429,6 +467,9 @@ export const useTysonKeebDevice = () => {
     error,
     connect,
     disconnect,
+    reloadDefinition,
+    isReloading,
+    reloadError,
     keymapStore,
     lightingData,
     customColors,

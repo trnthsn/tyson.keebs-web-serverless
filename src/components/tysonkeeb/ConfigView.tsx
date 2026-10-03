@@ -39,6 +39,9 @@ type ConfigViewProps = {
   updatePerKeyRGB: (index: number, hue: number, sat: number) => Promise<void>;
   deviceName: string;
   onDisconnect: () => void;
+  onReloadDefinition: () => Promise<void>;
+  isReloading: boolean;
+  reloadError: string | null;
 };
 
 type Tab = 'keymap' | 'layouts' | 'lighting' | 'save';
@@ -61,6 +64,9 @@ export const ConfigView = ({
   updatePerKeyRGB,
   deviceName,
   onDisconnect,
+  onReloadDefinition,
+  isReloading,
+  reloadError,
 }: ConfigViewProps) => {
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>('keymap');
@@ -102,6 +108,18 @@ export const ConfigView = ({
           />
           <div className="flex items-center gap-4">
             <div className="text-[1.4rem] text-[#222] dark:text-[#d9d9d9]">{deviceName}</div>
+            {reloadError && (
+              <div className="text-[1.2rem] text-red-500 dark:text-red-400">
+                {t('tysonkeeb.reloadDefinitionFailed')}
+              </div>
+            )}
+            <button
+              onClick={() => void onReloadDefinition()}
+              disabled={isReloading}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 text-[1.3rem] tracking-wide border border-[#121212] dark:border-white text-[#121212] dark:text-white hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-150 disabled:opacity-50 disabled:cursor-wait"
+            >
+              {isReloading ? t('tysonkeeb.reloadingDefinition') : t('tysonkeeb.reloadDefinition')}
+            </button>
             <button
               onClick={onDisconnect}
               className="inline-flex items-center justify-center gap-2 px-4 py-2 text-[1.3rem] tracking-wide border border-[#121212] dark:border-white text-[#121212] dark:text-white hover:bg-[#121212] hover:text-white dark:hover:bg-white dark:hover:text-[#121212] transition-colors duration-150"
