@@ -308,15 +308,15 @@ export const useTysonKeebDevice = () => {
     }
   }, [disconnect, loadKeymap, loadLighting, loadLayoutOptions]);
 
-  const reloadDefinition = useCallback(async () => {
-    if (!deviceInfo || isReloading) return;
+  const reloadDefinition = useCallback(async (): Promise<boolean> => {
+    if (!deviceInfo || isReloading) return false;
     setIsReloading(true);
     setReloadError(null);
     try {
       const parsed = await refreshDefinition(deviceInfo.vendorProductId);
       if (!parsed) {
         setReloadError('Failed to reload definition');
-        return;
+        return false;
       }
       setDefinition(parsed);
       setLayers(null);
@@ -333,8 +333,10 @@ export const useTysonKeebDevice = () => {
       );
       await Promise.all([loadKeymap(deviceInfo, parsed), loadLighting(deviceInfo, parsed)]);
       await loadLayoutOptions(deviceInfo, parsed);
+      return true;
     } catch {
       setReloadError('Failed to reload definition');
+      return false;
     } finally {
       setIsReloading(false);
     }

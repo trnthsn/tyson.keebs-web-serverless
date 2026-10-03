@@ -81,6 +81,8 @@
     "reloadDefinition": "Reload definition",
     "reloadingDefinition": "Reloading...",
     "reloadDefinitionFailed": "Could not reload the keyboard definition. The previous definition is still active.",
+    "reloadBundledDefinition": "Reload keyboard definition",
+    "reloadDefinitionSuccess": "Definition reloaded successfully.",
     "config": "Config",
     "keyTester": "Key Tester",
     "keysPressed": "keys pressed",

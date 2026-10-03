@@ -81,6 +81,8 @@
     "reloadDefinition": "Tải lại định nghĩa",
     "reloadingDefinition": "Đang tải lại...",
     "reloadDefinitionFailed": "Không thể tải lại định nghĩa bàn phím. Định nghĩa hiện tại vẫn được giữ.",
+    "reloadBundledDefinition": "Tải lại định nghĩa bàn phím",
+    "reloadDefinitionSuccess": "Đã tải lại định nghĩa thành công.",
     "config": "Cấu hình",
     "keyTester": "Kiểm tra phím",
     "keysPressed": "phím đang nhấn",

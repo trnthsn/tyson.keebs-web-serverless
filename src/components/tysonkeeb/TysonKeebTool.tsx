@@ -21,7 +21,6 @@ export const TysonKeebTool = () => {
     disconnect,
     reloadDefinition,
     isReloading,
-    reloadError,
     keymapStore,
     lightingData,
     customColors,
@@ -61,7 +60,12 @@ export const TysonKeebTool = () => {
               {tabs.map(({ id, label }) => (
                 <button
                   key={id}
-                  onClick={() => setTab(id)}
+                  onClick={() => {
+                    if (id === 'keytester') {
+                      keymapStore.setSelectedLayer(0);
+                    }
+                    setTab(id);
+                  }}
                   className={`px-6 py-3 text-[1.6rem] uppercase tracking-wide transition-colors duration-150 ${
                     activeTab === id
                       ? 'bg-[#e0e0e0] text-[#363434] dark:bg-[#414141] dark:text-[#d9d9d9]'
@@ -104,7 +108,6 @@ export const TysonKeebTool = () => {
             onDisconnect={() => void disconnect()}
             onReloadDefinition={() => reloadDefinition()}
             isReloading={isReloading}
-            reloadError={reloadError}
           />
         )}
         {activeTab === 'keytester' && connected && (

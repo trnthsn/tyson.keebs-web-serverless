@@ -12,6 +12,8 @@ type SaveLoadViewProps = {
   basicKeyToByte: Record<string, number>;
   byteToKey: Record<number, string>;
   onSave: (keymap: number[][]) => Promise<void>;
+  onReloadDefinition: () => Promise<boolean>;
+  isReloading: boolean;
 };
 
 type ViaSaveFile = {
@@ -29,6 +31,8 @@ export const SaveLoadView = ({
   basicKeyToByte,
   byteToKey,
   onSave,
+  onReloadDefinition,
+  isReloading,
 }: SaveLoadViewProps) => {
   const { t } = useTranslation();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -122,8 +126,31 @@ export const SaveLoadView = ({
     reader.readAsText(file);
   };
 
+  const reloadBundledDefinition = async () => {
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    const ok = await onReloadDefinition();
+    if (ok) {
+      setSuccessMessage(t('tysonkeeb.reloadDefinitionSuccess'));
+    } else {
+      setErrorMessage(t('tysonkeeb.reloadDefinitionFailed'));
+    }
+  };
+
   return (
     <div className="h-full overflow-y-auto px-8 py-6">
+      <div className="py-4 flex items-center justify-between gap-8 border-b border-[#796c6c]/40 dark:border-[#414141]/40">
+        <span className="text-[1.6rem] text-[#222] dark:text-[#d9d9d9]">
+          {t('tysonkeeb.reloadBundledDefinition')}
+        </span>
+        <button
+          onClick={() => void reloadBundledDefinition()}
+          disabled={isReloading}
+          className="min-w-[20rem] px-6 py-3 text-[1.6rem] tracking-wide border border-[#9c9c9c] text-[#222] dark:text-[#d9d9d9] hover:bg-[#e0e0e0] dark:hover:bg-[#333] transition-colors disabled:opacity-50 disabled:cursor-wait"
+        >
+          {isReloading ? t('tysonkeeb.reloadingDefinition') : t('tysonkeeb.reloadDefinition')}
+        </button>
+      </div>
       <div className="py-4 flex items-center justify-between gap-8 border-b border-[#796c6c]/40 dark:border-[#414141]/40">
         <span className="text-[1.6rem] text-[#222] dark:text-[#d9d9d9]">
           {t('tysonkeeb.saveCurrentLayout')}
