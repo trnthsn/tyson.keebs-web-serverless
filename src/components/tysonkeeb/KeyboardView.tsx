@@ -219,7 +219,7 @@ const KeyFrame = memo(function KeyFrame({
       title={lab?.tooltipLabel || undefined}
       className={[
         'absolute select-none',
-        pressable ? 'cursor-pointer' : '',
+        pressable ? 'cursor-pointer group' : '',
         selected ? 'z-10' : '',
       ].join(' ')}
       style={{
@@ -236,12 +236,13 @@ const KeyFrame = memo(function KeyFrame({
           isKeyDown={isKeyDown}
           isKeyUp={isKeyUp}
           selected={selected}
+          pressable={pressable}
           renderFace={renderFace}
         />
       ) : (
         <div
           className={`w-full h-full transition-transform duration-100 ${keycapBgClass(isKeyDown, selected)}${
-            selectable && !data.isEncoder && data.isMatrixKey ? ' hover:scale-[1.02]' : ''
+            pressable ? ' hover:scale-[0.95] group-hover:scale-[0.95]' : ''
           }`}
           style={{
             padding: '2px 6px 8px 6px',
@@ -266,15 +267,18 @@ const ComboFace = memo(function ComboFace({
   isKeyDown,
   isKeyUp,
   selected,
+  pressable,
   renderFace,
 }: {
   combo: ComboGeom;
   isKeyDown: boolean;
   isKeyUp: boolean;
   selected: boolean;
+  pressable: boolean;
   renderFace: (primary: boolean, shiftLegend?: boolean, squareBottomRight?: boolean) => ReactNode;
 }) {
   const overlayClass = stateOverlayClass(isKeyDown, isKeyUp);
+  const isHighlighted = isKeyDown || isKeyUp;
   return (
     <div
       className="relative"
@@ -299,7 +303,7 @@ const ComboFace = memo(function ComboFace({
           <div
             className={`relative w-full h-full ${
               selected ? 'scale-[0.96]' : isKeyDown ? 'scale-[0.95]' : ''
-            } rounded-[0.6rem] bg-[#bdbdbd] dark:bg-[#3f3f3f]`}
+            }${pressable && !isHighlighted && !selected ? ' group-hover:scale-[0.95]' : ''} rounded-[0.6rem] bg-[#bdbdbd] dark:bg-[#3f3f3f]`}
             style={{
               padding: '2px 6px 8px 6px',
               boxShadow: 'inset -1px -1px 0 rgb(0 0 0 / 20%), inset 1px 1px 0 rgb(255 255 255 / 20%)',
@@ -323,7 +327,7 @@ const ComboFace = memo(function ComboFace({
         <div
           className={`w-full h-full ${
             selected ? 'scale-[0.96]' : isKeyDown ? 'scale-[0.95]' : ''
-          }`}
+          }${pressable && !isHighlighted && !selected ? ' group-hover:scale-[0.95]' : ''}`}
           style={{ padding: '2px 6px 8px 6px' }}
         >
           {renderFace(false)}
@@ -341,7 +345,7 @@ const ComboFace = memo(function ComboFace({
         <div
           className={`w-full h-full ${
             selected ? 'scale-[0.96]' : isKeyDown ? 'scale-[0.95]' : ''
-          }`}
+          }${pressable && !isHighlighted && !selected ? ' group-hover:scale-[0.95]' : ''}`}
           style={{ padding: '2px 6px 8px 6px' }}
         >
           {renderFace(true, true, true)}

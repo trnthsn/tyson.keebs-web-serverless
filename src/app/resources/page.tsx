@@ -9,7 +9,13 @@ import { ResourceCard } from './components/ResourceCard';
 import { ResourceFilters } from './components/ResourceFilters';
 import { ResourcePagination } from './components/ResourcePagination';
 import type { DetectedKeyboard, Resource, ResourceCategory } from './components/types';
-import { computeVendorProductId, getHid, lookupKeyboard } from './components/resource-utils';
+import {
+  categoryToUrlSlug,
+  computeVendorProductId,
+  getHid,
+  lookupKeyboard,
+  urlSlugToCategory,
+} from './components/resource-utils';
 
 const PAGE_SIZE = 12;
 const resources = resourcesData as Resource[];
@@ -29,12 +35,9 @@ const ResourcesPage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [activeCategory, setActiveCategory] = useState<ResourceCategory>(() => {
-    const category = searchParams.get('category');
-    return category === 'JSON_DEFINITION' || category === 'FIRMWARE' || category === 'BOOTLOADER'
-      ? category
-      : 'All';
-  });
+  const [activeCategory, setActiveCategory] = useState<ResourceCategory>(() =>
+    urlSlugToCategory(searchParams.get('category')),
+  );
   const [searchQuery, setSearchQuery] = useState(() => searchParams.get('search') || '');
   const [page, setPage] = useState(() => {
     const pageParam = searchParams.get('page');
@@ -56,7 +59,7 @@ const ResourcesPage = () => {
     }
     const params = new URLSearchParams();
     if (debouncedKeyword) params.set('search', debouncedKeyword);
-    if (activeCategory !== 'All') params.set('category', activeCategory);
+    if (activeCategory !== 'All') params.set('category', categoryToUrlSlug(activeCategory));
     if (page > 1) params.set('page', String(page));
     const qs = params.toString();
     router.replace(`${pathname}${qs ? `?${qs}` : ''}`, { scroll: false });

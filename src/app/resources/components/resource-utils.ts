@@ -2,6 +2,25 @@ import type { Resource, ResourceCategory, ResourceFile } from './types';
 
 export const categoryOrder: ResourceCategory[] = ['All', 'JSON_DEFINITION', 'FIRMWARE', 'BOOTLOADER'];
 
+export const categoryToUrlSlug = (category: ResourceCategory): string => {
+  if (category === 'JSON_DEFINITION') return 'jsonDefinition';
+  if (category === 'FIRMWARE') return 'firmware';
+  if (category === 'BOOTLOADER') return 'bootloader';
+  return 'all';
+};
+
+export const urlSlugToCategory = (slug: string | null): ResourceCategory => {
+  if (slug === 'jsonDefinition') return 'JSON_DEFINITION';
+  if (slug === 'firmware') return 'FIRMWARE';
+  if (slug === 'bootloader') return 'BOOTLOADER';
+  if (slug === 'all') return 'All';
+  // Backwards compatibility with previous UPPERCASE urls (?category=JSON_DEFINITION, ...)
+  if (slug === 'JSON_DEFINITION' || slug === 'FIRMWARE' || slug === 'BOOTLOADER' || slug === 'All') {
+    return slug as ResourceCategory;
+  }
+  return 'All';
+};
+
 export const categoryLabel = (category: ResourceCategory) => {
   if (category === 'All') return 'All';
   if (category === 'JSON_DEFINITION') return 'JSON';
